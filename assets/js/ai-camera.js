@@ -250,6 +250,49 @@
     };
   })();
 
+  // ---------- ScanHistory: last-5 tier log in localStorage ----------
+
+  const ScanHistory = (function () {
+    const KEY = 'sieunhi.aicam.history';
+    const MAX = 5;
+
+    function read() {
+      try {
+        const raw = localStorage.getItem(KEY);
+        if (!raw) return [];
+        const arr = JSON.parse(raw);
+        return Array.isArray(arr) ? arr.slice(0, MAX) : [];
+      } catch (_) { return []; }
+    }
+    function write(arr) {
+      try { localStorage.setItem(KEY, JSON.stringify(arr.slice(0, MAX))); } catch (_) { /* quota */ }
+    }
+
+    return {
+      push(det) {
+        const tier = det.confidence >= 0.60 ? 'ok' : (det.confidence >= 0.30 ? 'warn' : null);
+        if (!tier) return;
+        const arr = read();
+        const now = Date.now();
+        if (arr[0] && arr[0].tier === tier && (now - arr[0].ts) < 3000) return;
+        arr.unshift({ tier, confidence: det.confidence, ts: now });
+        write(arr);
+        this.render();
+      },
+      render() {
+        const strip = document.querySelector('.history-strip');
+        if (!strip) return;
+        const arr = read();
+        if (arr.length === 0) return; // keep the demo thumbs on first visit
+        strip.innerHTML = arr.map(e => `
+          <div class="hist-thumb ${e.tier}">
+            ⛑️<span class="hist-status">${e.tier === 'ok' ? '✓' : '!'}</span>
+          </div>
+        `).join('');
+      },
+    };
+  })();
+
   // ---------- REAL MODE: orchestrate camera + detector + rendering ----------
 
   function runRealMode(cfg) {
@@ -261,6 +304,8 @@
     let detector = null;
     let camHandle = null;
     let loop = null;
+
+    ScanHistory.render();
 
     async function ensureDetector() {
       if (detector) return detector;
@@ -291,6 +336,7 @@
             ResultRenderer.updateBadge('⏸ Chưa thấy mũ', 'idle');
           }
           ResultRenderer.updateHelmetCard(top);
+          if (top) ScanHistory.push(top);
         });
       } catch (err) {
         stopCamera();
