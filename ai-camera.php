@@ -1,9 +1,22 @@
+<?php
+require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/auth.php'; // for e() helper
+
+$aiEnabled = AI_CAMERA_ENABLED && ROBOFLOW_KEY !== '' && ROBOFLOW_MODEL !== '';
+?>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script>(function(){try{document.documentElement.setAttribute("data-theme", localStorage.getItem("sieu-nhi-theme")||"dark");}catch(e){}})();</script>
+<script>
+window.__AI_CAMERA__ = {
+  enabled: <?= $aiEnabled ? 'true' : 'false' ?>,
+  key:     "<?= $aiEnabled ? e(ROBOFLOW_KEY)   : '' ?>",
+  model:   "<?= $aiEnabled ? e(ROBOFLOW_MODEL) : '' ?>"
+};
+</script>
 <title>AI Camera · Siêu Nhí An Toàn Giao Thông AI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -14,8 +27,8 @@
 
 <nav class="navbar static" id="navbar">
   <div class="nav-inner">
-    <a href="sieu-nhi-atgt-ai.php" class="logo"><span class="logo-badge">🤖</span>SIÊU NHÍ <span class="logo-text-en">AI</span></a>
-    <a class="back-link" href="sieu-nhi-atgt-ai.php">← Về trang chủ</a>
+    <a href="index.php" class="logo"><span class="logo-badge">🤖</span>SIÊU NHÍ <span class="logo-text-en">AI</span></a>
+    <a class="back-link" href="index.php">← Về trang chủ</a>
     <div class="nav-actions">
       <button class="icon-btn theme-toggle" aria-label="Chế độ tối">🌙</button>
       <a class="btn btn-ghost" href="ai-gia-su.php">🎓 AI Gia sư</a>
