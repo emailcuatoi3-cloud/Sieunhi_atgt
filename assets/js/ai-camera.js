@@ -44,11 +44,54 @@
     };
   }
 
-  // ---------- REAL MODE (stub — filled in by Task 4+) ----------
+  // ---------- HelmetDetector: wrapper for Roboflow inferencejs ----------
+
+  const HelmetDetector = {
+    /**
+     * Load a model. modelSlugWithVersion e.g. "helmet-detection-abcxyz/3".
+     * Rejects if SDK missing or startWorker throws — callers must handle.
+     */
+    async load(publishableKey, modelSlugWithVersion) {
+      if (!window.inferencejs) {
+        throw new Error('inferencejs SDK not loaded');
+      }
+      const slash = modelSlugWithVersion.lastIndexOf('/');
+      if (slash < 1) {
+        throw new Error('ROBOFLOW_MODEL must be "<slug>/<version>"');
+      }
+      const slug = modelSlugWithVersion.slice(0, slash);
+      const version = modelSlugWithVersion.slice(slash + 1);
+
+      const { InferenceEngine, CVImage } = window.inferencejs;
+      const engine = new InferenceEngine();
+      const workerId = await engine.startWorker(slug, version, publishableKey);
+
+      return {
+        async detect(mediaElement) {
+          const image = new CVImage(mediaElement);
+          const raw = await engine.infer(workerId, image);
+          // Normalize Roboflow's shape to our Detection interface.
+          return (raw || []).map(p => ({
+            className: p.class || 'helmet',
+            confidence: typeof p.confidence === 'number' ? p.confidence : (p.score || 0),
+            bbox: {
+              x: p.bbox?.x ?? p.x ?? 0,
+              y: p.bbox?.y ?? p.y ?? 0,
+              width:  p.bbox?.width  ?? p.width  ?? 0,
+              height: p.bbox?.height ?? p.height ?? 0,
+            },
+          }));
+        },
+        async destroy() {
+          try { await engine.stopWorker(workerId); } catch (_) { /* ignore */ }
+        },
+      };
+    },
+  };
+
+  // ---------- REAL MODE (stub — filled in by Task 5+) ----------
 
   function runRealMode(_cfg) {
-    // Task 4-9 will replace this. For now, fail loudly if it's ever reached
-    // in a state Task 3 didn't expect.
     throw new Error('runRealMode not implemented yet');
   }
 
