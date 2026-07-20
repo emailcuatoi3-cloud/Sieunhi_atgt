@@ -74,6 +74,52 @@ CREATE TABLE IF NOT EXISTS class_students (
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
+-- Lịch sử chơi game (dùng để tính XP/Coin thật + lịch sử hoạt động)
+-- ---------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS game_sessions (
+  id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  student_id  INT UNSIGNED NOT NULL,
+  game_id     VARCHAR(50)  NOT NULL,
+  xp_earned   INT UNSIGNED NOT NULL DEFAULT 0,
+  coin_earned INT UNSIGNED NOT NULL DEFAULT 0,
+  played_at   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- Huy hiệu đã đạt được (mỗi huy hiệu chỉ tính 1 lần dù chơi lại nhiều lần)
+-- ---------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS earned_badges (
+  id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  student_id  INT UNSIGNED NOT NULL,
+  badge_key   VARCHAR(50)  NOT NULL,
+  badge_label VARCHAR(150) NOT NULL,
+  earned_at   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE,
+  UNIQUE KEY uniq_student_badge (student_id, badge_key)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- AI Gia sư — lịch sử trò chuyện (mỗi cuộc trò chuyện là 1 mục sidebar)
+-- ---------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS ai_chat_sessions (
+  id          INT AUTO_INCREMENT PRIMARY KEY,
+  user_id     INT NOT NULL DEFAULT 1,
+  title       VARCHAR(255) NOT NULL DEFAULT 'Cuộc trò chuyện mới',
+  created_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS ai_chat_messages (
+  id          INT AUTO_INCREMENT PRIMARY KEY,
+  session_id  INT NOT NULL,
+  role        ENUM('user','bot') NOT NULL,
+  content     TEXT NOT NULL,
+  created_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_msg_session FOREIGN KEY (session_id) REFERENCES ai_chat_sessions(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
 -- Tài khoản demo: KHÔNG tạo trực tiếp bằng SQL ở đây vì password_hash()
 -- của PHP sinh ra chuỗi khác nhau mỗi lần chạy (có salt ngẫu nhiên) nên
 -- không thể viết cứng một hash "đúng" vào file .sql tĩnh.
