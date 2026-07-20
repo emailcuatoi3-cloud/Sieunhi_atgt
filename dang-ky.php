@@ -2,7 +2,7 @@
 require_once __DIR__ . '/auth.php';
 
 if (isLoggedIn()) {
-    header('Location: sieu-nhi-atgt-ai.php');
+    header('Location: index.php');
     exit;
 }
 
@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 
     <div class="auth-shell">
-        <a class="auth-back" href="sieu-nhi-atgt-ai.php">← Về trang chủ</a>
+        <a class="auth-back" href="index.php">← Về trang chủ</a>
         <button class="icon-btn theme-toggle auth-theme-btn" aria-label="Chế độ tối">🌙</button>
 
         <div class="auth-card">

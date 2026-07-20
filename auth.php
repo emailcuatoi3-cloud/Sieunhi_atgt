@@ -65,7 +65,7 @@ function requireRole(array $allowedRoles): void {
     $role = $_SESSION['user_role'] ?? null;
     if (!in_array($role, $allowedRoles, true)) {
         // Đăng nhập rồi nhưng sai vai trò -> đưa về đúng dashboard của họ
-        $ownDashboard = ROLE_DASHBOARDS[$role] ?? 'sieu-nhi-atgt-ai.php';
+        $ownDashboard = ROLE_DASHBOARDS[$role] ?? 'index.php';
         header('Location: ' . $ownDashboard . '?error=khong_du_quyen');
         exit;
     }

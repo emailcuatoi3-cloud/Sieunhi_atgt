@@ -3,7 +3,7 @@ require_once __DIR__ . '/auth.php';
 
 // Nếu đã đăng nhập rồi thì đưa về trang chủ
 if (isLoggedIn()) {
-    header('Location: sieu-nhi-atgt-ai.php');
+    header('Location: index.php');
     exit;
 }
 
@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         if ($user) {
             $next = $_GET['next'] ?? null;
-            $target = $next ? urldecode($next) : 'sieu-nhi-atgt-ai.php';
+            $target = $next ? urldecode($next) : 'index.php';
             header('Location: ' . $target);
             exit;
         } elseif ($error === '') {
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 
     <div class="auth-shell">
-        <a class="auth-back" href="sieu-nhi-atgt-ai.php">← Về trang chủ</a>
+        <a class="auth-back" href="index.php">← Về trang chủ</a>
         <button class="icon-btn theme-toggle auth-theme-btn" aria-label="Chế độ tối">🌙</button>
 
         <div class="auth-card">

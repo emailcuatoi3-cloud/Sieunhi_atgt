@@ -78,7 +78,7 @@ $roleLabelMap = ROLE_LABELS;
   <aside class="sidebar">
     <div>
       <div class="side-brand"><div class="mark">🤖</div>SIÊU NHÍ AI</div>
-      <a class="side-back" href="sieu-nhi-atgt-ai.php">← Về trang chủ</a>
+      <a class="side-back" href="index.php">← Về trang chủ</a>
     </div>
     <a class="side-link" href="dashboard-admin.php"><span class="ic">🏠</span> Tổng quan</a>
     <a class="side-link active" href="admin-users.php"><span class="ic">👥</span> Người dùng</a>

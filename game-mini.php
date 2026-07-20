@@ -52,9 +52,9 @@ $games = [
 
     <nav class="navbar static" id="navbar">
         <div class="nav-inner">
-            <a href="sieu-nhi-atgt-ai.php" class="logo"><span class="logo-badge">🤖</span>SIÊU NHÍ <span
+            <a href="index.php" class="logo"><span class="logo-badge">🤖</span>SIÊU NHÍ <span
                     class="logo-text-en">AI</span></a>
-            <a class="back-link" href="sieu-nhi-atgt-ai.php">← Về trang chủ</a>
+            <a class="back-link" href="index.php">← Về trang chủ</a>
             <div class="nav-actions">
                 <button class="icon-btn theme-toggle" aria-label="Chế độ tối">🌙</button>
                 <a class="btn btn-ghost" href="bang-xep-hang.php">🏆 Xếp hạng</a>

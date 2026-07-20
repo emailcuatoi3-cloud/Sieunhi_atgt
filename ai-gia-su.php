@@ -210,7 +210,7 @@ $avatar = $user['avatar'] ?? '🧒';
                 <div class="side-brand">
                     <div class="mark">🤖</div>AI Gia sư
                 </div>
-                <a class="side-back" href="sieu-nhi-atgt-ai.php">← Về trang chủ</a>
+                <a class="side-back" href="index.php">← Về trang chủ</a>
             </div>
             <button class="btn btn-primary-sm" style="width:100%; justify-content:center; margin-bottom:14px;"
                 onclick="newChat()">＋ Cuộc trò chuyện mới</button>

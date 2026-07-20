@@ -140,7 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const baseEndHtml = `
     <div class="end-actions">
       <button class="btn btn-primary-sm" onclick="restart()">🔁 Chơi lại từ đầu</button>
-      <a class="btn btn-ghost" href="sieu-nhi-atgt-ai.php">🏠 Về trang chủ</a>
+      <a class="btn btn-ghost" href="index.php">🏠 Về trang chủ</a>
     </div>`;
 
   function renderNode(key) {
