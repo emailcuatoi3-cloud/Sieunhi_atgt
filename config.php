@@ -27,4 +27,4 @@ defined('PASSWORD_EMAIL') || define('PASSWORD_EMAIL', env('SMTP_PASSWORD', ''));
 // --- AI Camera ---
 defined('AI_CAMERA_ENABLED') || define('AI_CAMERA_ENABLED', (bool) env('AI_CAMERA_ENABLED', false));
 defined('ROBOFLOW_KEY')      || define('ROBOFLOW_KEY',      env('ROBOFLOW_PUBLISHABLE_KEY', ''));
-defined('ROBOFLOW_MODEL')    || define('ROBOFLOW_MODEL',    env('ROBOFLOW_MODEL', ''));
+defined('ROBOFLOW_MODEL')    || define('ROBOFLOW_MODEL',    env('ROBOFLOW_MODEL', 'hard-hat-workers/12'));
