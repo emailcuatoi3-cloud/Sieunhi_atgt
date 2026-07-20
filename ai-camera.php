@@ -20,8 +20,8 @@ window.__AI_CAMERA__ = {
 <title>AI Camera · Siêu Nhí An Toàn Giao Thông AI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=7">
-<link rel="stylesheet" href="assets/css/shared-pages.css?v=7">
+<link rel="stylesheet" href="assets/css/style.css?v=10">
+<link rel="stylesheet" href="assets/css/shared-pages.css?v=10">
 </head>
 <body>
 
@@ -152,6 +152,6 @@ window.__AI_CAMERA__ = {
 </section>
 
 <script src="assets/js/main.js?v=6"></script>
-<script src="assets/js/ai-camera.js?v=9"></script>
+<script src="assets/js/ai-camera.js?v=10"></script>
 </body>
 </html>

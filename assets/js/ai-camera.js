@@ -220,6 +220,10 @@
   const ResultRenderer = (function () {
     const CONF_HIGH = 0.60;
     const CONF_MID  = 0.30;
+    // Classes tra ve tu hard-hat-workers/12 va cac model tuong tu.
+    // Groupd theo semantic — de swap model sau nay khong phai sua nhieu cho.
+    const HELMET_CLASSES = ['helmet', 'hardhat', 'hard-hat', 'mu', 'mu-bao-hiem'];
+    const PERSON_CLASSES = ['person', 'head', 'no-helmet', 'no-hardhat', 'nohelmet'];
 
     function tierFor(conf) {
       if (conf >= CONF_HIGH) return 'ok';
@@ -228,14 +232,49 @@
     }
 
     function colorFor(tier) {
+      const cs = getComputedStyle(document.documentElement);
       switch (tier) {
-        case 'ok':   return getComputedStyle(document.documentElement).getPropertyValue('--green').trim() || '#2ecc71';
-        case 'warn': return getComputedStyle(document.documentElement).getPropertyValue('--yellow').trim() || '#f5b642';
-        default:     return 'rgba(255,255,255,0.35)';
+        case 'ok':    return cs.getPropertyValue('--green').trim()  || '#2ecc71';
+        case 'warn':  return cs.getPropertyValue('--yellow').trim() || '#f5b642';
+        case 'alarm': return cs.getPropertyValue('--pink').trim()   || '#ef4444';
+        default:      return 'rgba(255,255,255,0.35)';
       }
     }
 
+    /**
+     * Analyze detections and return a semantic state.
+     *   { state: 'ok'   | 'warn' | 'alarm' | 'idle',
+     *     topHelmet: Detection | null,
+     *     personSeen: boolean }
+     *
+     * - 'ok'    = helmet detected with high confidence
+     * - 'warn'  = helmet detected with mid confidence
+     * - 'alarm' = person/head detected but NO helmet → cần đội mũ ngay
+     * - 'idle'  = nothing meaningful in frame
+     */
+    function analyze(dets) {
+      const isHelmet = c => HELMET_CLASSES.includes(String(c || '').toLowerCase());
+      const isPerson = c => PERSON_CLASSES.includes(String(c || '').toLowerCase());
+      let topHelmet = null;
+      let personSeen = false;
+      for (const d of dets) {
+        if (d.confidence < CONF_MID) continue;
+        if (isHelmet(d.className) && (!topHelmet || d.confidence > topHelmet.confidence)) {
+          topHelmet = d;
+        }
+        if (isPerson(d.className) && d.confidence >= CONF_HIGH) {
+          personSeen = true;
+        }
+      }
+      if (topHelmet && topHelmet.confidence >= CONF_HIGH) return { state: 'ok',    topHelmet, personSeen };
+      if (topHelmet)                                      return { state: 'warn',  topHelmet, personSeen };
+      if (personSeen)                                     return { state: 'alarm', topHelmet: null, personSeen: true };
+      return { state: 'idle', topHelmet: null, personSeen: false };
+    }
+
     return {
+      analyze,
+
       updateBadge(text, tier) {
         const badge = document.getElementById('accBadge');
         if (!badge) return;
@@ -243,12 +282,27 @@
         const map = {
           ok:        { color: 'var(--green)',  bg: 'rgba(46,204,113,0.15)' },
           warn:      { color: 'var(--yellow)', bg: 'rgba(245,182,66,0.15)' },
+          alarm:     { color: 'var(--pink)',   bg: 'rgba(239,68,68,0.18)'  },
           idle:      { color: 'rgba(255,255,255,0.55)', bg: 'rgba(255,255,255,0.06)' },
           analyzing: { color: 'var(--cyan)',   bg: 'rgba(79,195,247,0.15)' },
         };
         const s = map[tier] || map.idle;
         badge.style.color = s.color;
         badge.style.background = s.bg;
+      },
+
+      /**
+       * Toggle alarm visuals on the whole camera view (red pulsing border + banner).
+       * Called on every frame with the current state.
+       */
+      setAlarm(on, message) {
+        const camView = document.querySelector('.cam-view');
+        if (camView) camView.classList.toggle('alarm', !!on);
+        if (on) {
+          this.setStatus(message || '⛔ CHƯA ĐỘI MŨ BẢO HIỂM — HÃY ĐỘI MŨ NGAY!');
+        }
+        // Note: don't clear status when off — other callers (low-light hint,
+        // preflight error) may have set it. Only the caller that set it clears it.
       },
 
       drawBoxes(canvas, videoEl, detections) {
@@ -279,34 +333,39 @@
         }
       },
 
-      updateHelmetCard(top) {
-        // First .detect-item in .result-panel is the helmet card.
+      /**
+       * Update the helmet card + advice text based on the semantic state,
+       * not raw detection presence. state: 'ok' | 'warn' | 'alarm' | 'idle'.
+       */
+      updateHelmetCard(state, top) {
         const card = document.querySelector('.result-panel .detect-item');
         if (!card) return;
         const title = card.querySelector('.d-info b');
         const sub   = card.querySelector('.d-info span');
         const advice = document.querySelector('.advice-box p');
+        card.classList.remove('ok', 'warn', 'alarm');
 
-        if (!top) {
-          card.classList.remove('ok', 'warn');
-          card.classList.add('warn');
-          if (title) title.childNodes[0].nodeValue = 'Chưa thấy mũ bảo hiểm ';
-          if (sub)   sub.textContent = 'Hãy đưa mũ vào giữa khung camera';
-          if (advice) advice.textContent = 'Chưa thấy mũ bảo hiểm trong khung. Con hãy đội mũ hoặc đưa mũ vào giữa khung camera nhé.';
-          return;
-        }
-        const tier = tierFor(top.confidence);
-        card.classList.remove('ok', 'warn');
-        if (tier === 'ok') {
+        if (state === 'ok') {
           card.classList.add('ok');
-          if (title) title.childNodes[0].nodeValue = 'Mũ bảo hiểm — Đạt chuẩn ';
-          if (sub)   sub.textContent = `Model tự tin ${Math.round(top.confidence * 100)}%`;
+          if (title)  title.childNodes[0].nodeValue = 'Mũ bảo hiểm — Đạt chuẩn ';
+          if (sub)    sub.textContent = `Model tự tin ${Math.round(top.confidence * 100)}%`;
           if (advice) advice.textContent = 'Con đội mũ bảo hiểm rất chuẩn rồi! Nhớ luôn cài quai và quan sát hai bên trước khi qua đường nhé.';
-        } else {
+        } else if (state === 'warn') {
           card.classList.add('warn');
-          if (title) title.childNodes[0].nodeValue = 'Mũ bảo hiểm — Chưa rõ ';
-          if (sub)   sub.textContent = `Chỉ ${Math.round(top.confidence * 100)}% chắc chắn — hãy đưa mũ vào chính giữa khung`;
+          if (title)  title.childNodes[0].nodeValue = 'Mũ bảo hiểm — Chưa rõ ';
+          if (sub)    sub.textContent = `Chỉ ${Math.round(top.confidence * 100)}% chắc chắn — hãy đưa mũ vào chính giữa khung`;
           if (advice) advice.textContent = 'Model chưa nhìn rõ mũ bảo hiểm. Con thử đưa mũ vào giữa khung, cách camera 1 sải tay nhé.';
+        } else if (state === 'alarm') {
+          card.classList.add('alarm');
+          if (title)  title.childNodes[0].nodeValue = '⛔ CHƯA ĐỘI MŨ BẢO HIỂM! ';
+          if (sub)    sub.textContent = 'Camera thấy có người trong khung nhưng KHÔNG có mũ — hãy đội mũ ngay trước khi tham gia giao thông.';
+          if (advice) advice.textContent = 'Tham gia giao thông mà không đội mũ bảo hiểm là VI PHẠM luật giao thông và rất nguy hiểm. Hãy đội mũ bảo hiểm ngay và cài chặt quai trước khi ra đường!';
+        } else {
+          // idle
+          card.classList.add('warn');
+          if (title)  title.childNodes[0].nodeValue = 'Đang chờ... ';
+          if (sub)    sub.textContent = 'Chưa thấy ai trong khung camera';
+          if (advice) advice.textContent = 'Camera đang chờ — hãy đứng trước khung camera để AI kiểm tra mũ bảo hiểm của con.';
         }
       },
 
@@ -419,26 +478,33 @@
         loop = FrameLoop.start(async () => {
           const dets = await detector.detect(videoEl);
           ResultRenderer.drawBoxes(canvasEl, videoEl, dets);
-          const top = dets.length
-            ? dets.reduce((a, b) => (a.confidence >= b.confidence ? a : b))
-            : null;
-          if (top && top.confidence >= 0.60) {
-            ResultRenderer.updateBadge(`✓ Độ chính xác ${Math.round(top.confidence * 100)}%`, 'ok');
-            noDetSince = null;
+          const { state, topHelmet, personSeen } = ResultRenderer.analyze(dets);
+
+          if (state === 'ok') {
+            ResultRenderer.updateBadge(`✓ Độ chính xác ${Math.round(topHelmet.confidence * 100)}%`, 'ok');
+            ResultRenderer.setAlarm(false);
             ResultRenderer.setStatus(null);
-          } else if (top) {
-            ResultRenderer.updateBadge(`⚠ Chưa rõ ${Math.round(top.confidence * 100)}%`, 'warn');
             noDetSince = null;
+          } else if (state === 'warn') {
+            ResultRenderer.updateBadge(`⚠ Chưa rõ ${Math.round(topHelmet.confidence * 100)}%`, 'warn');
+            ResultRenderer.setAlarm(false);
             ResultRenderer.setStatus(null);
+            noDetSince = null;
+          } else if (state === 'alarm') {
+            ResultRenderer.updateBadge('⛔ CHƯA ĐỘI MŨ', 'alarm');
+            ResultRenderer.setAlarm(true);
+            noDetSince = null;
           } else {
-            ResultRenderer.updateBadge('⏸ Chưa thấy mũ', 'idle');
+            // idle — nothing in frame
+            ResultRenderer.updateBadge('⏸ Chưa thấy ai', 'idle');
+            ResultRenderer.setAlarm(false);
             if (!noDetSince) noDetSince = Date.now();
             if (Date.now() - noDetSince >= 5000) {
-              ResultRenderer.setStatus('Hãy đứng gần cửa sổ hoặc bật đèn — camera đang thấy tối.');
+              ResultRenderer.setStatus('Hãy đứng vào giữa khung camera để AI kiểm tra mũ bảo hiểm.');
             }
           }
-          ResultRenderer.updateHelmetCard(top);
-          if (top) ScanHistory.push(top);
+          ResultRenderer.updateHelmetCard(state, topHelmet);
+          if (topHelmet) ScanHistory.push(topHelmet);
         });
       } catch (err) {
         stopCamera();
@@ -456,6 +522,8 @@
       if (loop)      { loop.stop();    loop = null; }
       if (camHandle) { camHandle.stop(); camHandle = null; }
       scene.classList.remove('real');
+      ResultRenderer.setAlarm(false);
+      ResultRenderer.setStatus(null);
       const ctx = canvasEl.getContext('2d');
       ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
     }
@@ -510,18 +578,22 @@
         try {
           const dets = await detector.detect(img);
           ResultRenderer.drawBoxes(canvasEl, img, dets);
-          const top = dets.length
-            ? dets.reduce((a, b) => (a.confidence >= b.confidence ? a : b))
-            : null;
-          if (top && top.confidence >= 0.60) {
-            ResultRenderer.updateBadge(`✓ Độ chính xác ${Math.round(top.confidence * 100)}%`, 'ok');
-          } else if (top) {
-            ResultRenderer.updateBadge(`⚠ Chưa rõ ${Math.round(top.confidence * 100)}%`, 'warn');
+          const { state, topHelmet } = ResultRenderer.analyze(dets);
+          if (state === 'ok') {
+            ResultRenderer.updateBadge(`✓ Độ chính xác ${Math.round(topHelmet.confidence * 100)}%`, 'ok');
+            ResultRenderer.setAlarm(false);
+          } else if (state === 'warn') {
+            ResultRenderer.updateBadge(`⚠ Chưa rõ ${Math.round(topHelmet.confidence * 100)}%`, 'warn');
+            ResultRenderer.setAlarm(false);
+          } else if (state === 'alarm') {
+            ResultRenderer.updateBadge('⛔ CHƯA ĐỘI MŨ', 'alarm');
+            ResultRenderer.setAlarm(true, '⛔ Ảnh có người nhưng KHÔNG đội mũ bảo hiểm!');
           } else {
-            ResultRenderer.updateBadge('⏸ Chưa thấy mũ trong ảnh', 'idle');
+            ResultRenderer.updateBadge('⏸ Không thấy ai trong ảnh', 'idle');
+            ResultRenderer.setAlarm(false);
           }
-          ResultRenderer.updateHelmetCard(top);
-          if (top) ScanHistory.push(top);
+          ResultRenderer.updateHelmetCard(state, topHelmet);
+          if (topHelmet) ScanHistory.push(topHelmet);
         } finally {
           URL.revokeObjectURL(url);
         }

@@ -4036,3 +4036,40 @@ body {
 }
 
 .cam-view.drop-hover { outline: 2px dashed var(--cyan); outline-offset: -6px; }
+
+/* ---------------- AI CAMERA — alarm state (chưa đội mũ) ---------------- */
+.cam-view.alarm {
+  animation: cam-alarm-pulse 1.4s ease-in-out infinite;
+}
+.cam-view.alarm .cam-status-banner {
+  background: var(--pink);
+  color: #fff;
+  font-weight: 800;
+  font-size: 14.5px;
+  padding: 12px 22px;
+  border: none;
+  letter-spacing: 0.02em;
+  box-shadow: 0 0 24px rgba(239, 68, 68, 0.65);
+  animation: cam-alarm-banner-shake 0.7s ease-in-out infinite;
+}
+@keyframes cam-alarm-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.0), inset 0 0 0 2px rgba(239, 68, 68, 0.35); }
+  50%      { box-shadow: 0 0 32px 4px rgba(239, 68, 68, 0.55), inset 0 0 0 3px rgba(239, 68, 68, 0.9); }
+}
+@keyframes cam-alarm-banner-shake {
+  0%, 100% { transform: translateX(-50%); }
+  25%      { transform: translateX(calc(-50% - 3px)); }
+  75%      { transform: translateX(calc(-50% + 3px)); }
+}
+
+.detect-item.alarm {
+  background: rgba(239, 68, 68, 0.14);
+  border: 1px solid rgba(239, 68, 68, 0.5);
+}
+.detect-item.alarm .d-info b {
+  color: var(--pink);
+}
+.detect-item.alarm .detect-bar i {
+  background: var(--pink);
+  width: 100%;
+}
