@@ -195,8 +195,22 @@ Nếu bất kỳ điều nào sau đây đúng, trang giữ nguyên hành vi moc
 
 Trường hợp fallback vì lý do kỹ thuật, banner nhỏ ở khung camera sẽ giải thích.
 
-### Ghi nhớ
+### Privacy — quan trọng
 
-- **Ảnh KHÔNG rời khỏi máy user.** Không có endpoint upload — server không thể lưu kể cả muốn.
+Từ bản pivot Hosted API, luồng dữ liệu như sau:
+
+- Browser chụp frame từ webcam → encode base64 JPEG (chất lượng 60%)
+- **POST lên `detect.roboflow.com`** (Roboflow servers) để inference
+- Roboflow trả về JSON `predictions` (class + confidence + bbox)
+- Ảnh KHÔNG được lưu trên server PHP của bạn (không có endpoint upload)
+- Roboflow claim **không lưu ảnh inference** ([Privacy Policy](https://roboflow.com/privacy)) — nhưng ảnh **có** đi qua họ
+
+Nghĩa là **NẾU trường học của bạn có quy định bảo mật nghiêm ngặt về hình ảnh trẻ em, cần thông báo phụ huynh** hoặc `AI_CAMERA_ENABLED=false` để giữ mock.
+
+Lý do bắt buộc phải qua server Roboflow: đa số public helmet-detection model trên Roboflow Universe **KHÔNG** được owner export cho browser (chỉ Hosted API). Nếu muốn 100% offline, phải tự train qua Teachable Machine — kế hoạch dự phòng, mất ~1 ngày thêm.
+
+### Ghi nhớ khác
+
 - Publishable key của Roboflow **an toàn để lộ** ở client (khác với secret key). Việc để trong `.env` là để dễ đổi + không commit lên git.
 - Card "Biển báo khu vực trường học" và "Vị trí đứng" gắn nhãn `Demo` — chỉ mũ bảo hiểm là detect thật.
+- Preflight probe chạy khi load trang: nếu key/model sai → banner cảnh báo NGAY (không cần chờ click camera). Rơi về mock để trang không bể.

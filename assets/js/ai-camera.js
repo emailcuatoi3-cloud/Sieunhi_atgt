@@ -57,64 +57,104 @@
     };
   }
 
-  // ---------- HelmetDetector: wrapper for Roboflow inferencejs ----------
+  // ---------- HelmetDetector: Roboflow Hosted API (no client-side model) ----------
+  //
+  // Vi sao KHONG dung inferencejs: da so public model tren Roboflow Universe
+  // KHONG duoc owner export cho browser -> inferencejs "Model init failed".
+  // Hosted API (detect.roboflow.com) chay tren server Roboflow, ho tro moi
+  // public model. Trade-off: frame anh phai POST len server (Roboflow claim
+  // khong luu). Xem README section "AI Camera" de biet privacy caveat.
 
   const HelmetDetector = {
-    /**
-     * Load a model. modelSlugWithVersion e.g. "helmet-detection-abcxyz/3".
-     * Rejects if SDK missing or startWorker throws — callers must handle.
-     */
     async load(publishableKey, modelSlugWithVersion) {
-      if (!window.inferencejs) {
-        throw new Error('inferencejs SDK not loaded');
-      }
       const slash = modelSlugWithVersion.lastIndexOf('/');
       if (slash < 1) {
-        throw new Error('ROBOFLOW_MODEL must be "<slug>/<version>"');
+        const e = new Error('ROBOFLOW_MODEL must be "<slug>/<version>"');
+        e.name = 'RoboflowInitError';
+        throw e;
       }
       const slug = modelSlugWithVersion.slice(0, slash);
       const version = modelSlugWithVersion.slice(slash + 1);
+      const endpoint =
+        `https://detect.roboflow.com/${encodeURIComponent(slug)}/${encodeURIComponent(version)}` +
+        `?api_key=${encodeURIComponent(publishableKey)}`;
 
-      const { InferenceEngine, CVImage } = window.inferencejs;
-      const engine = new InferenceEngine();
-      let workerId;
+      // --- Preflight probe: fail fast if key/model wrong ---
+      // Send a 1x1 transparent PNG so we get a decisive HTTP status without
+      // spending user bandwidth on a real frame.
+      const TINY_PNG_B64 =
+        'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+      let probeRes;
       try {
-        workerId = await engine.startWorker(slug, version, publishableKey);
-      } catch (rfErr) {
-        // Roboflow's error object often has status/response body but a
-        // generic .message. Surface everything so debugging is possible.
-        console.error('[HelmetDetector] Roboflow startWorker failed', {
-          slug, version, error: rfErr, message: rfErr?.message,
-          response: rfErr?.response, body: rfErr?.body,
+        probeRes = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: TINY_PNG_B64,
         });
-        const nicer = new Error(
-          `Roboflow từ chối model "${slug}/${version}". ` +
-          `Kiểm tra slug/version trên https://universe.roboflow.com và ` +
-          `Publishable Key trong Settings → API Keys. Chi tiết trong Console.`
+      } catch (netErr) {
+        const e = new Error(
+          'Không kết nối được Roboflow (network / CORS lỗi). Kiểm tra internet.'
         );
-        nicer.name = 'RoboflowInitError';
-        throw nicer;
+        e.name = 'RoboflowInitError';
+        e.cause = netErr;
+        throw e;
       }
+      if (!probeRes.ok) {
+        const text = await probeRes.text().catch(() => '');
+        console.error('[HelmetDetector] Preflight failed', {
+          slug, version, status: probeRes.status, body: text,
+        });
+        let hint = '';
+        if (probeRes.status === 401 || probeRes.status === 403) {
+          hint = 'Publishable Key sai hoặc hết hạn.';
+        } else if (probeRes.status === 404) {
+          hint = `Model "${slug}/${version}" không tồn tại hoặc chưa public.`;
+        } else if (probeRes.status === 429) {
+          hint = 'Quota Roboflow đã hết cho hôm nay.';
+        } else {
+          hint = `Roboflow trả HTTP ${probeRes.status}.`;
+        }
+        const e = new Error(hint + ' Chi tiết trong Console.');
+        e.name = 'RoboflowInitError';
+        throw e;
+      }
+
+      // Reusable capture canvas — avoids allocating one per frame.
+      const captureCanvas = document.createElement('canvas');
+      const captureCtx = captureCanvas.getContext('2d');
 
       return {
         async detect(mediaElement) {
-          const image = new CVImage(mediaElement);
-          const raw = await engine.infer(workerId, image);
-          // Normalize Roboflow's shape to our Detection interface.
-          return (raw || []).map(p => ({
+          const w = mediaElement.videoWidth  || mediaElement.naturalWidth  || mediaElement.width;
+          const h = mediaElement.videoHeight || mediaElement.naturalHeight || mediaElement.height;
+          if (!w || !h) return [];
+          captureCanvas.width = w;
+          captureCanvas.height = h;
+          captureCtx.drawImage(mediaElement, 0, 0, w, h);
+          const base64 = captureCanvas.toDataURL('image/jpeg', 0.6).split(',', 2)[1];
+
+          const res = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: base64,
+          });
+          if (!res.ok) {
+            console.warn('[HelmetDetector] detect() non-OK', res.status);
+            return [];
+          }
+          const json = await res.json();
+          return (json.predictions || []).map(p => ({
             className: p.class || 'helmet',
             confidence: typeof p.confidence === 'number' ? p.confidence : (p.score || 0),
             bbox: {
-              x: p.bbox?.x ?? p.x ?? 0,
-              y: p.bbox?.y ?? p.y ?? 0,
-              width:  p.bbox?.width  ?? p.width  ?? 0,
-              height: p.bbox?.height ?? p.height ?? 0,
+              x: p.x ?? 0,
+              y: p.y ?? 0,
+              width:  p.width  ?? 0,
+              height: p.height ?? 0,
             },
           }));
         },
-        async destroy() {
-          try { await engine.stopWorker(workerId); } catch (_) { /* ignore */ }
-        },
+        async destroy() { /* nothing to destroy — no worker */ },
       };
     },
   };
@@ -336,6 +376,27 @@
     let loop = null;
 
     ScanHistory.render();
+
+    // Preflight: verify key + model on load, not on first shutter click.
+    // Fires in the background; falls back to mock loudly on failure.
+    (async () => {
+      ResultRenderer.setStatus('Đang kiểm tra kết nối AI...');
+      try {
+        detector = await HelmetDetector.load(cfg.key, cfg.model);
+        ResultRenderer.setStatus(null);
+        ResultRenderer.updateBadge('✓ Sẵn sàng — bấm 📸 để bật camera', 'idle');
+      } catch (err) {
+        console.warn('[AI Camera] Preflight failed, falling back to mock', err);
+        // Hide the mode pill's green state to reflect reality.
+        const pill = document.getElementById('camModePill');
+        if (pill) { pill.dataset.mode = 'demo'; pill.querySelector('.mode-dot').nextSibling.textContent = ' Demo (config lỗi)'; }
+        // Show the specific reason.
+        ResultRenderer.setStatus(err.message || 'Cấu hình AI không hợp lệ — chuyển sang mock.');
+        ResultRenderer.updateBadge('⚠ Config lỗi', 'warn');
+        // Rebind rescan to mock behavior so shutter still does SOMETHING.
+        runMockMode();
+      }
+    })();
 
     async function ensureDetector() {
       if (detector) return detector;
