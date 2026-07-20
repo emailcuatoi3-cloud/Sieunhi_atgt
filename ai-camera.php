@@ -155,6 +155,6 @@ window.__AI_CAMERA__ = {
 <?php if ($aiEnabled): ?>
 <script src="https://cdn.jsdelivr.net/npm/inferencejs"></script>
 <?php endif; ?>
-<script src="assets/js/ai-camera.js?v=7"></script>
+<script src="assets/js/ai-camera.js?v=8"></script>
 </body>
 </html>

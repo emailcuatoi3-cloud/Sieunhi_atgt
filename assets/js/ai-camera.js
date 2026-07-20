@@ -77,7 +77,24 @@
 
       const { InferenceEngine, CVImage } = window.inferencejs;
       const engine = new InferenceEngine();
-      const workerId = await engine.startWorker(slug, version, publishableKey);
+      let workerId;
+      try {
+        workerId = await engine.startWorker(slug, version, publishableKey);
+      } catch (rfErr) {
+        // Roboflow's error object often has status/response body but a
+        // generic .message. Surface everything so debugging is possible.
+        console.error('[HelmetDetector] Roboflow startWorker failed', {
+          slug, version, error: rfErr, message: rfErr?.message,
+          response: rfErr?.response, body: rfErr?.body,
+        });
+        const nicer = new Error(
+          `Roboflow từ chối model "${slug}/${version}". ` +
+          `Kiểm tra slug/version trên https://universe.roboflow.com và ` +
+          `Publishable Key trong Settings → API Keys. Chi tiết trong Console.`
+        );
+        nicer.name = 'RoboflowInitError';
+        throw nicer;
+      }
 
       return {
         async detect(mediaElement) {
@@ -384,13 +401,14 @@
 
     function handleCameraError(err) {
       const map = {
-        NotAllowedError: 'Bạn chưa cho phép camera. Bấm biểu tượng ổ khoá ở thanh địa chỉ để bật lại.',
-        NotFoundError:   'Không tìm thấy camera trên thiết bị này.',
-        NotSecureError:  'Trình duyệt yêu cầu HTTPS. Mở qua http://localhost hoặc bật HTTPS.',
+        NotAllowedError:   'Bạn chưa cho phép camera. Bấm biểu tượng ổ khoá ở thanh địa chỉ để bật lại.',
+        NotFoundError:     'Không tìm thấy camera trên thiết bị này.',
+        NotSecureError:    'Trình duyệt yêu cầu HTTPS. Mở qua http://localhost hoặc bật HTTPS.',
+        RoboflowInitError: err.message, // đã có message tiếng Việt sẵn từ HelmetDetector
       };
       const msg = map[err.name] || `Không mở được camera: ${err.message}`;
       ResultRenderer.setStatus(msg);
-      ResultRenderer.updateBadge('⚠ Camera lỗi', 'warn');
+      ResultRenderer.updateBadge('⚠ ' + (err.name === 'RoboflowInitError' ? 'Model lỗi' : 'Camera lỗi'), 'warn');
     }
 
     if (shutter) {
