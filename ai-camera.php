@@ -20,8 +20,8 @@ window.__AI_CAMERA__ = {
 <title>AI Camera · Siêu Nhí An Toàn Giao Thông AI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=5">
-<link rel="stylesheet" href="assets/css/shared-pages.css?v=5">
+<link rel="stylesheet" href="assets/css/style.css?v=6">
+<link rel="stylesheet" href="assets/css/shared-pages.css?v=6">
 </head>
 <body>
 
@@ -55,14 +55,22 @@ window.__AI_CAMERA__ = {
         <span class="rec-dot"><i></i> AI ĐANG PHÂN TÍCH</span>
         <span>1280×720 · 30fps</span>
       </div>
-      <div class="cam-scene">
-        <div class="street"></div>
-        <div class="lane"></div>
-        <div class="kid">🧒</div>
-        <div class="helmet-box"></div>
-        <div class="sign-icon">🚸</div>
-        <div class="sign-box"></div>
-        <div class="scan-line"></div>
+      <div class="cam-scene" id="camScene">
+        <!-- REAL scene: revealed by adding class "real" to #camScene -->
+        <video id="camVideo" class="cam-real" autoplay playsinline muted></video>
+        <canvas id="camCanvas" class="cam-real"></canvas>
+        <div id="camStatusBanner" class="cam-status-banner" hidden></div>
+
+        <!-- MOCK scene: visible by default -->
+        <div id="camMockScene" class="cam-mock">
+          <div class="street"></div>
+          <div class="lane"></div>
+          <div class="kid">🧒</div>
+          <div class="helmet-box"></div>
+          <div class="sign-icon">🚸</div>
+          <div class="sign-box"></div>
+          <div class="scan-line"></div>
+        </div>
       </div>
     </div>
     <div class="cam-controls">
@@ -70,7 +78,12 @@ window.__AI_CAMERA__ = {
       <button class="ctrl-btn shutter" title="Chụp ảnh" onclick="rescan()">📸</button>
       <button class="ctrl-btn" title="Tải ảnh lên">🖼️</button>
     </div>
+    <input type="file" id="camFileInput" accept="image/jpeg,image/png" hidden>
     <div class="upload-hint">Hỗ trợ JPG, PNG · Hoặc kéo thả ảnh vào khung camera</div>
+    <div class="mode-pill" id="camModePill" data-mode="<?= $aiEnabled ? 'real' : 'demo' ?>">
+      <span class="mode-dot"></span>
+      <?= $aiEnabled ? 'AI thật' : 'Demo' ?>
+    </div>
   </div>
 
   <div class="result-panel">
@@ -86,12 +99,12 @@ window.__AI_CAMERA__ = {
     </div>
     <div class="detect-item ok">
       <div class="d-icon">🚸</div>
-      <div class="d-info"><b>Biển báo khu vực trường học</b><span>Nhận diện rõ ràng, vị trí chính xác</span></div>
+      <div class="d-info"><b>Biển báo khu vực trường học <span class="demo-badge">Demo</span></b><span>Nhận diện rõ ràng, vị trí chính xác</span></div>
       <div class="detect-bar"><i></i></div>
     </div>
     <div class="detect-item warn">
       <div class="d-icon">🚶</div>
-      <div class="d-info"><b>Vị trí đứng — Cần chú ý</b><span>Hơi lệch khỏi vạch qua đường an toàn</span></div>
+      <div class="d-info"><b>Vị trí đứng — Cần chú ý <span class="demo-badge">Demo</span></b><span>Hơi lệch khỏi vạch qua đường an toàn</span></div>
       <div class="detect-bar"><i></i></div>
     </div>
 
@@ -138,7 +151,10 @@ window.__AI_CAMERA__ = {
   </div>
 </section>
 
-<script src="assets/js/main.js?v=5"></script>
-<script src="assets/js/ai-camera.js?v=5"></script>
+<script src="assets/js/main.js?v=6"></script>
+<?php if ($aiEnabled): ?>
+<script src="https://cdn.jsdelivr.net/npm/inferencejs"></script>
+<?php endif; ?>
+<script src="assets/js/ai-camera.js?v=6"></script>
 </body>
 </html>
