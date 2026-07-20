@@ -499,8 +499,8 @@ $user = currentUser();
                         <div class="feat-icon">🕹️</div>
                         <h4>AI Game hoá</h4>
                         <p>
-                            Kéo thả biển báo, ghép đèn tín hiệu, vượt mê cung an toàn giao
-                            thông.
+                            5 trò chơi mô phỏng tình huống giao thông thực tế: qua đường,
+                            đội mũ, tìm biển báo, chọn đường an toàn và cứu thành phố.
                         </p>
                     </div>
                 </a>
@@ -750,7 +750,7 @@ $user = currentUser();
                 <div class="foot-col">
                     <h5>Sản phẩm</h5>
                     <a href="ai-gia-su.php">AI Gia sư</a><a href="ai-mo-phong.php">Mô phỏng</a><a
-                        href="game-mini.php">Thử thách</a><a href="#">Bảng xếp hạng</a>
+                        href="game-mini.php">Thử thách</a><a href="bang-xep-hang.php">Bảng xếp hạng</a>
                 </div>
                 <div class="foot-col">
                     <h5>Đối tượng</h5>
