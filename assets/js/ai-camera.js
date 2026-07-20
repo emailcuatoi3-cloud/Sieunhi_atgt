@@ -89,7 +89,38 @@
     },
   };
 
-  // ---------- REAL MODE (stub — filled in by Task 5+) ----------
+  // ---------- CameraStream: getUserMedia wrapper ----------
+
+  const CameraStream = {
+    async start(videoEl) {
+      if (!navigator.mediaDevices?.getUserMedia) {
+        const err = new Error('getUserMedia unavailable — dùng localhost hoặc HTTPS');
+        err.name = 'NotSecureError';
+        throw err;
+      }
+
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },
+        audio: false,
+      });
+
+      videoEl.srcObject = stream;
+      await new Promise(resolve => {
+        if (videoEl.readyState >= 2) return resolve();
+        videoEl.onloadedmetadata = () => resolve();
+      });
+      await videoEl.play().catch(() => { /* autoplay policies — muted+playsinline should be fine */ });
+
+      return {
+        stop() {
+          stream.getTracks().forEach(t => t.stop());
+          videoEl.srcObject = null;
+        },
+      };
+    },
+  };
+
+  // ---------- REAL MODE (stub — filled in by Task 6+) ----------
 
   function runRealMode(_cfg) {
     throw new Error('runRealMode not implemented yet');
