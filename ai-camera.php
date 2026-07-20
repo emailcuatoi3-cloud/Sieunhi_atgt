@@ -20,8 +20,8 @@ window.__AI_CAMERA__ = {
 <title>AI Camera · Siêu Nhí An Toàn Giao Thông AI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=6">
-<link rel="stylesheet" href="assets/css/shared-pages.css?v=6">
+<link rel="stylesheet" href="assets/css/style.css?v=7">
+<link rel="stylesheet" href="assets/css/shared-pages.css?v=7">
 </head>
 <body>
 
@@ -76,7 +76,7 @@ window.__AI_CAMERA__ = {
     <div class="cam-controls">
       <button class="ctrl-btn" title="Đổi camera">🔄</button>
       <button class="ctrl-btn shutter" title="Chụp ảnh" onclick="rescan()">📸</button>
-      <button class="ctrl-btn" title="Tải ảnh lên">🖼️</button>
+      <button class="ctrl-btn" id="camUploadBtn" title="Tải ảnh lên">🖼️</button>
     </div>
     <input type="file" id="camFileInput" accept="image/jpeg,image/png" hidden>
     <div class="upload-hint">Hỗ trợ JPG, PNG · Hoặc kéo thả ảnh vào khung camera</div>
@@ -155,6 +155,6 @@ window.__AI_CAMERA__ = {
 <?php if ($aiEnabled): ?>
 <script src="https://cdn.jsdelivr.net/npm/inferencejs"></script>
 <?php endif; ?>
-<script src="assets/js/ai-camera.js?v=6"></script>
+<script src="assets/js/ai-camera.js?v=7"></script>
 </body>
 </html>

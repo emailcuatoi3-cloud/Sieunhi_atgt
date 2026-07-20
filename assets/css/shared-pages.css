@@ -4034,3 +4034,5 @@ body {
   color: var(--green);
   border-color: rgba(46, 204, 113, 0.35);
 }
+
+.cam-view.drop-hover { outline: 2px dashed var(--cyan); outline-offset: -6px; }

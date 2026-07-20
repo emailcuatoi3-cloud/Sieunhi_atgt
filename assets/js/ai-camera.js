@@ -318,6 +318,7 @@
 
     async function startCamera() {
       try {
+        videoEl.style.display = '';   // undo hide from upload path
         await ensureDetector();
         camHandle = await CameraStream.start(videoEl);
         scene.classList.add('real');
@@ -372,6 +373,74 @@
     window.rescan = function () {
       if (!camHandle) startCamera();
     };
+
+    // ---------- Upload tab: single-shot detect ----------
+
+    const fileInput = document.getElementById('camFileInput');
+    const uploadBtn = document.getElementById('camUploadBtn');
+    const uploadTab = document.querySelectorAll('.cam-tab')[1];
+    const camView   = document.querySelector('.cam-view');
+
+    async function detectFromFile(file) {
+      if (!file || !file.type.startsWith('image/')) return;
+      try {
+        await ensureDetector();
+      } catch (err) {
+        handleCameraError(err); return;
+      }
+      if (camHandle) stopCamera();
+
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = async () => {
+        scene.classList.add('real');
+        canvasEl.width  = img.naturalWidth;
+        canvasEl.height = img.naturalHeight;
+        const ctx = canvasEl.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        videoEl.style.display = 'none';
+        try {
+          const dets = await detector.detect(img);
+          ResultRenderer.drawBoxes(canvasEl, img, dets);
+          const top = dets.length
+            ? dets.reduce((a, b) => (a.confidence >= b.confidence ? a : b))
+            : null;
+          if (top && top.confidence >= 0.60) {
+            ResultRenderer.updateBadge(`✓ Độ chính xác ${Math.round(top.confidence * 100)}%`, 'ok');
+          } else if (top) {
+            ResultRenderer.updateBadge(`⚠ Chưa rõ ${Math.round(top.confidence * 100)}%`, 'warn');
+          } else {
+            ResultRenderer.updateBadge('⏸ Chưa thấy mũ trong ảnh', 'idle');
+          }
+          ResultRenderer.updateHelmetCard(top);
+          if (top) ScanHistory.push(top);
+        } finally {
+          URL.revokeObjectURL(url);
+        }
+      };
+      img.src = url;
+    }
+
+    if (fileInput) {
+      if (uploadBtn) uploadBtn.addEventListener('click', () => fileInput.click());
+      if (uploadTab) uploadTab.addEventListener('click', () => {
+        if (uploadTab.classList.contains('active')) fileInput.click();
+      });
+      fileInput.addEventListener('change', e => detectFromFile(e.target.files[0]));
+    }
+
+    if (camView) {
+      ['dragover', 'dragenter'].forEach(ev => camView.addEventListener(ev, e => {
+        e.preventDefault(); camView.classList.add('drop-hover');
+      }));
+      ['dragleave', 'drop'].forEach(ev => camView.addEventListener(ev, e => {
+        e.preventDefault(); camView.classList.remove('drop-hover');
+      }));
+      camView.addEventListener('drop', e => {
+        const f = e.dataTransfer?.files?.[0];
+        if (f) detectFromFile(f);
+      });
+    }
 
     window.__aiCam = { startCamera, stopCamera };
   }
