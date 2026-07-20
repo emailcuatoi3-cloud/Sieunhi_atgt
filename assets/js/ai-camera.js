@@ -16,12 +16,25 @@
 
   document.addEventListener('DOMContentLoaded', () => {
     if (cfg.enabled) {
-      runRealMode(cfg);
+      try {
+        runRealMode(cfg);
+      } catch (e) {
+        console.warn('AI camera real mode failed to init, falling back to mock', e);
+        runMockMode();
+        showFallbackBanner();
+      }
     } else {
       runMockMode();
     }
     wireTabs();
   });
+
+  function showFallbackBanner() {
+    const el = document.getElementById('camStatusBanner');
+    if (!el) return;
+    el.hidden = false;
+    el.textContent = 'Đang chạy chế độ demo — chưa kết nối được model AI.';
+  }
 
   // ---------- MOCK MODE (byte-identical to trước khi refactor) ----------
 
@@ -323,6 +336,8 @@
         camHandle = await CameraStream.start(videoEl);
         scene.classList.add('real');
         ResultRenderer.updateBadge('🔴 AI đang phân tích', 'analyzing');
+
+        let noDetSince = null;
         loop = FrameLoop.start(async () => {
           const dets = await detector.detect(videoEl);
           ResultRenderer.drawBoxes(canvasEl, videoEl, dets);
@@ -331,16 +346,30 @@
             : null;
           if (top && top.confidence >= 0.60) {
             ResultRenderer.updateBadge(`✓ Độ chính xác ${Math.round(top.confidence * 100)}%`, 'ok');
+            noDetSince = null;
+            ResultRenderer.setStatus(null);
           } else if (top) {
             ResultRenderer.updateBadge(`⚠ Chưa rõ ${Math.round(top.confidence * 100)}%`, 'warn');
+            noDetSince = null;
+            ResultRenderer.setStatus(null);
           } else {
             ResultRenderer.updateBadge('⏸ Chưa thấy mũ', 'idle');
+            if (!noDetSince) noDetSince = Date.now();
+            if (Date.now() - noDetSince >= 5000) {
+              ResultRenderer.setStatus('Hãy đứng gần cửa sổ hoặc bật đèn — camera đang thấy tối.');
+            }
           }
           ResultRenderer.updateHelmetCard(top);
           if (top) ScanHistory.push(top);
         });
       } catch (err) {
         stopCamera();
+        if (err.message && err.message.includes('inferencejs')) {
+          console.warn('detector unavailable, falling back to mock', err);
+          showFallbackBanner();
+          runMockMode();
+          return;
+        }
         handleCameraError(err);
       }
     }
