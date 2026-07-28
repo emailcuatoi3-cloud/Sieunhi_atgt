@@ -1,10 +1,9 @@
 /* comic-scenes.js — Hệ thống minh hoạ cho "AI Truyện tranh"
    =========================================================
-   Thay thế 1 emoji lẻ giữa màn hình bằng cảnh minh hoạ ĐẦY ĐỦ cho mỗi
-   chương: có bầu trời, đường phố/ngã tư, trường học, cây xanh, đèn tín
-   hiệu, phương tiện, và nhân vật Bo với biểu cảm/tư thế phù hợp nội
-   dung — bố cục có tiền cảnh/trung cảnh/hậu cảnh như 1 khung truyện
-   tranh thật, không dùng emoji/icon đơn lẻ.
+   Vẽ bằng SVG vector (không dùng emoji/icon đơn lẻ) cho mỗi chương: có bầu
+   trời, đường phố, trường học, cây xanh, đèn tín hiệu, phương tiện, và
+   nhân vật Bo với biểu cảm/tư thế phù hợp nội dung — bố cục có tiền cảnh/
+   trung cảnh/hậu cảnh như 1 khung truyện tranh, không dùng emoji/icon lẻ.
    ========================================================= */
 
 const ComicScenes = (() => {
@@ -13,37 +12,37 @@ const ComicScenes = (() => {
      --------------------------------------------------------------- */
   const FACES = {
     happy: {
-      browL: "M-14 -6 Q-8 -9 -2 -6",
-      browR: "M2 -6 Q8 -9 14 -6",
-      mouth: "M-9 9 Q0 17 9 9",
+      browL: "M-14 -23 Q-8 -26 -2 -23",
+      browR: "M2 -23 Q8 -26 14 -23",
+      mouth: "M-9 -1 Q0 6 9 -1",
       eyeR: 3.2,
       cheeks: true,
     },
     surprised: {
-      browL: "M-14 -8 Q-8 -12 -2 -8",
-      browR: "M2 -8 Q8 -12 14 -8",
-      mouth: "M0 11 m-4 0 a4 5 0 1 0 8 0 a4 5 0 1 0 -8 0",
+      browL: "M-14 -25 Q-8 -29 -2 -25",
+      browR: "M2 -25 Q8 -29 14 -25",
+      mouth: "M0 0 m-4 0 a4 5 0 1 0 8 0 a4 5 0 1 0 -8 0",
       eyeR: 3.8,
       cheeks: false,
     },
     worried: {
-      browL: "M-14 -4 Q-8 0 -2 -4",
-      browR: "M2 -4 Q8 0 14 -4",
-      mouth: "M-8 12 Q0 8 8 12",
+      browL: "M-14 -21 Q-8 -17 -2 -21",
+      browR: "M2 -21 Q8 -17 14 -21",
+      mouth: "M-8 1 Q0 -3 8 1",
       eyeR: 3.0,
       cheeks: false,
     },
     think: {
-      browL: "M-14 -7 Q-8 -9 -2 -6",
-      browR: "M2 -6 Q8 -10 14 -7",
-      mouth: "M-6 10 Q0 11 7 9",
+      browL: "M-14 -24 Q-8 -26 -2 -23",
+      browR: "M2 -23 Q8 -26 14 -24",
+      mouth: "M-6 -1 Q0 0.5 6 -1",
       eyeR: 3.0,
       cheeks: false,
     },
     confident: {
-      browL: "M-14 -7 Q-8 -10 -2 -7",
-      browR: "M2 -7 Q8 -10 14 -7",
-      mouth: "M-9 8 Q0 18 9 8",
+      browL: "M-14 -24 Q-8 -27 -2 -24",
+      browR: "M2 -24 Q8 -27 14 -24",
+      mouth: "M-9 -3 Q0 5 9 -3",
       eyeR: 3.2,
       cheeks: true,
     },
@@ -58,11 +57,11 @@ const ComicScenes = (() => {
   } = {}) {
     const f = FACES[expression] || FACES.think;
     const legs = {
-      stand: "M-9 40 L-11 68 M9 40 L11 68",
-      run: "M-9 40 L-18 62 M9 40 L4 66",
-      wave: "M-9 40 L-11 68 M9 40 L11 68",
-      "step-back": "M-9 40 L-16 64 M9 40 L14 64",
-      point: "M-9 40 L-11 68 M9 40 L11 68",
+      stand: "M-9 36 L-11 68 M9 36 L11 68",
+      run: "M-9 36 L-18 62 M9 36 L4 66",
+      wave: "M-9 36 L-11 68 M9 36 L11 68",
+      "step-back": "M-9 36 L-16 64 M9 36 L14 64",
+      point: "M-9 36 L-11 68 M9 36 L11 68",
     }[pose];
     const arms = {
       stand:
@@ -75,12 +74,12 @@ const ComicScenes = (() => {
     }[pose];
 
     return `
-      <g transform="translate(0,0) scale(${flip ? -scale : scale},${scale})">
+      <g transform="scale(${flip ? -1 : 1},1)">
         <ellipse cx="0" cy="72" rx="20" ry="5" fill="rgba(0,0,0,0.25)"/>
-        <path d="${legs}" stroke="#2b3358" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <path d="${legs}" stroke="#2b3358" stroke-width="12" stroke-linecap="round" fill="none"/>
         <rect x="-13" y="60" width="10" height="8" rx="3" fill="#1c2340"/>
         <rect x="3" y="60" width="10" height="8" rx="3" fill="#1c2340"/>
-        <path d="M-18 4 Q0 -4 18 4 L16 42 Q0 48 -16 42 Z" fill="#3b82f6"/>
+        <path d="M-18 4 Q0 -4 18 4 L15 34 Q0 38 -15 34 Z" fill="#3b82f6"/>
         <path d="M-18 4 Q0 -4 18 4 L17 14 Q0 8 -17 14 Z" fill="#2f68d1"/>
         <rect x="-8" y="14" width="16" height="20" rx="3" fill="#fff" opacity="0.85"/>
         <rect x="-15" y="18" width="9" height="18" rx="4" fill="#f59e0b"/>
@@ -102,18 +101,47 @@ const ComicScenes = (() => {
   }
 
   /** Bạn Na — trang phục khác màu để phân biệt với Bo */
+  /** Một bạn nhỏ nhìn từ SAU LƯNG, đang bước băng qua đường (không thấy mặt,
+   *  chỉ thấy tóc sau đầu và balo to rõ giữa lưng) — tạo cảm giác đường phố
+   *  có người qua lại, không chỉ có Bo đứng yên. */
+  function pedestrianBack({
+    scale = 1,
+    hair = "#2b1a12",
+    shirt = "#2f68d1",
+    bag = "#f59e0b",
+  } = {}) {
+    return `
+      <g >
+        <ellipse cx="0" cy="72" rx="20" ry="5" fill="rgba(0,0,0,0.25)"/>
+        <path d="M-9 36 L-16 66 M9 36 L4 68" stroke="#2b3358" stroke-width="12" stroke-linecap="round" fill="none"/>
+        <rect x="-15" y="58" width="10" height="8" rx="3" fill="#1c2340"/>
+        <rect x="1" y="60" width="10" height="8" rx="3" fill="#1c2340"/>
+        <path d="M-18 4 Q0 -4 18 4 L15 34 Q0 38 -15 34 Z" fill="${shirt}"/>
+        <g fill="none" stroke="${shirt}" stroke-width="9" stroke-linecap="round">
+          <path d="M-19 6 Q-27 16 -25 32"/><path d="M19 6 Q25 18 20 34"/>
+        </g>
+        <rect x="-14" y="2" width="28" height="32" rx="8" fill="${bag}"/>
+        <rect x="-14" y="2" width="28" height="10" rx="4" fill="rgba(0,0,0,0.18)"/>
+        <rect x="-3" y="10" width="6" height="16" rx="2" fill="#fff" opacity="0.45"/>
+        <circle cx="0" cy="-18" r="24" fill="${hair}"/>
+        <circle cx="-19" cy="-13" r="6" fill="#ffd8a8"/>
+        <circle cx="19" cy="-13" r="6" fill="#ffd8a8"/>
+      </g>
+    `;
+  }
+
   function na({ pose = "wave", scale = 1 } = {}) {
     const arms =
       pose === "wave"
         ? '<path d="M-19 6 Q-26 20 -22 34" /><path d="M19 6 Q30 -6 26 -20" />'
         : '<path d="M-19 6 Q-26 20 -22 34" /><path d="M19 6 Q26 20 22 34" />';
     return `
-      <g transform="scale(${scale})">
+      <g >
         <ellipse cx="0" cy="72" rx="20" ry="5" fill="rgba(0,0,0,0.25)"/>
-        <path d="M-9 40 L-11 68 M9 40 L11 68" stroke="#2b3358" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <path d="M-9 36 L-11 68 M9 36 L11 68" stroke="#2b3358" stroke-width="12" stroke-linecap="round" fill="none"/>
         <rect x="-13" y="60" width="10" height="8" rx="3" fill="#1c2340"/>
         <rect x="3" y="60" width="10" height="8" rx="3" fill="#1c2340"/>
-        <path d="M-18 4 Q0 -4 18 4 L16 42 Q0 48 -16 42 Z" fill="#ec4899"/>
+        <path d="M-18 4 Q0 -4 18 4 L15 34 Q0 38 -15 34 Z" fill="#ec4899"/>
         <path d="M-18 4 Q0 -4 18 4 L17 14 Q0 8 -17 14 Z" fill="#d63384"/>
         <rect x="-8" y="14" width="16" height="20" rx="3" fill="#fff" opacity="0.85"/>
         <g fill="none" stroke="#ec4899" stroke-width="9" stroke-linecap="round">${arms}</g>
@@ -137,7 +165,7 @@ const ComicScenes = (() => {
           ? "M-6 8 Q0 5 6 8"
           : "M-6 7 L6 7";
     return `
-      <g transform="scale(${scale})">
+      <g >
         <ellipse cx="0" cy="46" rx="18" ry="4.5" fill="rgba(0,0,0,0.25)"/>
         <rect x="-16" y="-6" width="32" height="26" rx="10" fill="#3b82f6"/>
         <rect x="-16" y="-6" width="32" height="26" rx="10" fill="url(#robotShine)" opacity="0.35"/>
@@ -220,18 +248,60 @@ const ComicScenes = (() => {
     `;
   }
 
-  function crosswalk(x, y, w = 90) {
+  /** Vạch qua đường vuông góc với chiều xe chạy: các sọc NGANG (rộng, dẹt)
+   *  xếp chồng theo chiều dọc, phủ hết bề ngang lòng đường để người đi bộ
+   *  băng qua theo phương thẳng đứng. */
+  function crosswalk(cx, roadTop, roadHeight) {
     let stripes = "";
-    for (let i = 0; i < 6; i++)
-      stripes += `<rect x="${x - w / 2 + i * (w / 6)}" y="${y}" width="${w / 10}" height="34" fill="#eef1fb" opacity="0.9"/>`;
+    const count = 6;
+    const gap = roadHeight / count;
+    const stripeH = gap * 0.6;
+    for (let i = 0; i < count; i++) {
+      const y = roadTop + i * gap + (gap - stripeH) / 2;
+      stripes += `<rect x="${cx - 34}" y="${y}" width="68" height="${stripeH}" fill="#eef1fb" opacity="0.9"/>`;
+    }
     return stripes;
   }
 
-  function roadWithCrosswalk(mood = "day") {
+  /** Vạch đứt nét phân chia làn xe (đường 1 chiều, không cần vạch tim vàng). */
+  function dashedLane(y) {
+    let out = "";
+    for (let x = 8; x < 636; x += 34) {
+      out += `<rect x="${x}" y="${y - 2}" width="18" height="4" fill="rgba(232,236,251,0.65)"/>`;
+    }
+    return out;
+  }
+
+  /** Vỉa hè riêng cho người đi bộ — nằm giữa nền (cây/trường/đèn) và lòng đường,
+   *  có bó vỉa (viền sáng) và vài đường lát gạch cho có kết cấu thật. */
+  function sidewalkStrip(topY, h) {
+    let tiles = "";
+    for (let x = 6; x < 640; x += 40) {
+      tiles += `<line x1="${x}" y1="${topY + 4}" x2="${x}" y2="${topY + h}" stroke="rgba(0,0,0,0.08)" stroke-width="2"/>`;
+    }
     return `
-      <rect x="0" y="240" width="640" height="120" fill="#2a2f45"/>
-      <rect x="0" y="234" width="640" height="6" fill="#f4b942" opacity="0.85"/>
-      ${crosswalk(320, 250, 130)}
+      <rect x="0" y="${topY}" width="640" height="${h}" fill="#9297ac"/>
+      <rect x="0" y="${topY}" width="640" height="4" fill="#d7dae6"/>
+      ${tiles}
+    `;
+  }
+
+  /** Đường 1 CHIỀU nhiều làn: chỉ có vạch đứt nét trắng phân làn cùng chiều,
+   *  không có vạch tim vàng (vì không có luồng xe ngược chiều). */
+  /** Vạch dừng xe — vạch trắng đậm, kẻ ngang qua toàn bộ lòng đường, nơi xe
+   *  phải dừng lại chờ đèn đỏ trước khi tới vạch qua đường. */
+  function stopLine(x, topY, h) {
+    return `<rect x="${x - 3}" y="${topY}" width="6" height="${h}" fill="#eef1fb" opacity="0.95"/>`;
+  }
+
+  function roadOneWay(topY, h, lanes = 3) {
+    let dividers = "";
+    for (let i = 1; i < lanes; i++)
+      dividers += dashedLane(topY + h * (i / lanes));
+    return `
+      <rect x="0" y="${topY}" width="640" height="${h}" fill="#2a2f45"/>
+      ${dividers}
+      ${crosswalk(320, topY, h)}
     `;
   }
 
@@ -257,6 +327,19 @@ const ComicScenes = (() => {
         <circle cx="12" cy="8" r="6" fill="#111"/>
         <circle cx="-2" cy="-12" r="7" fill="#ffd8a8"/>
         <rect x="-6" y="-8" width="9" height="10" fill="#3b82f6"/>
+      </g>
+    `;
+  }
+
+  function bicycle(x, y, flip = false) {
+    return `
+      <g transform="translate(${x},${y}) scale(${flip ? -1 : 1},1)">
+        <circle cx="-13" cy="8" r="9" fill="none" stroke="#cfd3e6" stroke-width="2"/>
+        <circle cx="13" cy="8" r="9" fill="none" stroke="#cfd3e6" stroke-width="2"/>
+        <path d="M-13 8 L2 -6 L13 8 M2 -6 L2 -14 M-13 8 L8 0 L13 8" stroke="#2b3358" stroke-width="2" fill="none"/>
+        <circle cx="2" cy="-19" r="6" fill="#ffd8a8"/>
+        <path d="M-3 -22 Q2 -27 7 -22" fill="#3b2a1e"/>
+        <rect x="-2" y="-16" width="8" height="9" rx="2" fill="#f59e0b"/>
       </g>
     `;
   }
@@ -298,109 +381,168 @@ const ComicScenes = (() => {
     return `<g transform="translate(${x},${y}) scale(${s})">${svgInner}</g>`;
   }
 
-  /* ---------------------------------------------------------------
-     9 CẢNH TRUYỆN — mỗi chương 1 illustration riêng, góc máy khác nhau
-     --------------------------------------------------------------- */
+  // Bố cục chiều sâu chung cho MỌI cảnh, từ xa tới gần:
+  //   nền/trời (cây, trường, đèn tín hiệu)  →  VỈA HÈ (người đi bộ đứng ở đây)
+  //   →  LÒNG ĐƯỜNG 1 CHIỀU nhiều làn (xe chạy đúng làn, cùng 1 hướng)
+  const SIDEWALK_Y = 240; // biên trên vỉa hè gần (giáp nền/cây/trường)
+  const SIDEWALK_H = 28; // bề dày vỉa hè gần
+  const ROAD_TOP = SIDEWALK_Y + SIDEWALK_H; // = 268, lòng đường bắt đầu từ đây
+  const ROAD_H = 62; // bề dày lòng đường
+  const SIDEWALK2_Y = ROAD_TOP + ROAD_H; // = 330, vỉa hè phía đối diện
+  const SIDEWALK2_H = 360 - SIDEWALK2_Y; // = 30
+  const STAND_Y = SIDEWALK_Y + SIDEWALK_H * 0.35; // ~202, chân người đứng vỉa hè gần (cùng phía cột đèn)
+  const STAND2_Y = SIDEWALK2_Y + SIDEWALK2_H * 0.5; // ~340, chân người đứng vỉa hè xa (phía đối diện cột đèn)
+  const LANE_COUNT = 3;
+  const laneY = (i) => ROAD_TOP + ROAD_H * ((i + 0.5) / LANE_COUNT); // tâm làn thứ i (0..2)
+
+  function roadWithCrosswalk() {
+    return `
+      ${sidewalkStrip(SIDEWALK_Y, SIDEWALK_H)}
+      ${roadOneWay(ROAD_TOP, ROAD_H, LANE_COUNT)}
+      ${sidewalkStrip(SIDEWALK2_Y, SIDEWALK2_H)}
+    `;
+  }
+
+  const placeBo = (x, feetY, opts = {}) =>
+    wrapCharAt(
+      x,
+      feetY - 72 * (opts.scale || 1.3),
+      opts.scale || 1.3,
+      bo(opts),
+    );
+  const placeNa = (x, feetY, opts = {}) =>
+    wrapCharAt(
+      x,
+      feetY - 72 * (opts.scale || 1.25),
+      opts.scale || 1.25,
+      na(opts),
+    );
+  const placeRobot = (x, feetY, opts = {}) =>
+    wrapCharAt(
+      x,
+      feetY - 46 * (opts.scale || 1.1),
+      opts.scale || 1.1,
+      robot(opts),
+    );
+  const placePedBack = (x, feetY, opts = {}) =>
+    wrapCharAt(
+      x,
+      feetY - 72 * (opts.scale || 0.85),
+      opts.scale || 0.85,
+      pedestrianBack(opts),
+    );
+  const placeTree = (x, scale = 1) =>
+    treeCluster(x, SIDEWALK_Y - 18 * scale, scale);
+  const placeSchool = (x, scale = 1) =>
+    schoolBuilding(x, SIDEWALK_Y - 6 * scale, scale);
+  const placeLight = (x, active) => trafficLightPole(x, ROAD_TOP - 46, active);
+  // lane: chỉ số làn 0-4 (0 = làn sát vỉa hè gần, 4 = làn sát vỉa hè xa)
+  const placeCar = (x, color, lane = 2) =>
+    car(x, laneY(lane) - 15, color, false);
+  const placeMoto = (x, urgent, lane = 2) =>
+    motorbike(x, laneY(lane) - 14, false, urgent);
+  const placeBike = (x, lane = 2) => bicycle(x, laneY(lane) - 12, false);
+  const placeBus = (x, braking, lane = 2) =>
+    bus(x, laneY(lane) - 18, false, braking);
+  const placePolice = (x, groundY = STAND_Y) => policeman(x, groundY - 46);
+  const placeStopLine = (x) => stopLine(x, ROAD_TOP, ROAD_H);
+  const groundBand = (color) =>
+    `<rect x="0" y="${SIDEWALK_Y}" width="640" height="${360 - SIDEWALK_Y}" fill="${color}"/>`;
+
   const SCENES = {
-    /* Chương 1 — Wide shot: Bo trước ngã tư đông xe, phân vân */
     start: () =>
       frame(`
       ${sky("morning")}
-      ${schoolBuilding(500, 232, 0.72)}
-      ${treeCluster(60, 250, 1.1)}${treeCluster(600, 260, 0.9)}
+      ${placeSchool(500, 0.75)}
+      ${placeTree(55, 1)}${placeTree(605, 0.85)}
       ${roadWithCrosswalk()}
-      ${trafficLightPole(430, 232, "red")}
-      ${car(180, 285, "#8b5cf6")}${motorbike(500, 300, true)}${car(520, 210, "#34d399", true)}
-      ${wrapCharAt(200, 300, 1.35, bo({ expression: "think", pose: "stand" }))}
+      ${placeStopLine(368)}
+      ${placeLight(396, "red")}
+      ${placeCar(420, "#8b5cf6", 0)}${placeBike(478, 0)}
+      ${placeMoto(400, false, 1)}${placeCar(455, "#3b82f6", 1)}${placeBus(520, false, 1)}
+      ${placeCar(430, "#34d399", 2)}${placeMoto(485, false, 2)}${placeBike(535, 2)}
+      ${placeBo(110, STAND2_Y, { expression: "think", pose: "stand", scale: 0.475 })}
     `),
 
-    /* Chương 2 (sai) — Close up: xe máy phanh gấp, Bo giật mình giữa đường */
     rush: () =>
       frame(`
       ${sky("tense")}
-      ${treeCluster(40, 250, 0.8)}
-      <rect x="0" y="230" width="640" height="130" fill="#2a2f45"/>
-      <rect x="0" y="224" width="640" height="6" fill="#f4b942" opacity="0.7"/>
-      ${motorbike(430, 260, true, true)}
-      ${wrapCharAt(300, 300, 1.7, bo({ expression: "surprised", pose: "step-back" }))}
-      <text x="470" y="200" font-size="46" fill="#fff" font-weight="800" opacity="0.9">!</text>
+      ${placeTree(40, 0.85)}
+      ${roadWithCrosswalk()}
+      ${placeMoto(440, true, 2)}
+      ${placeBo(320, 340, { expression: "surprised", pose: "step-back", scale: 0.55 })}
+      <text x="480" y="170" font-size="46" fill="#fff" font-weight="800" opacity="0.9">!</text>
     `),
 
-    /* Chương 2 (đúng) — Bo tại vạch qua đường, đèn đỏ, Na vẫy gọi */
     safeCross: () =>
       frame(`
       ${sky("morning")}
-      ${treeCluster(560, 245, 1)}
+      ${placeTree(560, 1)}
       ${roadWithCrosswalk()}
-      ${trafficLightPole(60, 232, "red")}
-      ${car(430, 285, "#3b82f6")}${bus(180, 200, true)}
-      ${wrapCharAt(280, 300, 1.4, bo({ expression: "think", pose: "stand" }))}
-      ${wrapCharAt(390, 300, 1.3, na({ pose: "wave" }))}
+      ${placeStopLine(272)}
+      ${placeLight(240, "red")}
+      ${placeCar(180, "#3b82f6")}${placeBus(90)}
+      ${placeBo(270, STAND_Y, { expression: "think", pose: "stand", scale: 0.5 })}
+      ${placeNa(380, STAND_Y, { pose: "wave", scale: 0.45 })}
     `),
 
-    /* Chương 3 (sai nhánh) — hai bạn chạy ẩu qua đèn đỏ, xe buýt phanh gấp */
     peerPressure: () =>
       frame(`
       ${sky("tense")}
       ${roadWithCrosswalk()}
-      ${trafficLightPole(60, 232, "red")}
-      ${bus(420, 250, true, true)}
-      ${wrapCharAt(230, 295, 1.3, bo({ expression: "surprised", pose: "run" }))}
-      ${wrapCharAt(310, 300, 1.2, na({ pose: "stand" }))}
+      ${placeLight(70, "red")}
+      ${placeBus(430, true)}
+      ${placeBo(220, STAND_Y - 5, { expression: "surprised", pose: "run", scale: 0.5 })}
+      ${placeNa(310, STAND_Y, { pose: "stand", scale: 0.45 })}
     `),
 
-    /* Chương 3 (đúng nhánh) — đèn xanh, cùng qua đường, chú công an điều tiết */
     goodWait: () =>
       frame(`
       ${sky("bright")}
-      ${treeCluster(560, 245, 1)}
+      ${placeTree(560, 1)}
       ${roadWithCrosswalk()}
-      ${trafficLightPole(60, 232, "green")}
-      ${policeman(560, 260)}
-      ${wrapCharAt(260, 300, 1.35, bo({ expression: "confident", pose: "stand" }))}
-      ${wrapCharAt(340, 300, 1.25, na({ pose: "wave" }))}
+      ${placeLight(70, "green")}
+      ${placePolice(560)}
+      ${placeBo(250, STAND_Y, { expression: "confident", pose: "stand", scale: 0.5 })}
+      ${placeNa(340, STAND_Y, { pose: "wave", scale: 0.45 })}
     `),
 
-    /* Chương 3 (phục hồi sau sai lầm) — Bo bình tĩnh lùi lại tìm vạch kẻ */
     recover: () =>
       frame(`
       ${sky("morning")}
-      ${treeCluster(80, 250, 1)}
+      ${placeTree(80, 1)}
       ${roadWithCrosswalk()}
-      ${trafficLightPole(430, 232, "red")}
-      ${wrapCharAt(230, 300, 1.4, bo({ expression: "think", pose: "step-back" }))}
+      ${placeLight(440, "red")}
+      ${placeBo(230, STAND_Y, { expression: "think", pose: "step-back", scale: 0.5 })}
     `),
 
-    /* Kết thúc TỐT — Bo & Na tới cổng trường an toàn, robot AI vui mừng */
     endGood: () =>
       frame(`
       ${sky("bright")}
-      ${schoolBuilding(460, 240, 0.95)}
-      ${treeCluster(60, 250, 1.1)}
-      <rect x="0" y="250" width="640" height="110" fill="#3d9856"/>
-      ${wrapCharAt(230, 300, 1.4, bo({ expression: "happy", pose: "wave" }))}
-      ${wrapCharAt(310, 300, 1.25, na({ pose: "wave" }))}
-      ${wrapCharAt(150, 260, 1.1, robot({ mood: "happy" }))}
+      ${placeSchool(460, 0.95)}
+      ${placeTree(60, 1.1)}
+      ${groundBand("#3d9856")}
+      ${placeBo(230, STAND_Y, { expression: "happy", pose: "wave", scale: 0.5 })}
+      ${placeNa(320, STAND_Y, { pose: "wave", scale: 0.45 })}
+      ${placeRobot(150, 300, { mood: "happy", scale: 0.55 })}
     `),
 
-    /* Kết thúc TRUNG BÌNH — Bo nhẹ nhõm, rút kinh nghiệm cùng AI Gia sư */
     endMid: () =>
       frame(`
       ${sky("morning")}
-      ${treeCluster(540, 250, 1)}
-      <rect x="0" y="260" width="640" height="100" fill="#3d9856"/>
-      ${wrapCharAt(260, 300, 1.4, bo({ expression: "think", pose: "stand" }))}
-      ${wrapCharAt(370, 265, 1.15, robot({ mood: "neutral" }))}
+      ${placeTree(540, 1)}
+      ${groundBand("#3d9856")}
+      ${placeBo(260, STAND_Y, { expression: "think", pose: "stand", scale: 0.5 })}
+      ${placeRobot(380, 300, { mood: "neutral", scale: 0.55 })}
     `),
 
-    /* Kết thúc CẦN CẨN THẬN — Bo và AI lo lắng nhắc nhở, không quá đáng sợ */
     endBad: () =>
       frame(`
       ${sky("tense")}
-      <rect x="0" y="240" width="640" height="120" fill="#2a2f45"/>
-      ${trafficLightPole(500, 222, "red")}
-      ${wrapCharAt(260, 300, 1.4, bo({ expression: "worried", pose: "stand" }))}
-      ${wrapCharAt(370, 265, 1.1, robot({ mood: "concern" }))}
+      ${roadWithCrosswalk()}
+      ${placeLight(520, "red")}
+      ${placeBo(260, STAND_Y, { expression: "worried", pose: "stand", scale: 0.5 })}
+      ${placeRobot(380, 300, { mood: "concern", scale: 0.55 })}
     `),
   };
 

@@ -18,20 +18,21 @@ if ($isStudent) {
 <!DOCTYPE html>
 <html lang="vi">
 <head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script>(function(){try{document.documentElement.setAttribute("data-theme", localStorage.getItem("sieu-nhi-theme")||"dark");}catch(e){}})();</script>
 <title>Đường đến trường an toàn · Siêu Nhí An Toàn Giao Thông AI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=5">
-<link rel="stylesheet" href="assets/css/shared-pages.css?v=7">
+<link rel="stylesheet" href="assets/css/style.css?v=9">
+<link rel="stylesheet" href="assets/css/shared-pages.css?v=25">
 </head>
 <body>
 
 <nav class="navbar static" id="navbar">
   <div class="nav-inner">
-    <a href="sieu-nhi-atgt-ai.php" class="logo"><span class="logo-badge">🤖</span>SIÊU NHÍ <span class="logo-text-en">AI</span></a>
+    <a href="index.php" class="logo"><span class="logo-badge">🤖</span>SIÊU NHÍ <span class="logo-text-en">AI</span></a>
     <a class="back-link" href="game-mini.php">← Về Game Mini</a>
     <div class="nav-actions">
       <button class="icon-btn theme-toggle" aria-label="Chế độ tối">🌙</button>
@@ -59,6 +60,8 @@ if ($isStudent) {
 <script src="assets/js/main.js?v=5"></script>
 <script src="assets/js/sound-fx.js?v=1"></script>
 <script src="assets/js/game-engine.js?v=1"></script>
-<script src="assets/js/game-safe-route.js?v=1"></script>
+<script src="assets/js/game-safe-route.js?v=2"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

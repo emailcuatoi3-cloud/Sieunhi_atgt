@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <rect x="18" y="68" width="13" height="7" rx="3.5" fill="#101830"/>
       <rect x="29" y="68" width="13" height="7" rx="3.5" fill="#101830"/>
       <rect x="12" y="29" width="11" height="21" rx="4" fill="#f59e0b"/>
-      <rect x="17" y="27" width="26" height="27" rx="10" fill="#3b82f6"/>
+      <rect x="17" y="27" width="26" height="27" rx="10" fill="#16C765"/>
       <path d="M17 34 L30 40 L43 34" stroke="#eaf6ff" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.85"/>
       <rect x="9" y="30" width="9" height="19" rx="4.5" fill="#ffd8b0"/>
       <rect x="42" y="30" width="9" height="19" rx="4.5" fill="#ffd8b0"/>
@@ -150,8 +150,11 @@ document.addEventListener("DOMContentLoaded", () => {
     usedContexts.push(ctx.key);
 
     playerRow = 0;
-    phase = "red";
-    phaseTimer = RED_MS;
+    // Random trạng thái đèn ban đầu mỗi lượt — không phải lúc nào cũng đèn đỏ trước
+    const startPhases = ["red", "green", "yellow"];
+    phase = startPhases[Math.floor(Math.random() * startPhases.length)];
+    phaseTimer =
+      phase === "red" ? RED_MS : phase === "green" ? GREEN_MS : YELLOW_MS;
     carsByLane = { 1: [], 2: [], 3: [] };
     crashed = false;
     finished = false;

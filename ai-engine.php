@@ -31,6 +31,28 @@ if (!function_exists('str_contains')) {
     }
 }
 
+/**
+ * Google hiện phát hành 2 dạng key khác nhau cho Gemini API:
+ *   - "AIzaSy..." (dạng cũ, API key thường)  -> gửi qua ?key=... trên URL
+ *   - "AQ...."    (dạng mới, thực chất là OAuth 2 Access Token) -> PHẢI gửi
+ *     qua header Authorization: Bearer, gửi qua ?key= sẽ bị lỗi 401
+ *     "Expected OAuth 2 access token" (theo báo cáo chính thức từ Google
+ *     AI Developers Forum, không phải lỗi sai key).
+ * Hàm này tự nhận diện và trả về đúng [url, headers] cho từng loại key.
+ */
+function gemini_endpoint(string $model): array
+{
+    $isAuthToken = substr(GEMINI_API_KEY, 0, 3) === 'AQ.';
+    if ($isAuthToken) {
+        $url = 'https://generativelanguage.googleapis.com/v1beta/models/' . $model . ':generateContent';
+        $headers = ['Content-Type: application/json', 'Authorization: Bearer ' . GEMINI_API_KEY];
+    } else {
+        $url = 'https://generativelanguage.googleapis.com/v1beta/models/' . $model . ':generateContent?key=' . GEMINI_API_KEY;
+        $headers = ['Content-Type: application/json'];
+    }
+    return [$url, $headers];
+}
+
 /* ============================================================
    HÀM CHÍNH — được ai-chat.php gọi
    ============================================================ */
@@ -74,14 +96,13 @@ function ai_call_gemini(PDO $pdo, int $sessionId, string $userMessage): ?string
         'generationConfig'   => ['temperature' => 0.7, 'maxOutputTokens' => 1024],
     ];
 
-    $url = 'https://generativelanguage.googleapis.com/v1beta/models/'
-         . GEMINI_MODEL . ':generateContent?key=' . GEMINI_API_KEY;
+    [$url, $headers] = gemini_endpoint(GEMINI_MODEL);
 
     $ch = curl_init($url);
     curl_setopt_array($ch, [
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_POST           => true,
-        CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
+        CURLOPT_HTTPHEADER     => $headers,
         CURLOPT_POSTFIELDS     => json_encode($body),
         CURLOPT_TIMEOUT        => 30,
         // XAMPP trên Windows thường thiếu chứng chỉ SSL → tắt kiểm tra

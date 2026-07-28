@@ -63,14 +63,15 @@ $roleLabelMap = ROLE_LABELS;
 <!DOCTYPE html>
 <html lang="vi">
 <head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script>(function(){try{document.documentElement.setAttribute("data-theme", localStorage.getItem("sieu-nhi-theme")||"dark");}catch(e){}})();</script>
 <title>Quản lý người dùng · Siêu Nhí An Toàn Giao Thông AI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=5">
-<link rel="stylesheet" href="assets/css/shared-pages.css?v=5">
+<link rel="stylesheet" href="assets/css/style.css?v=9">
+<link rel="stylesheet" href="assets/css/shared-pages.css?v=25">
 </head>
 <body>
 
@@ -78,7 +79,7 @@ $roleLabelMap = ROLE_LABELS;
   <aside class="sidebar">
     <div>
       <div class="side-brand"><div class="mark">🤖</div>SIÊU NHÍ AI</div>
-      <a class="side-back" href="sieu-nhi-atgt-ai.php">← Về trang chủ</a>
+      <a class="side-back" href="index.php">← Về trang chủ</a>
     </div>
     <a class="side-link" href="dashboard-admin.php"><span class="ic">🏠</span> Tổng quan</a>
     <a class="side-link active" href="admin-users.php"><span class="ic">👥</span> Người dùng</a>
@@ -252,5 +253,7 @@ $roleLabelMap = ROLE_LABELS;
 </div>
 
 <script src="assets/js/main.js?v=5"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
