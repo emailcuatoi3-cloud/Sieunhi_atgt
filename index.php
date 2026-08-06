@@ -38,6 +38,7 @@ $user = currentUser();
             <ul class="nav-menu">
                 <li><a href="index.php" class="active">Trang chủ</a></li>
                 <li><a href="ai-gia-su.php">AI Gia sư</a></li>
+                <li><a href="kham-pha.php">🗺️ Khám phá</a></li>
                 <li><a href="ai-camera.php">AI Camera</a></li>
                 <li><a href="ai-mo-phong.php">Mô phỏng</a></li>
                 <li><a href="ai-truyen-tranh.php">Truyện tranh</a></li>
