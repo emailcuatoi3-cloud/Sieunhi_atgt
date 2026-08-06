@@ -209,9 +209,10 @@ const MascotSVG = (() => {
 
   /** Vẽ mascot ở 1 trong 4 trạng thái cảm xúc: 'wave' | 'cheer' | 'worry' | 'point' */
   function pose(state = "wave") {
-    return `<svg viewBox="0 0 140 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Siêu Nhí ${state}">
-      <defs><radialGradient id="skinGrad" cx="50%" cy="40%"><stop offset="0%" stop-color="#FFD9A8"/><stop offset="100%" stop-color="#F2B87E"/></radialGradient></defs>
-      ${extras(state)}${hairFull()}${head()}${arms(state)}
+    const skinGid = "sg" + Math.random().toString(36).slice(2, 9); // id gradient riêng mỗi lần vẽ, tránh trùng (giống character())
+    return `<svg viewBox="0 0 140 160" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Siêu Nhí ${state}">
+      <defs><radialGradient id="${skinGid}" cx="50%" cy="40%"><stop offset="0%" stop-color="#FFD9A8"/><stop offset="100%" stop-color="#F2B87E"/></radialGradient></defs>
+      ${extras(state)}${hairFull()}${head().replace("url(#skinGrad)", `url(#${skinGid})`)}${arms(state)}
     </svg>`;
   }
 
