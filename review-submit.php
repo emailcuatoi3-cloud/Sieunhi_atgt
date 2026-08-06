@@ -24,6 +24,10 @@ $today = (int)$db->getValue(
     'SELECT COUNT(*) FROM place_reviews WHERE user_id = ? AND created_at >= CURDATE()', [$userId]);
 if ($today >= 5) fail('Hôm nay con kể đủ 5 chuyến rồi, mai kể tiếp nha! 🌙', 429);
 
+if (isset($_FILES['photos']) && !is_array($_FILES['photos']['name'])) {
+    fail('Ảnh gửi lên chưa đúng định dạng, thử lại nhé!');
+}
+
 $saved = [];
 foreach (array_slice(array_keys($_FILES['photos']['name'] ?? []), 0, 3) as $i) {
     $file = ['tmp_name' => $_FILES['photos']['tmp_name'][$i],
