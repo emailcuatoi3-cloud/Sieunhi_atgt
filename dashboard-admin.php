@@ -3,12 +3,13 @@ require_once __DIR__ . '/auth.php';
 requireRole(['admin']);
 $user = currentUser();
 $db = new DB_UTILS();
-$userTotal = $studentTotal = $lessonTotal = $chatTotal = 0;
+$userTotal = $studentTotal = $lessonTotal = $chatTotal = 0; $pendingReviewCount = 0;
 try {
   $userTotal = (int)$db->getValue('SELECT COUNT(*) FROM users');
   $studentTotal = (int)$db->getValue('SELECT COUNT(*) FROM users WHERE role = "hocsinh"');
   $lessonTotal = (int)$db->getValue('SELECT COUNT(*) FROM lessons WHERE status = "published"');
   $chatTotal = (int)$db->getValue('SELECT COUNT(*) FROM ai_chat_messages WHERE role = "user"');
+  $pendingReviewCount = (int)$db->getValue('SELECT COUNT(*) FROM place_reviews WHERE status = "pending"');
 } catch (Throwable $ignored) { }
 ?>
 <!DOCTYPE html>
@@ -17,6 +18,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf" content="<?= e(csrfToken()) ?>">
     <script>
     (function() {
         try {
@@ -50,6 +52,7 @@ try {
             <a class="side-link" href="dashboard-admin.php"><span class="ic">📊</span> Thống kê</a>
             <a class="side-link" href="dashboard-admin.php"><span class="ic">🖥️</span> Máy chủ</a>
             <a class="side-link" href="dashboard-admin.php"><span class="ic">📜</span> Logs</a>
+            <a class="side-link" href="#duyet-review"><span class="ic">📝</span> Duyệt review<?php if ($pendingReviewCount > 0): ?> <span class="kid-badge kid-badge--red"><?= $pendingReviewCount ?></span><?php endif; ?></a>
             <div class="side-divider"></div>
             <a class="side-link" href="dashboard-hoc-sinh.php"><span class="ic">🎒</span> Dashboard học sinh</a>
             <a class="side-link" href="dashboard-phu-huynh.php"><span class="ic">👨‍👩‍👧</span> Dashboard phụ huynh</a>
@@ -272,6 +275,8 @@ try {
                     </div>
                 </div>
             </div>
+
+            <section id="duyet-review"><?php require __DIR__ . '/partials/review-moderation-section.php'; ?></section>
         </main>
     </div>
 

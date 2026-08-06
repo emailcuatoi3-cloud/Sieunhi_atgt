@@ -3,11 +3,12 @@ require_once __DIR__ . '/auth.php';
 requireRole(['giaovien', 'admin']);
 $user = currentUser();
 $db = new DB_UTILS();
-$classCount = 0; $studentCount = 0; $lessonCount = 0;
+$classCount = 0; $studentCount = 0; $lessonCount = 0; $pendingReviewCount = 0;
 try {
   $classCount = (int)$db->getValue('SELECT COUNT(*) FROM classes WHERE teacher_id = ?', [$user['id']]);
   $studentCount = (int)$db->getValue('SELECT COUNT(DISTINCT cs.student_id) FROM class_students cs JOIN classes c ON c.id = cs.class_id WHERE c.teacher_id = ?', [$user['id']]);
   $lessonCount = (int)$db->getValue('SELECT COUNT(*) FROM lessons WHERE status = "published"');
+  $pendingReviewCount = (int)$db->getValue('SELECT COUNT(*) FROM place_reviews WHERE status = "pending"');
 } catch (Throwable $ignored) { }
 ?>
 <!DOCTYPE html>
@@ -16,6 +17,7 @@ try {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="csrf" content="<?= e(csrfToken()) ?>">
 <script>(function(){try{document.documentElement.setAttribute("data-theme", localStorage.getItem("sieu-nhi-theme")||"light");}catch(e){}})();</script>
 <title>Dashboard giáo viên · Siêu Nhí An Toàn Giao Thông AI</title>
 <link rel="stylesheet" href="assets/css/fonts.css?v=1">
@@ -37,6 +39,7 @@ try {
     <a class="side-link" href="ai-gia-su.php"><span class="ic">📘</span> Bài học</a>
     <a class="side-link" href="game-mini.php"><span class="ic">🏆</span> Cuộc thi</a>
     <a class="side-link" href="dashboard-giao-vien.php"><span class="ic">📊</span> Báo cáo</a>
+    <a class="side-link" href="#duyet-review"><span class="ic">📝</span> Duyệt review<?php if ($pendingReviewCount > 0): ?> <span class="kid-badge kid-badge--red"><?= $pendingReviewCount ?></span><?php endif; ?></a>
     <div class="side-divider"></div>
     <a class="side-link" href="dang-ky.php"><span class="ic">⚙️</span> Cài đặt hồ sơ</a>
     <a class="side-link" href="logout.php"><span class="ic">🚪</span> Đăng xuất</a>
@@ -144,6 +147,8 @@ try {
         </div>
       </div>
     </div>
+
+    <section id="duyet-review"><?php require __DIR__ . '/partials/review-moderation-section.php'; ?></section>
   </main>
 </div>
 
