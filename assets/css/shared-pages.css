@@ -421,7 +421,7 @@ body {
   color: var(--blue-light);
 }
 .role-tag.parent {
-  background: rgba(21, 101, 192, 0.16);
+  background: rgba(18, 103, 130, 0.16);
   color: var(--purple);
 }
 .role-tag.teacher {
@@ -445,7 +445,7 @@ body {
   background: linear-gradient(
     135deg,
     rgba(33, 158, 188, 0.35),
-    rgba(21, 101, 192, 0.28)
+    rgba(18, 103, 130, 0.28)
   );
   display: flex;
   align-items: center;
@@ -637,7 +637,7 @@ body {
   background: linear-gradient(
     120deg,
     rgba(33, 158, 188, 0.35),
-    rgba(21, 101, 192, 0.28)
+    rgba(18, 103, 130, 0.28)
   );
   border-top-right-radius: 4px;
 }
@@ -669,7 +669,7 @@ body {
   background: linear-gradient(
     135deg,
     rgba(33, 158, 188, 0.35),
-    rgba(21, 101, 192, 0.28)
+    rgba(18, 103, 130, 0.28)
   );
   display: flex;
   align-items: center;
@@ -908,7 +908,7 @@ body {
     rgba(20, 20, 60, 0.9),
     rgba(10, 10, 35, 0.95)
   );
-  border: 1px solid var(--glass-border);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1031,7 +1031,7 @@ body {
   display: flex;
   justify-content: space-between;
   font-size: 11px;
-  color: rgba(75, 51, 37, 0.72);
+  color: rgba(255, 255, 255, 0.72);
   z-index: 3;
 }
 .rec-dot {
@@ -1168,7 +1168,7 @@ body {
   background: linear-gradient(
     135deg,
     rgba(33, 158, 188, 0.18),
-    rgba(21, 101, 192, 0.14)
+    rgba(18, 103, 130, 0.14)
   );
   border: 1px solid var(--glass-border);
 }
@@ -1311,7 +1311,7 @@ body {
   border-radius: 18px;
   overflow: hidden;
   background: linear-gradient(160deg, #12173f, #0a0e26);
-  border: 1px solid var(--glass-border);
+  border: 1px solid rgba(255, 255, 255, 0.18);
 }
 .board.night {
   background: linear-gradient(160deg, #070a1c, #03040c);
@@ -1524,7 +1524,7 @@ body {
   background: rgba(10, 15, 61, 0.75);
   border: 1px solid var(--glass-border);
   font-size: 12px;
-  color: rgba(75, 51, 37, 0.72);
+  color: rgba(255, 255, 255, 0.72);
   backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
@@ -1865,7 +1865,7 @@ body {
   background: linear-gradient(
     135deg,
     rgba(33, 158, 188, 0.25),
-    rgba(21, 101, 192, 0.2)
+    rgba(18, 103, 130, 0.2)
   );
 }
 .lib-info {
@@ -1970,7 +1970,7 @@ body {
   background: linear-gradient(
     135deg,
     rgba(33, 158, 188, 0.28),
-    rgba(21, 101, 192, 0.2)
+    rgba(18, 103, 130, 0.2)
   );
   position: relative;
 }
@@ -1988,7 +1988,7 @@ body {
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(21, 101, 192, 0.35),
+    rgba(18, 103, 130, 0.35),
     transparent 70%
   );
   filter: blur(4px);
@@ -2367,7 +2367,7 @@ body {
   background: linear-gradient(
     135deg,
     rgba(33, 158, 188, 0.25),
-    rgba(21, 101, 192, 0.2) 50%,
+    rgba(18, 103, 130, 0.2) 50%,
     rgba(34, 211, 238, 0.22)
   );
   flex-shrink: 0;
@@ -2389,9 +2389,9 @@ body {
   font-weight: 700;
   padding: 4px 9px;
   border-radius: 999px;
-  background: rgba(21, 101, 192, 0.16);
+  background: rgba(18, 103, 130, 0.16);
   color: var(--purple);
-  border: 1px solid rgba(21, 101, 192, 0.28);
+  border: 1px solid rgba(18, 103, 130, 0.28);
   flex-shrink: 0;
 }
 .sched-item {
@@ -2781,7 +2781,7 @@ body {
   background:
     radial-gradient(
       900px 560px at 15% -10%,
-      rgba(21, 101, 192, 0.3),
+      rgba(18, 103, 130, 0.3),
       transparent 60%
     ),
     radial-gradient(
@@ -3380,7 +3380,7 @@ body {
   min-height: 460px;
   background: linear-gradient(160deg, #1a1450, #0a0e26);
   border-radius: 20px;
-  border: 1px solid var(--glass-border);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   overflow: hidden;
 }
 .ge-hotspot {
@@ -3421,7 +3421,7 @@ body {
   min-height: 520px;
   background: linear-gradient(160deg, #12173f, #0a0e26);
   border-radius: 20px;
-  border: 1px solid var(--glass-border);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   overflow: hidden;
 }
 .ge-sign-item {
