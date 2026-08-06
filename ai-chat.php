@@ -17,6 +17,7 @@
 
 require_once __DIR__ . '/auth.php';   // session + currentUser() (đã tự kết nối DB bên trong)
 require_once __DIR__ . '/ai-engine.php'; // bộ não AI
+require_once __DIR__ . '/lib/personalize.php'; // chip gợi ý cá nhân hoá
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -161,6 +162,38 @@ switch ($action) {
         // Xoá session → tin nhắn tự xoá theo (ON DELETE CASCADE)
         $pdo->prepare("DELETE FROM ai_chat_sessions WHERE id = ?")->execute([$sid]);
         json_out(['status' => 'success']);
+
+    /* ---------- Chip gợi ý cá nhân hoá (hoạt động cả khách) ---------- */
+    case 'chips':
+        $fav = $weak = $recent = []; $band = 'tieu-hoc';
+        if (!$isGuest) {
+            $stmt = $pdo->prepare('SELECT grade_band, fav_topics FROM user_preferences WHERE user_id = ?');
+            $stmt->execute([$userId]);
+            if ($p = $stmt->fetch()) {
+                $band = $p['grade_band'];
+                $fav = array_filter(explode(',', $p['fav_topics']));
+            }
+            // Chủ đề "yếu": game có XP trung bình thấp nhất trong các game đã chơi
+            $gameTopic = ['game-helmet' => 'mu-bao-hiem', 'game-sign-detective' => 'bien-bao',
+                          'game-pedestrian' => 'qua-duong', 'game-safe-route' => 'qua-duong',
+                          'game-city-hero' => 'den-tin-hieu'];
+            $stmt = $pdo->prepare('SELECT game_id, AVG(xp_earned) a FROM game_sessions
+                                   WHERE student_id = ? GROUP BY game_id ORDER BY a ASC LIMIT 2');
+            $stmt->execute([$userId]);
+            foreach ($stmt->fetchAll() as $g) {
+                if (isset($gameTopic[$g['game_id']])) $weak[] = $gameTopic[$g['game_id']];
+            }
+            // Chủ đề hỏi gần đây
+            $stmt = $pdo->prepare('SELECT m.content FROM ai_chat_messages m
+                                   JOIN ai_chat_sessions s ON s.id = m.session_id
+                                   WHERE s.user_id = ? AND m.role = "user" ORDER BY m.id DESC LIMIT 10');
+            $stmt->execute([$userId]);
+            foreach ($stmt->fetchAll() as $m) {
+                $t = ai_detect_topic($m['content']);
+                if ($t !== null) $recent[] = $t;
+            }
+        }
+        json_out(['status' => 'success', 'chips' => build_suggested_chips($fav, $weak, array_unique($recent), $band)]);
 
     default:
         json_out(['status' => 'error', 'message' => 'Action không hợp lệ']);
