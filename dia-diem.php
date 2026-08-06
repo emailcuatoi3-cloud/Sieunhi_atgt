@@ -198,7 +198,12 @@ $smileys = ['☹️' => 1, '🙁' => 2, '😐' => 3, '🙂' => 4, '😍' => 5];
                 <?php if ($photos): ?>
                 <div class="dd-review-photos">
                     <?php foreach ($photos as $f): ?>
-                    <?php if (!is_string($f) || $f === '') continue; ?>
+                    <?php
+                    if (!is_string($f) || $f === '') continue;
+                    if (strpos($f, '..') !== false || strpos($f, '/') !== false || strpos($f, '\\') !== false) continue;
+                    $f = basename($f);
+                    if ($f === '' || $f === '.' || $f === '..' || $f[0] === '.') continue;
+                    ?>
                     <img src="uploads/reviews/<?= e($f) ?>" alt="Ảnh của <?= e($r['name']) ?>" loading="lazy">
                     <?php endforeach; ?>
                 </div>
