@@ -27,6 +27,12 @@ Mở **phpMyAdmin** (http://localhost/phpmyadmin) → tab **Import** → chọn 
 Nếu bạn đã có database cũ, chạy thêm `sql/migrate-learning.sql` trước khi dùng
 AI Gia sư theo độ tuổi, mastery và hàng chờ cộng đồng.
 
+Với bản cài **mới hoàn toàn**, `sql/schema.sql` đã có sẵn 4 bảng cho tính năng
+Khám phá + Lịch trình AI (`places`, `place_reviews`, `user_preferences`,
+`ai_itineraries`) nên không cần chạy thêm gì. Nếu bạn **nâng cấp từ bản cũ**
+chưa có các bảng này, chạy thêm `sql/migrate-kham-pha.sql`, sau đó chạy
+`sql/seed-places.sql` để có sẵn dữ liệu mẫu địa điểm cho trang Khám phá.
+
 Hoặc dùng dòng lệnh:
 ```bash
 mysql -u root -p < schema.sql

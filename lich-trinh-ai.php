@@ -292,6 +292,10 @@ $typeOptions = ['bao-tang', 'cong-vien', 'vui-choi', 'thien-nhien'];
     }
 
     document.getElementById('btn-go').addEventListener('click', function () {
+        var btnGo = document.getElementById('btn-go');
+        if (btnGo.disabled) return;
+        btnGo.disabled = true;
+
         var fd = new FormData();
         fd.append('time_slot', selectedValue(slotRow));
         fd.append('vehicle', selectedValue(vehicleRow));
@@ -309,6 +313,9 @@ $typeOptions = ['bao-tang', 'cong-vien', 'vui-choi', 'thien-nhien'];
             .catch(function () {
                 var result = document.getElementById('result');
                 result.innerHTML = '<p class="kid-card" style="color:var(--kid-red);">Có lỗi mạng, con thử lại nhé! 😢</p>';
+            })
+            .finally(function () {
+                btnGo.disabled = false;
             });
     });
 })();

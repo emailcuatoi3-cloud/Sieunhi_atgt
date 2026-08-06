@@ -32,7 +32,7 @@ Mật khẩu chung cho cả 4 tài khoản: **`123456`**
 1. Mở `index.php` ở trạng thái khách (chưa đăng nhập).
 2. Chỉ vào mascot chào ở đầu trang, phần hero với "Chọn nhóm tuổi" (6–8 / 9–11).
 3. Bấm thử một nhóm tuổi — nhấn mạnh nút bấm to, dễ chạm (đã chỉnh về chuẩn 44px), trạng thái `.selected` được lưu lại (localStorage) cho lần sau.
-4. Cuộn nhanh qua các khối tính năng (AI Gia sư, Khám phá, Lịch trình AI) để cho thấy phong cách hoạt hình rực rỡ, không phải giao diện mặc định.
+4. Cuộn nhanh qua các khối tính năng (AI Gia sư, Khám phá, ...) để cho thấy phong cách hoạt hình rực rỡ, không phải giao diện mặc định; chỉ vào mục **"🗓️ Lịch trình AI"** mới thêm trên thanh điều hướng để dẫn sang Cảnh 4.
 
 ## Cảnh 2 — Chat AI Gia sư hỏi 2 câu có hình + chip cá nhân hoá (≈90 giây)
 
@@ -52,7 +52,7 @@ Mật khẩu chung cho cả 4 tài khoản: **`123456`**
 
 ## Cảnh 4 — Lên lịch trình AI + in vé (≈60 giây)
 
-1. Vào `lich-trinh-ai.php`.
+1. Từ `kham-pha.php` (cuối Cảnh 3), bấm nút **"Lên lịch trình AI 🚀"** ở cuối trang (hoặc mục "🗓️ Lịch trình AI" trên thanh điều hướng) để vào `lich-trinh-ai.php`.
 2. Trả lời 3 câu hỏi nhanh: đi khi nào (VD: Cả ngày), đi bằng gì (VD: Xe đạp), thích gì (VD: Công viên).
 3. Bấm **"Lên lịch thôi! 🚀"** — chỉ vào vé hành trình vừa sinh ra: mốc giờ, tên địa điểm, mô tả, và đặc biệt là khối cảnh báo an toàn màu vàng cho từng điểm dừng.
 4. Bấm **"🖨️ In vé"** để mở hộp thoại in — nhấn mạnh khi in, chỉ có vé được in ra (phần điều hướng/wizard tự ẩn nhờ CSS `@media print`).

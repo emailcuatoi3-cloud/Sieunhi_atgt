@@ -125,6 +125,14 @@ $typeFilters = ['bao-tang', 'cong-vien', 'vui-choi', 'thien-nhien'];
             <?php endif; ?>
         </div>
     </section>
+
+    <section class="kp-section">
+        <div class="kid-card" style="max-width:720px; margin:0 auto; text-align:center;">
+            <h3 style="margin:0 0 8px;">🗓️ Đã chọn được điểm đến chưa?</h3>
+            <p style="margin:0 0 14px; color:var(--kid-ink-soft);">Để Siêu Nhí lên lịch trình đi chơi an toàn cho con!</p>
+            <a class="kid-btn kid-btn--green" href="lich-trinh-ai.php">Lên lịch trình AI 🚀</a>
+        </div>
+    </section>
 </main>
 
 <script src="assets/js/mascot.js?v=2"></script>

@@ -4,8 +4,10 @@ require_once __DIR__ . '/auth.php';
 require_once __DIR__ . '/ai-engine.php';
 require_once __DIR__ . '/lib/places-repo.php';
 require_once __DIR__ . '/lib/itinerary.php';
+require_once __DIR__ . '/lib/ai-limit.php';
 header('Content-Type: application/json; charset=utf-8');
 requireCsrf();
+allowAiRequest();
 
 $opts = [
     'time_slot' => in_array($_POST['time_slot'] ?? '', ['sang','ca-ngay','cuoi-tuan'], true) ? $_POST['time_slot'] : 'sang',

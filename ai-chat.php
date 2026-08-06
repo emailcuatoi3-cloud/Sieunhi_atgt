@@ -18,6 +18,7 @@
 require_once __DIR__ . '/auth.php';   // session + currentUser() (đã tự kết nối DB bên trong)
 require_once __DIR__ . '/ai-engine.php'; // bộ não AI
 require_once __DIR__ . '/lib/personalize.php'; // chip gợi ý cá nhân hoá
+require_once __DIR__ . '/lib/ai-limit.php'; // rate limit dùng chung cho các API gọi AI
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -26,17 +27,6 @@ $pdo = (new DB_UTILS())->connection;  // lấy PDO thật từ wrapper DB_UTILS 
 $isGuest = !isLoggedIn();
 $userId = $isGuest ? 0 : (int) $_SESSION['user_id'];
 $action = $_REQUEST['action'] ?? '';
-
-function allowAiRequest(): void
-{
-    $now = time();
-    $window = array_values(array_filter($_SESSION['ai_request_times'] ?? [], static fn($time) => ($now - (int)$time) < 3600));
-    if (count($window) >= AI_RATE_LIMIT) {
-        json_out(['status' => 'error', 'message' => 'Con đã hỏi khá nhiều trong một giờ. Mình nghỉ một chút rồi học tiếp nhé.'], 429);
-    }
-    $window[] = $now;
-    $_SESSION['ai_request_times'] = $window;
-}
 
 function json_out(array $data, int $status = 200): void
 {

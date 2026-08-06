@@ -3,7 +3,13 @@ declare(strict_types=1);
 require_once __DIR__ . '/../lib/moderation.php';
 
 /** @var DB_UTILS $db biến $db được dashboard gọi partial này cung cấp sẵn */
-$pendingReviews = pending_reviews($db);
+$pendingReviews = [];
+$reviewLoadError = false;
+try {
+    $pendingReviews = pending_reviews($db);
+} catch (Throwable $ignored) {
+    $reviewLoadError = true;
+}
 ?>
 <div class="kid-card" style="margin-bottom:16px;">
     <h2 style="margin:0 0 6px;">📝 Duyệt review từ học sinh</h2>
@@ -11,7 +17,9 @@ $pendingReviews = pending_reviews($db);
 </div>
 
 <div id="review-moderation-list" style="display:flex; flex-direction:column; gap:14px;">
-    <?php if (!$pendingReviews): ?>
+    <?php if ($reviewLoadError): ?>
+    <p class="kid-card" id="review-moderation-empty" style="text-align:center; color:var(--kid-ink-soft, #6b7280);">Chưa lấy được hàng chờ duyệt (dữ liệu Khám phá có thể chưa được cài đặt). Thử lại sau nhé! 🔧</p>
+    <?php elseif (!$pendingReviews): ?>
     <p class="kid-card" id="review-moderation-empty" style="text-align:center; color:var(--kid-ink-soft, #6b7280);">Không có review nào đang chờ duyệt. Tuyệt vời! 🎉</p>
     <?php else: ?>
         <?php foreach ($pendingReviews as $r): ?>
