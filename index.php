@@ -25,20 +25,20 @@ $user = currentUser();
     <link
         href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap"
         rel="stylesheet" />
-    <link rel="stylesheet" href="assets/css/style.css?v=5" />
+    <link rel="stylesheet" href="assets/css/style.css?v=9" />
 </head>
 
 <body>
     <!-- ============ NAVBAR ============ -->
     <nav class="navbar" id="navbar">
         <div class="nav-inner">
-            <a href="sieu-nhi-atgt-ai.php" class="logo">
+            <a href="index.php" class="logo">
                 <span class="logo-badge">🤖</span>
                 SIÊU NHÍ <span class="logo-text-en">AI</span>
             </a>
 
             <ul class="nav-menu">
-                <li><a href="sieu-nhi-atgt-ai.php" class="active">Trang chủ</a></li>
+                <li><a href="index.php" class="active">Trang chủ</a></li>
                 <li><a href="ai-gia-su.php">AI Gia sư</a></li>
                 <li><a href="ai-camera.php">AI Camera</a></li>
                 <li><a href="ai-mo-phong.php">Mô phỏng</a></li>
@@ -69,7 +69,7 @@ $user = currentUser();
                     🌙
                 </button>
                 <?php if ($user): ?>
-                <a href="<?= e(ROLE_DASHBOARDS[$user['role']] ?? 'sieu-nhi-atgt-ai.php') ?>"
+                <a href="<?= e(ROLE_DASHBOARDS[$user['role']] ?? 'index.php') ?>"
                     class="btn btn-ghost desktop-only"><?= e($user['avatar']) ?> <?= e($user['name']) ?></a>
                 <a href="logout.php" class="btn btn-primary-sm">Đăng xuất</a>
                 <?php else: ?>

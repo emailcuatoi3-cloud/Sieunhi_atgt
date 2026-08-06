@@ -25,9 +25,9 @@
 
     <nav class="navbar static" id="navbar">
         <div class="nav-inner">
-            <a href="sieu-nhi-atgt-ai.php" class="logo"><span class="logo-badge">🤖</span>SIÊU NHÍ <span
+            <a href="index.php" class="logo"><span class="logo-badge">🤖</span>SIÊU NHÍ <span
                     class="logo-text-en">AI</span></a>
-            <a class="back-link" href="sieu-nhi-atgt-ai.php">← Về trang chủ</a>
+            <a class="back-link" href="index.php">← Về trang chủ</a>
             <div class="nav-actions">
                 <button class="icon-btn theme-toggle" aria-label="Chế độ tối">🌙</button>
                 <a class="btn btn-ghost" href="ai-mo-phong.php">🚦 Mô phỏng</a>
@@ -100,8 +100,8 @@
     </section>
 
     <script src="assets/js/main.js?v=5"></script>
-    <script src="assets/js/comic-scenes.js?v=1"></script>
-    <script src="assets/js/ai-truyen-tranh.js?v=6"></script>
+    <script src="assets/js/comic-scenes.js?v=18"></script>
+    <script src="assets/js/ai-truyen-tranh.js?v=7"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

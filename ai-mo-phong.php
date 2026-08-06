@@ -18,16 +18,16 @@
         href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css?v=9">
-    <link rel="stylesheet" href="assets/css/shared-pages.css?v=24">
+    <link rel="stylesheet" href="assets/css/shared-pages.css?v=25">
 </head>
 
 <body>
 
     <nav class="navbar static" id="navbar">
         <div class="nav-inner">
-            <a href="sieu-nhi-atgt-ai.php" class="logo"><span class="logo-badge">🤖</span>SIÊU NHÍ <span
+            <a href="index.php" class="logo"><span class="logo-badge">🤖</span>SIÊU NHÍ <span
                     class="logo-text-en">AI</span></a>
-            <a class="back-link" href="sieu-nhi-atgt-ai.php">← Về trang chủ</a>
+            <a class="back-link" href="index.php">← Về trang chủ</a>
             <div class="nav-actions">
                 <button class="icon-btn theme-toggle" aria-label="Chế độ tối">🌙</button>
                 <a class="btn btn-ghost" href="ai-gia-su.php">🎓 AI Gia sư</a>

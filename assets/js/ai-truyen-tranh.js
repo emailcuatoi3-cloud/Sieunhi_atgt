@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
       emoji: "🏫",
       speaker: "Bo",
       avatar: "🧒",
-      text: "Bo chuẩn bị đi bộ đến trường một mình lần đầu tiên. Trước mặt Bo là một ngã tư có đèn tín hiệu và khá đông xe cộ qua lại vào giờ cao điểm.",
+      text: "Bo chuẩn bị đi bộ đến trường một mình lần đầu tiên. Trước mặt Bo là một đoạn đường có đèn tín hiệu và vạch qua đường, khá đông xe cộ qua lại vào giờ cao điểm.",
       choices: [
         {
           label: "Đi thẳng qua đường ngay vì thấy vắng xe",
@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     rush: {
       chapter: "Chương 2",
-      tag: "📍 Giữa ngã tư",
+      tag: "📍 Giữa lòng đường",
       emoji: "🚗",
       speaker: "AI Gia sư",
       avatar: "🤖",
@@ -140,7 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const baseEndHtml = `
     <div class="end-actions">
       <button class="btn btn-primary-sm" onclick="restart()">🔁 Chơi lại từ đầu</button>
-      <a class="btn btn-ghost" href="sieu-nhi-atgt-ai.php">🏠 Về trang chủ</a>
+      <a class="btn btn-ghost" href="index.php">🏠 Về trang chủ</a>
     </div>`;
 
   function renderNode(key) {
