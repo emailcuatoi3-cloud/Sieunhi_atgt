@@ -232,3 +232,24 @@ function ai_rule_based(string $msg): string
     ];
     return $fallback[array_rand($fallback)];
 }
+
+/* Nhận diện chủ đề ATGT của câu hỏi/câu trả lời — dùng cho minh hoạ + gợi ý */
+function ai_detect_topic(string $msg): ?string
+{
+    $t = ai_khong_dau($msg);
+    $map = [
+        'mu-bao-hiem'  => ['mu bao hiem', 'doi mu', 'non bao hiem'],
+        'den-tin-hieu' => ['den do', 'den vang', 'den xanh', 'den giao thong', 'den tin hieu', 'tin hieu den'],
+        'qua-duong'    => ['sang duong', 'qua duong', 'bang qua duong', 'vach ke', 'loi di bo', 'nguoi di bo', 'di bo'],
+        'bien-bao'     => ['bien bao', 'bien cam', 'bien nguy hiem', 'bien chi dan', 'bien hieu lenh', 'stop'],
+        'xe-dap'       => ['xe dap'],
+        'ngoi-xe'      => ['xe may', 'ngoi sau', 'o to', 'oto', 'xe hoi', 'day an toan'],
+        'uu-tien'      => ['cuu thuong', 'cuu hoa', 'xe uu tien', 'canh sat', 'cuu ho', 'uu tien'],
+    ];
+    foreach ($map as $code => $keywords) {
+        foreach ($keywords as $k) {
+            if (str_contains($t, $k)) return $code;
+        }
+    }
+    return null;
+}

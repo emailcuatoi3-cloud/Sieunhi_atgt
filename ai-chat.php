@@ -101,6 +101,7 @@ switch ($action) {
         // Chưa có cuộc trò chuyện → tạo mới, lấy câu hỏi đầu tiên làm tiêu đề
         if ($isGuest) {
             $reply = ai_get_reply($pdo, 0, $message, $ageGroup);
+            $topic = ai_detect_topic($message) ?? ai_detect_topic($reply);
             json_out([
                 'status' => 'success',
                 'session_id' => 0,
@@ -110,6 +111,8 @@ switch ($action) {
                 'sources' => ['Luật Trật tự, an toàn giao thông đường bộ · 36/2024/QH15'],
                 'suggested_actions' => ['Cho con xem hình', 'Thử tình huống', 'Luyện lại'],
                 'safety' => 'safe',
+                'topic' => $topic,
+                'art_url' => $topic !== null ? 'art.php?code=' . $topic : null,
             ]);
         }
 
@@ -135,6 +138,7 @@ switch ($action) {
         // Cập nhật thời gian để cuộc trò chuyện nhảy lên đầu danh sách
         $pdo->prepare("UPDATE ai_chat_sessions SET updated_at = NOW() WHERE id = ?")->execute([$sid]);
 
+        $topic = ai_detect_topic($message) ?? ai_detect_topic($reply);
         json_out([
             'status'     => 'success',
             'session_id' => $sid,
@@ -143,6 +147,8 @@ switch ($action) {
             'sources' => ['Luật Trật tự, an toàn giao thông đường bộ · 36/2024/QH15'],
             'suggested_actions' => ['Cho con xem hình', 'Thử tình huống', 'Luyện lại'],
             'safety' => 'safe',
+            'topic' => $topic,
+            'art_url' => $topic !== null ? 'art.php?code=' . $topic : null,
         ]);
 
     /* ---------- Xoá cuộc trò chuyện ---------- */
