@@ -2,6 +2,15 @@
 require_once __DIR__ . '/auth.php';
 requireRole(['admin']);
 $user = currentUser();
+$db = new DB_UTILS();
+$userTotal = $studentTotal = $lessonTotal = $chatTotal = 0; $pendingReviewCount = 0;
+try {
+  $userTotal = (int)$db->getValue('SELECT COUNT(*) FROM users');
+  $studentTotal = (int)$db->getValue('SELECT COUNT(*) FROM users WHERE role = "hocsinh"');
+  $lessonTotal = (int)$db->getValue('SELECT COUNT(*) FROM lessons WHERE status = "published"');
+  $chatTotal = (int)$db->getValue('SELECT COUNT(*) FROM ai_chat_messages WHERE role = "user"');
+  $pendingReviewCount = (int)$db->getValue('SELECT COUNT(*) FROM place_reviews WHERE status = "pending"');
+} catch (Throwable $ignored) { }
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -9,20 +18,19 @@ $user = currentUser();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf" content="<?= e(csrfToken()) ?>">
     <script>
     (function() {
         try {
-            document.documentElement.setAttribute("data-theme", localStorage.getItem("sieu-nhi-theme") || "dark");
+            document.documentElement.setAttribute("data-theme", localStorage.getItem("sieu-nhi-theme") || "light");
         } catch (e) {}
     })();
     </script>
     <title>Dashboard Admin · Siêu Nhí An Toàn Giao Thông AI</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/fonts.css?v=1">
     <link rel="stylesheet" href="assets/css/style.css?v=5">
     <link rel="stylesheet" href="assets/css/shared-pages.css?v=5">
+    <link rel="stylesheet" href="assets/css/kid-components.css?v=1">
 </head>
 
 <body>
@@ -35,21 +43,22 @@ $user = currentUser();
                 </div>
                 <a class="side-back" href="index.php">← Về trang chủ</a>
             </div>
-            <a class="side-link active" href="#"><span class="ic">🏠</span> Tổng quan</a>
+            <a class="side-link active" href="dashboard-admin.php"><span class="ic">🏠</span> Tổng quan</a>
             <a class="side-link" href="admin-users.php"><span class="ic">👥</span> Người dùng</a>
-            <a class="side-link" href="#"><span class="ic">🗂️</span> Nội dung</a>
-            <a class="side-link" href="#"><span class="ic">🤖</span> AI</a>
-            <a class="side-link" href="#"><span class="ic">📘</span> Bài học</a>
-            <a class="side-link" href="#"><span class="ic">🏆</span> Cuộc thi</a>
-            <a class="side-link" href="#"><span class="ic">📊</span> Thống kê</a>
-            <a class="side-link" href="#"><span class="ic">🖥️</span> Máy chủ</a>
-            <a class="side-link" href="#"><span class="ic">📜</span> Logs</a>
+            <a class="side-link" href="community-admin.php"><span class="ic">🗂️</span> Nội dung</a>
+            <a class="side-link" href="ai-gia-su.php"><span class="ic">🤖</span> AI</a>
+            <a class="side-link" href="ai-gia-su.php"><span class="ic">📘</span> Bài học</a>
+            <a class="side-link" href="game-mini.php"><span class="ic">🏆</span> Cuộc thi</a>
+            <a class="side-link" href="dashboard-admin.php"><span class="ic">📊</span> Thống kê</a>
+            <a class="side-link" href="dashboard-admin.php"><span class="ic">🖥️</span> Máy chủ</a>
+            <a class="side-link" href="dashboard-admin.php"><span class="ic">📜</span> Logs</a>
+            <a class="side-link" href="#duyet-review"><span class="ic">📝</span> Duyệt review<?php if ($pendingReviewCount > 0): ?> <span class="kid-badge kid-badge--red"><?= $pendingReviewCount ?></span><?php endif; ?></a>
             <div class="side-divider"></div>
             <a class="side-link" href="dashboard-hoc-sinh.php"><span class="ic">🎒</span> Dashboard học sinh</a>
             <a class="side-link" href="dashboard-phu-huynh.php"><span class="ic">👨‍👩‍👧</span> Dashboard phụ huynh</a>
             <a class="side-link" href="dashboard-giao-vien.php"><span class="ic">👩‍🏫</span> Dashboard giáo viên</a>
             <div class="side-divider"></div>
-            <a class="side-link" href="#"><span class="ic">⚙️</span> Cài đặt hệ thống</a>
+            <a class="side-link" href="dashboard-admin.php"><span class="ic">⚙️</span> Cài đặt hệ thống</a>
             <a class="side-link" href="logout.php"><span class="ic">🚪</span> Đăng xuất</a>
 
             <div class="sidebar-foot">
@@ -67,26 +76,25 @@ $user = currentUser();
                 <div class="top-actions">
                     <button class="icon-btn theme-toggle" aria-label="Chế độ tối">🌙</button>
                     <button class="btn btn-ghost" onclick="refreshLogs()">🔄 Làm mới</button>
-                    <button class="btn btn-primary-sm" onclick="alert('Đã mở trình tạo báo cáo hệ thống.')">📄 Tạo báo
-                        cáo</button>
+                    <a class="btn btn-primary-sm" href="community-admin.php">📄 Mở hàng đợi nội dung</a>
                 </div>
             </div>
 
             <div class="stat-row cols-5">
                 <div class="mini-stat-card">
-                    <div class="st-ic">👥</div><b>128.500</b><span>Tổng người dùng</span>
+                    <div class="st-ic">👥</div><b><?= $userTotal ?></b><span>Tổng người dùng</span>
                 </div>
                 <div class="mini-stat-card">
-                    <div class="st-ic">🧒</div><b>112.400</b><span>Học sinh</span>
+                    <div class="st-ic">🧒</div><b><?= $studentTotal ?></b><span>Học sinh</span>
                 </div>
                 <div class="mini-stat-card">
-                    <div class="st-ic">📘</div><b>640</b><span>Bài học</span>
+                    <div class="st-ic">📘</div><b><?= $lessonTotal ?></b><span>Bài học đã xuất bản</span>
                 </div>
                 <div class="mini-stat-card">
-                    <div class="st-ic">🤖</div><b>2,1 triệu</b><span>Câu hỏi AI xử lý</span>
+                    <div class="st-ic">🤖</div><b><?= $chatTotal ?></b><span>Câu hỏi đã lưu</span>
                 </div>
                 <div class="mini-stat-card">
-                    <div class="st-ic">🖥️</div><b>99,98%</b><span>Uptime hệ thống</span>
+                    <div class="st-ic">🖥️</div><b>—</b><span>Uptime chưa kết nối</span>
                 </div>
             </div>
 
@@ -158,7 +166,7 @@ $user = currentUser();
 
                     <div class="card">
                         <div class="card-head">
-                            <h3>🗂️ Nội dung chờ duyệt</h3><a href="#">Xem hàng đợi</a>
+                            <h3>🗂️ Nội dung chờ duyệt</h3><a href="community-admin.php">Xem hàng đợi</a>
                         </div>
                         <div class="mod-item">
                             <div class="mod-ic">📖</div>
@@ -267,6 +275,8 @@ $user = currentUser();
                     </div>
                 </div>
             </div>
+
+            <section id="duyet-review"><?php require __DIR__ . '/partials/review-moderation-section.php'; ?></section>
         </main>
     </div>
 

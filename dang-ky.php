@@ -10,6 +10,7 @@ $error = '';
 $name = '';
 $email = '';
 $selectedRole = $_POST['role'] ?? 'hocsinh';
+$ageGroup = $_POST['age_group'] ?? '6-8';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name'] ?? '');
@@ -28,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Bạn cần đồng ý với Điều khoản sử dụng để tiếp tục.';
     } else {
         try {
-            $result = attemptRegister($name, $email, $password, $selectedRole);
+            $result = attemptRegister($name, $email, $password, $selectedRole, $ageGroup);
         } catch (\Throwable $ex) {
             $result = ['ok' => false, 'error' => 'Lỗi hệ thống: ' . $ex->getMessage()];
         }
@@ -50,17 +51,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script>
     (function() {
         try {
-            document.documentElement.setAttribute("data-theme", localStorage.getItem("sieu-nhi-theme") || "dark");
+            document.documentElement.setAttribute("data-theme", localStorage.getItem("sieu-nhi-theme") || "light");
         } catch (e) {}
     })();
     </script>
     <title>Đăng ký · Siêu Nhí An Toàn Giao Thông AI</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/fonts.css?v=1">
     <link rel="stylesheet" href="assets/css/style.css?v=5">
     <link rel="stylesheet" href="assets/css/shared-pages.css?v=5">
+    <link rel="stylesheet" href="assets/css/kid-components.css?v=1">
 </head>
 
 <body>
@@ -91,6 +90,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <form class="auth-form" id="registerForm" method="post" novalidate>
                 <input type="hidden" name="role" id="roleInput" value="<?= e($selectedRole) ?>">
+
+                <div class="auth-field" id="ageGroupField">
+                    <label for="ageGroup">Nhóm tuổi của học sinh</label>
+                    <div class="auth-input-wrap"><span class="fi">🌱</span>
+                        <select id="ageGroup" name="age_group"><option value="6-8"<?= $ageGroup === '6-8' ? ' selected' : '' ?>>6–8 tuổi · Học bằng hình và câu chuyện</option><option value="9-11"<?= $ageGroup === '9-11' ? ' selected' : '' ?>>9–11 tuổi · Thử thách và tình huống</option></select>
+                    </div>
+                </div>
 
                 <div class="auth-field">
                     <label for="regName">Họ và tên</label>

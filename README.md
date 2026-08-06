@@ -24,6 +24,15 @@ Với XAMPP: copy toàn bộ thư mục dự án vào `C:\xampp\htdocs\sieu-nhi-
 Mở **phpMyAdmin** (http://localhost/phpmyadmin) → tab **Import** → chọn file `schema.sql` → Go.
 (File này sẽ tự tạo database tên **`duanmau_atgt`**.)
 
+Nếu bạn đã có database cũ, chạy thêm `sql/migrate-learning.sql` trước khi dùng
+AI Gia sư theo độ tuổi, mastery và hàng chờ cộng đồng.
+
+Với bản cài **mới hoàn toàn**, `sql/schema.sql` đã có sẵn 4 bảng cho tính năng
+Khám phá + Lịch trình AI (`places`, `place_reviews`, `user_preferences`,
+`ai_itineraries`) nên không cần chạy thêm gì. Nếu bạn **nâng cấp từ bản cũ**
+chưa có các bảng này, chạy thêm `sql/migrate-kham-pha.sql`, sau đó chạy
+`sql/seed-places.sql` để có sẵn dữ liệu mẫu địa điểm cho trang Khám phá.
+
 Hoặc dùng dòng lệnh:
 ```bash
 mysql -u root -p < schema.sql
@@ -57,6 +66,11 @@ DB_CHARSET=utf8mb4
 
 APP_ENV=local          # local | production
 APP_DEBUG=true         # true = hiện lỗi PDO chi tiết, false = chỉ trả 500
+
+GEMINI_API_KEY=        # tùy chọn; để trống sẽ dùng kho kiến thức offline
+GEMINI_MODEL=gemini-2.5-flash
+OPENAI_API_KEY=        # chỉ dùng cho AI Camera Vision
+AI_RATE_LIMIT=30
 ```
 
 > ⚠️ **Lên production nhớ:**
@@ -153,16 +167,17 @@ $user = currentUser();
 Nếu chưa đăng nhập → tự động chuyển tới `dang-nhap.php`.
 Nếu đăng nhập rồi nhưng sai vai trò → tự động chuyển tới đúng dashboard của họ.
 
-## Việc tiếp theo bạn có thể làm
+## Các luồng đã có trong bản hiện tại
 
-- Thay dữ liệu tĩnh trong các dashboard (XP, tiến độ, danh sách học sinh...) bằng truy vấn MySQL thật qua `DB_UTILS`, ví dụ:
+- Dashboard học sinh đọc XP, mastery, bài học theo nhóm tuổi từ MySQL qua `DB_UTILS`, ví dụ:
   ```php
   require_once __DIR__ . '/db_utils.php';
   $db = new DB_UTILS();
   $progress = $db->getOne('SELECT * FROM student_progress WHERE student_id = ?', [$user['id']]);
   ```
 - Thêm chức năng "Quên mật khẩu" (gửi email reset — điền `SMTP_USER` / `SMTP_PASSWORD` trong `.env`, chúng sẽ tự vào hằng số `USERNAME_EMAIL` / `PASSWORD_EMAIL`).
-- Thêm CSRF token cho các form (bảo mật nâng cao hơn).
+- AI Gia sư dùng CSRF token, rate limit theo session và không lưu lịch sử khách dùng thử.
+- `community.php` nhận đóng góp từ phụ huynh/giáo viên; `community-admin.php` duyệt trước khi xuất bản.
 - Triển khai lên hosting thật:
   - Copy `.env.example` → `.env` trên server, điền `DB_PASSWORD` mới.
   - Đặt `APP_ENV=production`, `APP_DEBUG=false` trong `.env`.

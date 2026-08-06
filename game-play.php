@@ -44,17 +44,15 @@ $meta = $gameMeta[$gameId];
     <script>
     (function() {
         try {
-            document.documentElement.setAttribute("data-theme", localStorage.getItem("sieu-nhi-theme") || "dark");
+            document.documentElement.setAttribute("data-theme", localStorage.getItem("sieu-nhi-theme") || "light");
         } catch (e) {}
     })();
     </script>
     <title><?= e($meta['title']) ?> · Siêu Nhí An Toàn Giao Thông AI</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/fonts.css?v=1">
     <link rel="stylesheet" href="assets/css/style.css?v=5">
     <link rel="stylesheet" href="assets/css/shared-pages.css?v=6">
+    <link rel="stylesheet" href="assets/css/kid-components.css?v=1">
 </head>
 
 <body>

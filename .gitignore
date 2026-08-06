@@ -9,3 +9,14 @@ Thumbs.db
 /node_modules/
 
 *.log
+
+# AI tool state
+.omx/
+.agents/
+.claude/
+skills-lock.json
+
+# Ảnh review người dùng tải lên — chỉ giữ thư mục + .htaccess khoá thực thi
+uploads/reviews/*
+!uploads/reviews/.htaccess
+!uploads/reviews/.gitkeep

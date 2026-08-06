@@ -10,12 +10,19 @@
 document.addEventListener("DOMContentLoaded", () => {
   const roleTabs = document.querySelectorAll(".role-tab");
   const roleInput = document.getElementById("roleInput"); // chỉ có ở trang đăng ký
+  const ageField = document.getElementById("ageGroupField");
+  const syncAgeField = () => {
+    if (!ageField || !roleInput) return;
+    ageField.hidden = roleInput.value !== "hocsinh";
+  };
+  syncAgeField();
 
   roleTabs.forEach((tab) => {
     tab.addEventListener("click", () => {
       roleTabs.forEach((t) => t.classList.remove("active"));
       tab.classList.add("active");
       if (roleInput) roleInput.value = tab.dataset.role;
+      syncAgeField();
     });
   });
 

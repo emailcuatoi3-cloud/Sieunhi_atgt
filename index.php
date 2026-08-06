@@ -13,7 +13,7 @@ $user = currentUser();
         try {
             document.documentElement.setAttribute(
                 "data-theme",
-                localStorage.getItem("sieu-nhi-theme") || "dark",
+                localStorage.getItem("sieu-nhi-theme") || "light",
             );
         } catch (e) {}
     })();
@@ -21,11 +21,9 @@ $user = currentUser();
     <title>SIÊU NHÍ AN TOÀN GIAO THÔNG AI</title>
     <meta name="description"
         content="Nền tảng AI giáo dục an toàn giao thông cho học sinh Việt Nam — Học thông minh, Đi an toàn, Vì tương lai Việt Nam." />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet" />
+    <link rel="stylesheet" href="assets/css/fonts.css?v=1">
     <link rel="stylesheet" href="assets/css/style.css?v=9" />
+    <link rel="stylesheet" href="assets/css/kid-components.css?v=1">
 </head>
 
 <body>
@@ -40,6 +38,8 @@ $user = currentUser();
             <ul class="nav-menu">
                 <li><a href="index.php" class="active">Trang chủ</a></li>
                 <li><a href="ai-gia-su.php">AI Gia sư</a></li>
+                <li><a href="kham-pha.php">🗺️ Khám phá</a></li>
+                <li><a href="lich-trinh-ai.php">🗓️ Lịch trình AI</a></li>
                 <li><a href="ai-camera.php">AI Camera</a></li>
                 <li><a href="ai-mo-phong.php">Mô phỏng</a></li>
                 <li><a href="ai-truyen-tranh.php">Truyện tranh</a></li>
@@ -192,20 +192,26 @@ $user = currentUser();
         <div class="wrap hero-grid">
             <!-- LEFT -->
             <div class="hero-left">
-                <span class="eyebrow-pill"><span class="dot"></span> Nền tảng AI giáo dục an toàn giao thông
-                    #1 Việt Nam</span>
-                <h1>SIÊU NHÍ AN TOÀN<br />GIAO THÔNG AI</h1>
+                <div id="hero-mascot" style="width:150px" aria-hidden="true"></div>
+                <span class="eyebrow-pill"><span class="dot"></span> Học an toàn giao thông theo cách của con</span>
+                <h1>HỌC AN TOÀN.<br />CHƠI THÔNG MINH.</h1>
                 <p class="subtitle">
-                    AI đồng hành cùng trẻ em Việt Nam học và thực hành an toàn giao
-                    thông thông qua trò chơi, mô phỏng và trí tuệ nhân tạo. Học thông
-                    minh — Đi an toàn — Vì tương lai Việt Nam.
+                    Một người bạn AI kể chuyện, đặt câu hỏi và tạo tình huống vừa sức để
+                    mỗi học sinh 6–11 tuổi tự tin hơn trên đường đến trường.
                 </p>
 
                 <div class="cta-row">
-                    <a href="ai-gia-su.php" class="cta-btn cta-primary" data-ripple>🚀 Bắt đầu học</a>
-                    <a href="ai-gia-su.php" class="cta-btn cta-secondary" data-ripple>✨ Trải nghiệm AI</a>
-                    <a href="ai-mo-phong.php" class="cta-btn cta-secondary" data-ripple>▶️ Xem Demo</a>
-                    <a href="#features" class="cta-btn cta-tertiary">Khám phá tính năng →</a>
+                    <a href="ai-gia-su.php" class="cta-btn cta-primary" data-ripple>🎓 Học cùng AI</a>
+                    <a href="game-mini.php" class="cta-btn cta-secondary" data-ripple>🎮 Chơi thử thách</a>
+                    <a href="ai-mo-phong.php" class="cta-btn cta-secondary" data-ripple>🚦 Khám phá tình huống</a>
+                </div>
+
+                <div class="age-chooser" aria-labelledby="ageChooserTitle">
+                    <div><span class="age-kicker">Bắt đầu từ đây</span><strong id="ageChooserTitle">Con đang học lớp nào?</strong></div>
+                    <div class="age-options" role="group" aria-label="Chọn nhóm tuổi">
+                        <button type="button" class="age-option" data-age-group="6-8"><span>🌱</span><b>6–8 tuổi</b><small>Học bằng hình và câu chuyện</small></button>
+                        <button type="button" class="age-option" data-age-group="9-11"><span>🚀</span><b>9–11 tuổi</b><small>Thử thách và xử lý tình huống</small></button>
+                    </div>
                 </div>
 
                 <div class="hero-trust">
@@ -213,8 +219,7 @@ $user = currentUser();
                         <span>👦</span><span>👧</span><span>🧒</span><span>👩‍🏫</span>
                     </div>
                     <p>
-                        <strong>128.000+</strong> học sinh &amp;
-                        <strong>500+</strong> trường học đang tin dùng
+                        Thiết kế cho học sinh tiểu học · học cùng gia đình và nhà trường
                     </p>
                 </div>
             </div>
@@ -389,11 +394,10 @@ $user = currentUser();
         <div class="wrap">
             <div class="section-head">
                 <span class="kicker">Con số biết nói</span>
-                <h2>Được hàng trăm nghìn Siêu Nhí tin tưởng</h2>
+                <h2>Một lộ trình nhỏ, nhiều kỹ năng lớn</h2>
                 <p>
-                    Nền tảng AI học an toàn giao thông được triển khai tại các trường
-                    học trên khắp Việt Nam, đồng hành cùng học sinh, phụ huynh và giáo
-                    viên mỗi ngày.
+                    Mỗi hoạt động đều giúp con nhớ một quy tắc, luyện một phản xạ và nhận
+                    được phản hồi dễ hiểu.
                 </p>
             </div>
 
@@ -401,37 +405,37 @@ $user = currentUser();
                 <div class="stat-card">
                     <div class="stat-icon">🎓</div>
                     <div class="stat-number">
-                        <span class="counter" data-target="128000" data-suffix="+">0</span>
+                        <span class="counter" data-target="2" data-suffix="">0</span>
                     </div>
-                    <div class="stat-label">Học sinh</div>
+                    <div class="stat-label">Nhóm tuổi</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon">📚</div>
                     <div class="stat-number">
-                        <span class="counter" data-target="640" data-suffix="+">0</span>
+                        <span class="counter" data-target="5" data-suffix="">0</span>
                     </div>
-                    <div class="stat-label">Bài học</div>
+                    <div class="stat-label">Trò chơi có sẵn</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon">🤖</div>
                     <div class="stat-number">
-                        <span class="counter" data-target="2100000" data-suffix="+">0</span>
+                        <span class="counter" data-target="4" data-suffix="">0</span>
                     </div>
-                    <div class="stat-label">Câu hỏi AI</div>
+                    <div class="stat-label">Kỹ năng cốt lõi</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon">✅</div>
                     <div class="stat-number">
-                        <span class="counter" data-target="93" data-suffix="%">0</span>
+                        <span class="counter" data-target="1" data-suffix="">0</span>
                     </div>
-                    <div class="stat-label">Tỷ lệ hoàn thành</div>
+                    <div class="stat-label">Nguồn luật được duyệt</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon">🏅</div>
                     <div class="stat-number">
-                        <span class="counter" data-target="41200" data-suffix="+">0</span>
+                        <span class="counter" data-target="10" data-suffix=" phút">0</span>
                     </div>
-                    <div class="stat-label">Chứng nhận</div>
+                    <div class="stat-label">Cách học mỗi ngày</div>
                 </div>
             </div>
         </div>
@@ -442,10 +446,9 @@ $user = currentUser();
         <div class="wrap">
             <div class="section-head">
                 <span class="kicker">Hệ sinh thái AI</span>
-                <h2>Một trợ lý, mười khả năng</h2>
+                <h2>Chọn cách học hợp với con</h2>
                 <p>
-                    Mỗi tính năng đều được xây dựng để biến kiến thức giao thông khô
-                    khan thành trải nghiệm sống động, cá nhân hoá cho từng em nhỏ.
+                    Học ngắn, chơi vui, được giải thích ngay và luôn biết bước tiếp theo.
                 </p>
             </div>
             <div class="feat-grid">
@@ -723,12 +726,11 @@ $user = currentUser();
             <div class="cta-band">
                 <h2>Sẵn sàng để AI đồng hành cùng con trên mọi nẻo đường?</h2>
                 <p>
-                    Tham gia cùng hơn 128.000 học sinh đang học an toàn giao thông theo
-                    cách thông minh hơn, vui hơn và hiệu quả hơn mỗi ngày.
+                    Chọn một hoạt động nhỏ hôm nay để hình thành thói quen an toàn mỗi ngày.
                 </p>
                 <div class="cta-row-center">
                     <a href="ai-gia-su.php" class="cta-btn cta-primary" data-ripple>🚀 Bắt đầu miễn phí</a>
-                    <a href="#" class="cta-btn cta-secondary" data-ripple>📅 Đặt lịch demo cho trường</a>
+                    <a href="dang-ky.php" class="cta-btn cta-secondary" data-ripple>🧑‍🏫 Tạo tài khoản cho lớp</a>
                 </div>
             </div>
         </div>
@@ -763,27 +765,35 @@ $user = currentUser();
                     <?php if (!$user || in_array($user['role'], ['giaovien', 'admin'], true)): ?>
                     <a href="dashboard-giao-vien.php">Giáo viên</a>
                     <?php endif; ?>
-                    <a href="#">Nhà trường</a>
+                    <a href="dang-ky.php">Nhà trường</a>
                 </div>
                 <div class="foot-col">
                     <h5>Công ty</h5>
-                    <a href="#">Về chúng tôi</a><a href="#">Đối tác</a><a href="#">Tin tức</a><a href="#">Liên hệ</a>
+                    <a href="index.php#hero">Về dự án</a><a href="community.php">Đóng góp tình huống</a><a href="index.php#features">Tính năng</a><a href="dang-ky.php">Liên hệ</a>
                 </div>
                 <div class="foot-col">
                     <h5>Pháp lý</h5>
-                    <a href="#">Điều khoản</a><a href="#">Chính sách bảo mật</a><a href="#">Tải ứng dụng</a>
+                    <a href="index.php#footer">Điều khoản</a><a href="index.php#footer">Chính sách bảo mật</a><a href="index.php">Mở trên điện thoại</a>
                 </div>
             </div>
             <div class="foot-bottom">
                 <span>© 2026 Siêu Nhí An Toàn Giao Thông AI · AI Traffic Hero</span>
                 <div class="social-row">
-                    <a href="#">𝕏</a><a href="#">f</a><a href="#">▶</a><a href="#">◎</a>
+                    <a href="index.php#footer" aria-label="Kênh thông tin">ⓘ</a>
                 </div>
             </div>
         </div>
     </footer>
 
     <script src="assets/js/main.js?v=5"></script>
+    <script src="assets/js/mascot.js?v=2"></script>
+    <script>window.SIEU_NHI_AUTH = <?= $user ? 'true' : 'false' ?>; window.SIEU_NHI_CSRF = <?= json_encode(csrfToken(), JSON_UNESCAPED_UNICODE) ?>;</script>
+    <script>
+        var heroMascot = document.getElementById('hero-mascot');
+        if (heroMascot && window.MascotSVG) {
+            heroMascot.innerHTML = MascotSVG.pose('wave');
+        }
+    </script>
 </body>
 
 </html>

@@ -16,6 +16,10 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 const ROLE_LABELS = [
     'hocsinh'  => 'Học sinh',
     'phuhuynh' => 'Phụ huynh',
@@ -44,7 +48,22 @@ function currentUser(): ?array {
         'email'  => $_SESSION['user_email'],
         'role'   => $_SESSION['user_role'],
         'avatar' => $_SESSION['user_avatar'] ?? '🙂',
+        'age_group' => $_SESSION['user_age_group'] ?? '6-8',
     ];
+}
+
+function csrfToken(): string {
+    return (string)($_SESSION['csrf_token'] ?? '');
+}
+
+function requireCsrf(): void {
+    $token = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? ($_POST['csrf_token'] ?? '');
+    if (!hash_equals(csrfToken(), (string)$token)) {
+        http_response_code(419);
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode(['status' => 'error', 'message' => 'Phiên làm việc đã hết hạn. Hãy tải lại trang.'], JSON_UNESCAPED_UNICODE);
+        exit;
+    }
 }
 
 /** Bắt buộc đã đăng nhập, nếu chưa thì đưa về trang đăng nhập */
@@ -89,12 +108,13 @@ function attemptLogin(string $email, string $password) {
     $_SESSION['user_email']  = $user['email'];
     $_SESSION['user_role']   = $user['role'];
     $_SESSION['user_avatar'] = $user['avatar_emoji'];
+    $_SESSION['user_age_group'] = $user['age_group'] ?? '6-8';
 
     return $user;
 }
 
 /** Đăng ký tài khoản mới. Trả về ['ok'=>true] hoặc ['ok'=>false,'error'=>...] */
-function attemptRegister(string $name, string $email, string $password, string $role): array {
+function attemptRegister(string $name, string $email, string $password, string $role, string $ageGroup = '6-8'): array {
     // Bảo mật: KHÔNG cho phép tự đăng ký với vai trò admin qua form công khai.
     // Tài khoản admin chỉ được tạo bởi admin khác, qua trang Quản lý người dùng.
     if (!in_array($role, ['hocsinh', 'phuhuynh', 'giaovien'], true)) {
@@ -119,6 +139,10 @@ function attemptRegister(string $name, string $email, string $password, string $
         [$name, $email, $hash, $role, $avatarByRole[$role]]
     );
     $userId = $db->getLastInsertId();
+
+    if ($role === 'hocsinh' && in_array($ageGroup, ['6-8', '9-11'], true)) {
+        try { $db->execute('UPDATE users SET age_group = ? WHERE id = ?', [$ageGroup, $userId]); } catch (Throwable $ignored) { /* older schema */ }
+    }
 
     if ($role === 'hocsinh') {
         $db->execute(

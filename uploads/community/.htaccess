@@ -1,0 +1,3 @@
+Options -Indexes
+Require all denied
+Header set X-Content-Type-Options "nosniff"
