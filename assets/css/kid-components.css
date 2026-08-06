@@ -1,0 +1,43 @@
+/* =======================================================================
+   SIÊU NHÍ AN TOÀN GIAO THÔNG AI — kid-components.css
+   Kid components — dùng chung mọi trang mới (Hoạt hình rực rỡ).
+   Nạp SAU style.css (và shared-pages.css nếu có) để kế thừa biến màu.
+   ======================================================================= */
+.kid-card { background:#fff; border:3px solid var(--glass-border); border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-soft); padding:20px; transition:transform .2s ease, box-shadow .2s ease; }
+.kid-card:hover { transform:translateY(-4px) scale(1.01); box-shadow:0 18px 40px -14px rgba(75,51,37,.35); }
+.sticker-tilt:nth-child(odd) { transform:rotate(-1.2deg); }
+.sticker-tilt:nth-child(even) { transform:rotate(1.2deg); }
+.sticker-tilt:hover { transform:rotate(0) translateY(-4px); }
+
+.kid-btn { display:inline-flex; align-items:center; gap:8px; min-height:48px; padding:12px 26px;
+  border-radius:999px; font-family:"Baloo 2",sans-serif; font-weight:800; font-size:17px;
+  background:var(--kid-yellow); color:var(--kid-ink); border:3px solid rgba(75,51,37,.18);
+  box-shadow:0 5px 0 rgba(75,51,37,.22); transition:transform .12s ease, box-shadow .12s ease; }
+.kid-btn:hover { transform:translateY(-2px); }
+.kid-btn:active { transform:translateY(3px); box-shadow:0 1px 0 rgba(75,51,37,.22); }
+.kid-btn--sky   { background:var(--kid-sky); color:#fff; }
+.kid-btn--green { background:var(--kid-green); color:#fff; }
+.kid-btn--red   { background:var(--kid-red); color:#fff; }
+
+.kid-chip { display:inline-flex; align-items:center; gap:6px; padding:9px 16px; border-radius:999px;
+  background:#fff; border:2.5px solid var(--kid-sky); color:var(--kid-sky-deep);
+  font-weight:700; font-size:14px; cursor:pointer; white-space:nowrap;
+  transition:transform .12s ease, background .12s ease; }
+.kid-chip:hover { transform:translateY(-2px); }
+.kid-chip.active, .kid-chip[aria-pressed="true"] { background:var(--kid-sky); color:#fff; }
+
+.kid-badge { display:inline-flex; align-items:center; gap:5px; padding:4px 12px; border-radius:999px;
+  font-size:12.5px; font-weight:800; background:var(--kid-cream-2); color:var(--kid-ink-soft); }
+.kid-badge--green { background:#E3F6E4; color:var(--kid-green); }
+.kid-badge--red   { background:#FDE8EA; color:var(--kid-red); }
+.kid-badge--yellow{ background:#FFF3D6; color:#9A6B00; }
+
+.kid-input { width:100%; min-height:48px; padding:12px 18px; border-radius:16px;
+  border:3px solid var(--glass-border); background:#fff; color:var(--kid-ink);
+  font-family:inherit; font-size:16px; }
+.kid-input:focus { border-color:var(--kid-sky); outline:none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .kid-card, .kid-btn, .kid-chip, .sticker-tilt { transition:none; transform:none; }
+}

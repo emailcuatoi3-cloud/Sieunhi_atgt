@@ -1,0 +1,33 @@
+/* =======================================================================
+   SIÊU NHÍ AN TOÀN GIAO THÔNG AI — fonts.css
+   Self-host Baloo 2 (tiêu đề, nút — "Baloo 2") + Quicksand (thay Be Vietnam Pro).
+   Subset latin + vietnamese. Nạp TRƯỚC style.css. font-display:swap để tránh chặn render.
+   ======================================================================= */
+@font-face {
+  font-family: "Baloo 2";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../fonts/baloo-2-v23-latin_vietnamese-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: "Baloo 2";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('../fonts/baloo-2-v23-latin_vietnamese-800.woff2') format('woff2');
+}
+@font-face {
+  font-family: "Quicksand";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../fonts/quicksand-v37-latin_vietnamese-500.woff2') format('woff2');
+}
+@font-face {
+  font-family: "Quicksand";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../fonts/quicksand-v37-latin_vietnamese-700.woff2') format('woff2');
+}

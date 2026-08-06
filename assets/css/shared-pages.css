@@ -5,7 +5,7 @@
    Dashboard Học sinh / Phụ huynh / Giáo viên / Admin.
    Phải load SAU style.css (kế thừa biến màu / font / nút / navbar từ đó).
    ===================================:root {
-  --red: #ef4444;
+  --red: var(--kid-red);
   --panel-fill: var(--bg-card);
 }
 
@@ -48,7 +48,7 @@ body {
 .consent-check input { width:auto; margin-top:3px; }
 .inline-success, .inline-error { max-width:760px; margin:0 auto 16px; border-radius:12px; padding:12px 14px; font-size:13px; }
 .inline-success { color:#15803d; background:rgba(34,197,94,.12); border:1px solid rgba(34,197,94,.3); }
-.inline-error { color:#b91c1c; background:rgba(239,68,68,.12); border:1px solid rgba(239,68,68,.3); }
+.inline-error { color:#b91c1c; background:rgba(230,57,70,.12); border:1px solid rgba(230,57,70,.3); }
 .community-queue { max-width:900px; margin:0 auto; display:grid; gap:16px; }
 .queue-item { display:flex; justify-content:space-between; gap:20px; align-items:flex-start; }
 .queue-item small { color:var(--text-muted); }
@@ -106,7 +106,7 @@ body {
   color: var(--text-muted);
 }
 .cond-chip.active {
-  background: rgba(37, 99, 235, 0.1);
+  background: rgba(33, 158, 188, 0.1);
   border: 1px solid var(--blue);
   color: var(--blue);
 }
@@ -119,7 +119,7 @@ body {
 }
 .sidebar {
   border-right: 1px solid var(--glass-border);
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(75, 51, 37, 0.02);
   display: flex;
   flex-direction: column;
   padding: 20px 14px;
@@ -179,13 +179,13 @@ body {
   text-align: center;
 }
 .side-link:hover {
-  background: rgba(37, 99, 235, 0.08);
+  background: rgba(33, 158, 188, 0.08);
   color: var(--blue);
 }
 .side-link.active {
   background: var(--grad-primary);
   color: #fff;
-  box-shadow: 0 6px 18px -4px rgba(37, 99, 235, 0.4);
+  box-shadow: 0 6px 18px -4px rgba(33, 158, 188, 0.4);
 }
 .side-divider {
   height: 1px;
@@ -330,7 +330,7 @@ body {
 }
 .mini-stat-card span {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(75, 51, 37, 0.5);
 }
 .trend {
   font-size: 11px;
@@ -353,7 +353,7 @@ body {
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: rgba(255, 255, 255, 0.42);
+  color: rgba(75, 51, 37, 0.42);
   padding: 0 10px 10px;
   font-weight: 600;
 }
@@ -361,16 +361,16 @@ body {
   font-size: 12.5px;
   padding: 11px 10px;
   border-top: 1px solid var(--glass-border);
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(75, 51, 37, 0.72);
   vertical-align: middle;
 }
 .data-table td b {
-  color: #fff;
+  color: var(--text-main);
 }
 .mini-bar {
   height: 6px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(75, 51, 37, 0.08);
   overflow: hidden;
   display: inline-block;
   vertical-align: middle;
@@ -417,7 +417,7 @@ body {
   border-radius: 999px;
 }
 .role-tag.student {
-  background: rgba(59, 130, 246, 0.15);
+  background: rgba(33, 158, 188, 0.15);
   color: var(--blue-light);
 }
 .role-tag.parent {
@@ -429,7 +429,7 @@ body {
   color: var(--cyan);
 }
 .role-tag.admin {
-  background: rgba(244, 63, 94, 0.15);
+  background: rgba(230, 57, 70, 0.15);
   color: var(--red);
 }
 
@@ -444,7 +444,7 @@ body {
   border-radius: 9px;
   background: linear-gradient(
     135deg,
-    rgba(59, 130, 246, 0.35),
+    rgba(33, 158, 188, 0.35),
     rgba(21, 101, 192, 0.28)
   );
   display: flex;
@@ -467,7 +467,7 @@ body {
   width: 32px;
   height: 32px;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(75, 51, 37, 0.05);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -476,18 +476,18 @@ body {
 }
 .notif-text {
   font-size: 12.5px;
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(75, 51, 37, 0.72);
 }
 .notif-time {
   font-size: 10.5px;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(75, 51, 37, 0.4);
   margin-top: 2px;
 }
 
 /* Forms (create lesson etc.) */
 .form-field label {
   font-size: 11.5px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(75, 51, 37, 0.5);
   margin-bottom: 4px;
   display: block;
 }
@@ -496,9 +496,9 @@ body {
   width: 100%;
   padding: 11px 14px;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(75, 51, 37, 0.05);
   border: 1px solid var(--glass-border);
-  color: #fff;
+  color: var(--text-main);
   font-size: 13px;
   font-family: inherit;
   outline: none;
@@ -522,7 +522,7 @@ body {
   color: #fff;
   font-weight: 700;
   font-size: 13.5px;
-  box-shadow: 0 12px 30px -8px rgba(59, 130, 246, 0.6);
+  box-shadow: 0 12px 30px -8px rgba(33, 158, 188, 0.6);
   transition: all 0.35s;
   z-index: 200;
   pointer-events: none;
@@ -614,7 +614,7 @@ body {
   background: var(--grad-primary);
 }
 .msg.user .msg-avatar {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(75, 51, 37, 0.08);
   border: 1px solid var(--glass-border);
 }
 .msg-body {
@@ -629,14 +629,14 @@ body {
   line-height: 1.6;
 }
 .msg.bot .msg-bubble {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(75, 51, 37, 0.05);
   border: 1px solid var(--glass-border);
   border-top-left-radius: 4px;
 }
 .msg.user .msg-bubble {
   background: linear-gradient(
     120deg,
-    rgba(59, 130, 246, 0.35),
+    rgba(33, 158, 188, 0.35),
     rgba(21, 101, 192, 0.28)
   );
   border-top-right-radius: 4px;
@@ -647,15 +647,15 @@ body {
 }
 .msg-tool {
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(75, 51, 37, 0.5);
   padding: 4px 9px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(75, 51, 37, 0.04);
   border: 1px solid var(--glass-border);
   cursor: pointer;
 }
 .msg-tool:hover {
-  color: #fff;
+  color: var(--text-main);
   border-color: var(--cyan);
 }
 .illus-card {
@@ -668,7 +668,7 @@ body {
   height: 140px;
   background: linear-gradient(
     135deg,
-    rgba(59, 130, 246, 0.35),
+    rgba(33, 158, 188, 0.35),
     rgba(21, 101, 192, 0.28)
   );
   display: flex;
@@ -689,8 +689,8 @@ body {
 .illus-caption {
   padding: 10px 12px;
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
-  background: rgba(255, 255, 255, 0.03);
+  color: rgba(75, 51, 37, 0.6);
+  background: rgba(75, 51, 37, 0.03);
 }
 .voice-note {
   display: flex;
@@ -698,7 +698,7 @@ body {
   gap: 10px;
   padding: 10px 14px;
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(75, 51, 37, 0.05);
   border: 1px solid var(--glass-border);
   width: 220px;
 }
@@ -757,7 +757,7 @@ body {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(75, 51, 37, 0.4);
   animation: typing 1.2s infinite;
 }
 .typing span:nth-child(2) {
@@ -794,14 +794,14 @@ body {
   border-radius: 999px;
   font-size: 12.5px;
   border: 1px solid var(--glass-border);
-  background: rgba(255, 255, 255, 0.03);
-  color: rgba(255, 255, 255, 0.72);
+  background: rgba(75, 51, 37, 0.03);
+  color: rgba(75, 51, 37, 0.72);
   cursor: pointer;
   transition: all 0.2s;
 }
 .suggest-chip:hover {
   border-color: var(--cyan);
-  color: #fff;
+  color: var(--text-main);
 }
 .chat-input-wrap {
   padding: 16px 24px 22px;
@@ -816,7 +816,7 @@ body {
   gap: 8px;
   padding: 9px 10px 9px 16px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(75, 51, 37, 0.05);
   border: 1px solid var(--glass-border);
 }
 .tutor-input input {
@@ -824,12 +824,12 @@ body {
   background: none;
   border: none;
   outline: none;
-  color: #fff;
+  color: var(--text-main);
   font-size: 14px;
   font-family: inherit;
 }
 .tutor-input input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(75, 51, 37, 0.4);
 }
 .icon-btn-sm {
   width: 34px;
@@ -838,16 +838,16 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(75, 51, 37, 0.06);
   font-size: 14px;
   cursor: pointer;
   transition: background 0.2s;
   flex-shrink: 0;
   border: none;
-  color: #fff;
+  color: var(--text-main);
 }
 .icon-btn-sm:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(75, 51, 37, 0.12);
 }
 .icon-btn-sm.send {
   background: var(--grad-primary);
@@ -855,7 +855,7 @@ body {
 .input-hint {
   text-align: center;
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(75, 51, 37, 0.4);
   margin-top: 10px;
 }
 
@@ -886,14 +886,14 @@ body {
   border-radius: 10px 10px 0 0;
   font-size: 13px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(75, 51, 37, 0.5);
   cursor: pointer;
   border: 1px solid transparent;
   transition: all 0.2s;
 }
 .cam-tab.active {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-main);
+  background: rgba(75, 51, 37, 0.05);
   border: 1px solid var(--glass-border);
   border-bottom: none;
 }
@@ -1031,7 +1031,7 @@ body {
   display: flex;
   justify-content: space-between;
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(75, 51, 37, 0.72);
   z-index: 3;
 }
 .rec-dot {
@@ -1059,7 +1059,7 @@ body {
   width: 46px;
   height: 46px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(75, 51, 37, 0.06);
   border: 1px solid var(--glass-border);
   display: flex;
   align-items: center;
@@ -1067,10 +1067,10 @@ body {
   font-size: 18px;
   cursor: pointer;
   transition: all 0.2s;
-  color: #fff;
+  color: var(--text-main);
 }
 .ctrl-btn:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(75, 51, 37, 0.12);
   transform: translateY(-2px);
 }
 .ctrl-btn.shutter {
@@ -1083,7 +1083,7 @@ body {
 .upload-hint {
   text-align: center;
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(75, 51, 37, 0.4);
   padding-bottom: 18px;
 }
 .result-panel {
@@ -1110,7 +1110,7 @@ body {
   gap: 12px;
   padding: 14px;
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(75, 51, 37, 0.03);
   border: 1px solid var(--glass-border);
 }
 .detect-item .d-icon {
@@ -1139,13 +1139,13 @@ body {
 }
 .detect-item .d-info span {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(75, 51, 37, 0.5);
 }
 .detect-bar {
   width: 60px;
   height: 6px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(75, 51, 37, 0.08);
   overflow: hidden;
   flex-shrink: 0;
 }
@@ -1167,7 +1167,7 @@ body {
   border-radius: 14px;
   background: linear-gradient(
     135deg,
-    rgba(59, 130, 246, 0.18),
+    rgba(33, 158, 188, 0.18),
     rgba(21, 101, 192, 0.14)
   );
   border: 1px solid var(--glass-border);
@@ -1183,7 +1183,7 @@ body {
 }
 .advice-box p {
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.68);
+  color: rgba(75, 51, 37, 0.68);
   line-height: 1.6;
 }
 .result-actions {
@@ -1201,7 +1201,7 @@ body {
   width: 64px;
   height: 64px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(75, 51, 37, 0.04);
   border: 1px solid var(--glass-border);
   display: flex;
   align-items: center;
@@ -1263,7 +1263,7 @@ body {
 }
 .cat-card span {
   font-size: 11.5px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(75, 51, 37, 0.5);
 }
 
 /* =======================================================================
@@ -1524,7 +1524,7 @@ body {
   background: rgba(10, 15, 61, 0.75);
   border: 1px solid var(--glass-border);
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(75, 51, 37, 0.72);
   backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
@@ -1541,7 +1541,7 @@ body {
   border-radius: 14px;
   background: var(--glass-fill);
   border: 1px solid var(--glass-border);
-  color: #fff;
+  color: var(--text-main);
   font-size: 12.5px;
   font-weight: 600;
   cursor: pointer;
@@ -1565,7 +1565,7 @@ body {
 }
 .scenario-desc {
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.68);
+  color: rgba(75, 51, 37, 0.68);
   line-height: 1.6;
 }
 .scenario-list {
@@ -1577,7 +1577,7 @@ body {
 }
 .scenario-list li {
   font-size: 12.5px;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(75, 51, 37, 0.6);
   display: flex;
   gap: 8px;
   align-items: flex-start;
@@ -1592,7 +1592,7 @@ body {
 .feedback-box.empty {
   align-items: center;
   text-align: center;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(75, 51, 37, 0.4);
   font-size: 13px;
 }
 .fb-result {
@@ -1610,7 +1610,7 @@ body {
 }
 .fb-text {
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.68);
+  color: rgba(75, 51, 37, 0.68);
   line-height: 1.6;
 }
 .fb-actions {
@@ -1630,7 +1630,7 @@ body {
   font-size: 12.5px;
   padding: 9px 10px;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(75, 51, 37, 0.03);
 }
 .history-item .h-dot {
   width: 8px;
@@ -1646,10 +1646,10 @@ body {
 }
 .history-item span.h-txt {
   flex: 1;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(75, 51, 37, 0.6);
 }
 .history-item span.h-pt {
-  color: #fff;
+  color: var(--text-main);
   font-weight: 700;
 }
 
@@ -1668,7 +1668,7 @@ body {
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(75, 51, 37, 0.12);
   transition: all 0.3s;
 }
 .path-step.done {
@@ -1682,7 +1682,7 @@ body {
 .path-line {
   width: 20px;
   height: 2px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(75, 51, 37, 0.1);
 }
 .story-wrap {
   padding-bottom: 70px;
@@ -1754,7 +1754,7 @@ body {
   width: 38px;
   height: 38px;
   border-radius: 11px;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(75, 51, 37, 0.06);
   border: 1px solid var(--glass-border);
   display: flex;
   align-items: center;
@@ -1768,7 +1768,7 @@ body {
 .narration {
   font-size: 15.5px;
   line-height: 1.75;
-  color: #fff;
+  color: var(--text-main);
   margin-bottom: 24px;
 }
 .narration .hl {
@@ -1788,7 +1788,7 @@ body {
   border-radius: 14px;
   background: var(--glass-fill);
   border: 1px solid var(--glass-border);
-  color: #fff;
+  color: var(--text-main);
   text-align: left;
   font-size: 14px;
   font-weight: 500;
@@ -1797,7 +1797,7 @@ body {
 }
 .choice-btn:hover {
   border-color: var(--cyan);
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(75, 51, 37, 0.08);
   transform: translateX(4px);
 }
 .choice-btn .c-ic {
@@ -1825,9 +1825,9 @@ body {
   border: 1px solid rgba(251, 191, 36, 0.3);
 }
 .ending-badge.bad {
-  background: rgba(244, 63, 94, 0.15);
+  background: rgba(230, 57, 70, 0.15);
   color: var(--red);
-  border: 1px solid rgba(244, 63, 94, 0.3);
+  border: 1px solid rgba(230, 57, 70, 0.3);
 }
 .end-actions {
   display: flex;
@@ -1864,7 +1864,7 @@ body {
   font-size: 44px;
   background: linear-gradient(
     135deg,
-    rgba(59, 130, 246, 0.25),
+    rgba(33, 158, 188, 0.25),
     rgba(21, 101, 192, 0.2)
   );
 }
@@ -1879,11 +1879,11 @@ body {
 }
 .lib-info span {
   font-size: 11.5px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(75, 51, 37, 0.5);
 }
 .lib-lock {
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.42);
+  color: rgba(75, 51, 37, 0.42);
   margin-top: 8px;
   display: flex;
   align-items: center;
@@ -1969,7 +1969,7 @@ body {
   font-size: 150px;
   background: linear-gradient(
     135deg,
-    rgba(59, 130, 246, 0.28),
+    rgba(33, 158, 188, 0.28),
     rgba(21, 101, 192, 0.2)
   );
   position: relative;
@@ -1999,7 +1999,7 @@ body {
   position: absolute;
   inset: 0;
   background-image: radial-gradient(
-    rgba(255, 255, 255, 0.14) 1.5px,
+    rgba(75, 51, 37, 0.14) 1.5px,
     transparent 1.5px
   );
   background-size: 22px 22px;
@@ -2028,7 +2028,7 @@ body {
 }
 .game-info p {
   font-size: 12.5px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(75, 51, 37, 0.5);
   margin-bottom: 12px;
 }
 .reward-row {
@@ -2044,12 +2044,12 @@ body {
   font-weight: 700;
   padding: 4px 9px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(75, 51, 37, 0.05);
   border: 1px solid var(--glass-border);
 }
 .lock-tag {
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.42);
+  color: rgba(75, 51, 37, 0.42);
   margin-top: 8px;
   display: flex;
   align-items: center;
@@ -2083,7 +2083,7 @@ body {
 }
 .featured-info p {
   font-size: 13.5px;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(75, 51, 37, 0.6);
   margin-bottom: 16px;
   max-width: 380px;
 }
@@ -2143,14 +2143,14 @@ body {
 }
 .gp-close {
   font-size: 12.5px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(75, 51, 37, 0.5);
   cursor: pointer;
   padding: 8px 14px;
   border-radius: 999px;
   border: 1px solid var(--glass-border);
 }
 .gp-close:hover {
-  color: #fff;
+  color: var(--text-main);
   border-color: var(--cyan);
 }
 .drag-area {
@@ -2169,7 +2169,7 @@ body {
   width: 132px;
   height: 132px;
   border-radius: 22px;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(75, 51, 37, 0.06);
   border: 2px solid var(--glass-border);
   display: flex;
   flex-direction: column;
@@ -2194,7 +2194,7 @@ body {
 .sign-chip small {
   font-size: 13px;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(75, 51, 37, 0.75);
   margin-top: 8px;
   text-align: center;
   line-height: 1.2;
@@ -2211,7 +2211,7 @@ body {
   gap: 18px;
   padding: 18px 22px;
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(75, 51, 37, 0.03);
   border: 3px dashed var(--glass-border);
   min-height: 88px;
   transition: all 0.2s;
@@ -2229,13 +2229,13 @@ body {
 .drop-slot.wrong {
   border-style: solid;
   border-color: var(--red);
-  background: rgba(244, 63, 94, 0.1);
+  background: rgba(230, 57, 70, 0.1);
 }
 .drop-slot .slot-label {
   flex: 1;
   font-size: 16px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.82);
+  color: rgba(75, 51, 37, 0.82);
   line-height: 1.4;
 }
 .drop-slot .slot-filled {
@@ -2282,7 +2282,7 @@ body {
   font-weight: 800;
   font-size: 18px;
   flex-shrink: 0;
-  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 4px rgba(75, 51, 37, 0.08);
 }
 .prog-item {
   margin-bottom: 14px;
@@ -2291,7 +2291,7 @@ body {
   display: flex;
   justify-content: space-between;
   font-size: 12.5px;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(75, 51, 37, 0.6);
   margin-bottom: 6px;
 }
 .mission-item {
@@ -2300,7 +2300,7 @@ body {
   gap: 12px;
   padding: 12px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(75, 51, 37, 0.03);
   border: 1px solid var(--glass-border);
   margin-bottom: 10px;
   transition: all 0.2s;
@@ -2348,7 +2348,7 @@ body {
   gap: 14px;
   padding: 14px;
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(75, 51, 37, 0.03);
   border: 1px solid var(--glass-border);
   transition: all 0.2s;
 }
@@ -2366,7 +2366,7 @@ body {
   font-size: 21px;
   background: linear-gradient(
     135deg,
-    rgba(59, 130, 246, 0.25),
+    rgba(33, 158, 188, 0.25),
     rgba(21, 101, 192, 0.2) 50%,
     rgba(34, 211, 238, 0.22)
   );
@@ -2382,7 +2382,7 @@ body {
 }
 .course-info span {
   font-size: 11.5px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(75, 51, 37, 0.5);
 }
 .course-tag {
   font-size: 10.5px;
@@ -2417,7 +2417,7 @@ body {
 }
 .sched-info span {
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(75, 51, 37, 0.5);
 }
 
 .bar-chart {
@@ -2450,12 +2450,12 @@ body {
   transform: translateX(-50%);
   font-size: 10.5px;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(75, 51, 37, 0.6);
   white-space: nowrap;
 }
 .bar-label {
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.42);
+  color: rgba(75, 51, 37, 0.42);
 }
 .sw-grid {
   display: grid;
@@ -2472,8 +2472,8 @@ body {
   border-color: rgba(52, 211, 153, 0.25);
 }
 .sw-box.weak {
-  background: rgba(244, 63, 94, 0.06);
-  border-color: rgba(244, 63, 94, 0.25);
+  background: rgba(230, 57, 70, 0.06);
+  border-color: rgba(230, 57, 70, 0.25);
 }
 .sw-box h5 {
   font-size: 13px;
@@ -2497,7 +2497,7 @@ body {
 }
 .sw-list li {
   font-size: 12.5px;
-  color: rgba(255, 255, 255, 0.68);
+  color: rgba(75, 51, 37, 0.68);
   display: flex;
   gap: 8px;
   align-items: center;
@@ -2532,15 +2532,15 @@ body {
 }
 .gauge-label span {
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(75, 51, 37, 0.45);
 }
 .risk-desc {
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.68);
+  color: rgba(75, 51, 37, 0.68);
   line-height: 1.6;
 }
 .hist-table td b {
-  color: #fff;
+  color: var(--text-main);
 }
 .score-tag {
   font-size: 11px;
@@ -2564,14 +2564,14 @@ body {
 }
 .heat-head {
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(75, 51, 37, 0.4);
   text-align: center;
   margin-bottom: 2px;
 }
 .heat-cell {
   aspect-ratio: 1;
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(75, 51, 37, 0.05);
 }
 .heat-legend {
   display: flex;
@@ -2579,7 +2579,7 @@ body {
   gap: 8px;
   margin-top: 12px;
   font-size: 10.5px;
-  color: rgba(255, 255, 255, 0.42);
+  color: rgba(75, 51, 37, 0.42);
 }
 .heat-legend .lg-cell {
   width: 12px;
@@ -2595,7 +2595,7 @@ body {
 .metric-box {
   padding: 14px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(75, 51, 37, 0.03);
   border: 1px solid var(--glass-border);
   text-align: center;
 }
@@ -2607,7 +2607,7 @@ body {
 }
 .metric-box .m-label {
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(75, 51, 37, 0.45);
   margin-bottom: 8px;
 }
 
@@ -2617,7 +2617,7 @@ body {
   gap: 12px;
   padding: 12px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(75, 51, 37, 0.03);
   border: 1px solid var(--glass-border);
   margin-bottom: 10px;
 }
@@ -2641,7 +2641,7 @@ body {
 }
 .ai-info span {
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(75, 51, 37, 0.45);
 }
 .ai-status {
   display: flex;
@@ -2691,10 +2691,10 @@ body {
   display: flex;
   gap: 10px;
   padding: 4px 0;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(75, 51, 37, 0.6);
 }
 .log-line .lt {
-  color: rgba(255, 255, 255, 0.35);
+  color: rgba(75, 51, 37, 0.35);
   flex-shrink: 0;
 }
 .log-line.info .lv {
@@ -2713,7 +2713,7 @@ body {
   gap: 12px;
   padding: 11px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(75, 51, 37, 0.03);
   border: 1px solid var(--glass-border);
   margin-bottom: 8px;
 }
@@ -2721,7 +2721,7 @@ body {
   width: 30px;
   height: 30px;
   border-radius: 9px;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(75, 51, 37, 0.06);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2737,7 +2737,7 @@ body {
 }
 .mod-info span {
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(75, 51, 37, 0.45);
 }
 .mod-actions {
   display: flex;
@@ -2800,7 +2800,7 @@ body {
   gap: 8px;
   font-size: 13px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(75, 51, 37, 0.6);
 }
 .auth-back:hover {
   color: var(--cyan);
@@ -2820,7 +2820,7 @@ body {
   background: linear-gradient(
     160deg,
     var(--glass-fill-strong),
-    rgba(255, 255, 255, 0.03)
+    rgba(75, 51, 37, 0.03)
   );
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
@@ -2849,14 +2849,14 @@ body {
 }
 .auth-brand p {
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(75, 51, 37, 0.55);
 }
 
 .role-tabs {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 8px;
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(75, 51, 37, 0.04);
   border: 1px solid var(--glass-border);
   border-radius: 14px;
   padding: 6px;
@@ -2880,7 +2880,7 @@ body {
   border-radius: 10px;
   font-size: 11.5px;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(75, 51, 37, 0.55);
   cursor: pointer;
   transition: all 0.2s;
   border: 1px solid transparent;
@@ -2890,13 +2890,13 @@ body {
   font-size: 18px;
 }
 .role-tab:hover {
-  background: rgba(255, 255, 255, 0.06);
-  color: #fff;
+  background: rgba(75, 51, 37, 0.06);
+  color: var(--text-main);
 }
 .role-tab.active {
   background: var(--grad-primary);
   color: #fff;
-  box-shadow: 0 6px 16px -6px rgba(59, 130, 246, 0.6);
+  box-shadow: 0 6px 16px -6px rgba(33, 158, 188, 0.6);
 }
 
 .auth-form {
@@ -2912,7 +2912,7 @@ body {
 .auth-field label {
   font-size: 12.5px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.68);
+  color: rgba(75, 51, 37, 0.68);
 }
 .auth-input-wrap {
   display: flex;
@@ -2920,7 +2920,7 @@ body {
   gap: 10px;
   padding: 12px 14px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(75, 51, 37, 0.05);
   border: 1px solid var(--glass-border);
   transition: border-color 0.2s;
 }
@@ -2936,12 +2936,12 @@ body {
   background: none;
   border: none;
   outline: none;
-  color: #fff;
+  color: var(--text-main);
   font-size: 14px;
   font-family: inherit;
 }
 .auth-input-wrap input::placeholder {
-  color: rgba(255, 255, 255, 0.35);
+  color: rgba(75, 51, 37, 0.35);
 }
 .auth-toggle-pw {
   font-size: 13px;
@@ -2949,7 +2949,7 @@ body {
   opacity: 0.6;
   background: none;
   border: none;
-  color: #fff;
+  color: var(--text-main);
 }
 .auth-toggle-pw:hover {
   opacity: 1;
@@ -2965,7 +2965,7 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: rgba(255, 255, 255, 0.65);
+  color: rgba(75, 51, 37, 0.65);
   cursor: pointer;
 }
 .auth-check input {
@@ -2995,7 +2995,7 @@ body {
   gap: 12px;
   margin: 22px 0 18px;
   font-size: 11.5px;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(75, 51, 37, 0.4);
 }
 .auth-divider::before,
 .auth-divider::after {
@@ -3007,13 +3007,13 @@ body {
 .auth-foot {
   text-align: center;
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(75, 51, 37, 0.6);
 }
 .auth-error {
   font-size: 12.5px;
   color: var(--red);
-  background: rgba(244, 63, 94, 0.1);
-  border: 1px solid rgba(244, 63, 94, 0.3);
+  background: rgba(230, 57, 70, 0.1);
+  border: 1px solid rgba(230, 57, 70, 0.3);
   padding: 10px 14px;
   border-radius: 10px;
   display: none;
@@ -3071,7 +3071,7 @@ body {
 .ge-intro-icon {
   font-size: 84px;
   margin-bottom: 18px;
-  filter: drop-shadow(0 10px 24px rgba(59, 130, 246, 0.4));
+  filter: drop-shadow(0 10px 24px rgba(33, 158, 188, 0.4));
   animation: floaty 3.5s ease-in-out infinite;
 }
 .ge-intro-title {
@@ -3081,7 +3081,7 @@ body {
 }
 .ge-intro-desc {
   font-size: 15px;
-  color: rgba(255, 255, 255, 0.68);
+  color: rgba(75, 51, 37, 0.68);
   max-width: 560px;
   margin: 0 auto 24px;
   line-height: 1.7;
@@ -3100,7 +3100,7 @@ body {
   border: 1px solid var(--glass-border);
   font-size: 12.5px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(75, 51, 37, 0.75);
 }
 .ge-big-btn {
   padding: 16px 34px;
@@ -3138,7 +3138,7 @@ body {
   background: var(--glass-fill);
   border: 1px solid var(--glass-border);
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(75, 51, 37, 0.85);
   line-height: 1.5;
 }
 .ge-instr-list li::before {
@@ -3210,7 +3210,7 @@ body {
 .ge-ai-text {
   font-size: 13.5px;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(75, 51, 37, 0.85);
   padding-top: 6px;
 }
 .ge-ai-bubble.ge-ai-good {
@@ -3221,8 +3221,8 @@ body {
   background: linear-gradient(135deg, var(--green), var(--cyan));
 }
 .ge-ai-bubble.ge-ai-bad {
-  border-color: rgba(244, 63, 94, 0.4);
-  background: rgba(244, 63, 94, 0.08);
+  border-color: rgba(230, 57, 70, 0.4);
+  background: rgba(230, 57, 70, 0.08);
 }
 .ge-ai-bubble.ge-ai-bad .ge-ai-avatar {
   background: linear-gradient(135deg, var(--red), #f97316);
@@ -3245,7 +3245,7 @@ body {
 }
 .ge-result-summary {
   font-size: 14.5px;
-  color: rgba(255, 255, 255, 0.68);
+  color: rgba(75, 51, 37, 0.68);
   max-width: 520px;
   margin: 0 auto 20px;
   line-height: 1.6;
@@ -3301,7 +3301,7 @@ body {
   border-radius: 16px;
   background: var(--glass-fill);
   border: 2px solid var(--glass-border);
-  color: #fff;
+  color: var(--text-main);
   cursor: pointer;
   transition: all 0.2s;
   font-size: 13px;
@@ -3320,7 +3320,7 @@ body {
 }
 .ge-choice-btn.selected-bad {
   border-color: var(--red);
-  background: rgba(244, 63, 94, 0.12);
+  background: rgba(230, 57, 70, 0.12);
 }
 .ge-choice-btn:disabled {
   cursor: default;
@@ -3363,7 +3363,7 @@ body {
   font-weight: 600;
   padding: 7px 14px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(75, 51, 37, 0.08);
 }
 .ge-route-card.selected-ok {
   border-color: var(--green);
@@ -3371,7 +3371,7 @@ body {
 }
 .ge-route-card.selected-bad {
   border-color: var(--red);
-  box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.2);
+  box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.2);
 }
 
 /* City hero hotspots (Game 5) */
@@ -3388,7 +3388,7 @@ body {
   width: 104px;
   height: 104px;
   border-radius: 22px;
-  background: rgba(255, 255, 255, 0.07);
+  background: rgba(75, 51, 37, 0.07);
   border: 2px solid var(--glass-border);
   display: flex;
   align-items: center;
@@ -3408,7 +3408,7 @@ body {
   transform: none;
 }
 .ge-hotspot.wrong-flash {
-  background: rgba(244, 63, 94, 0.22);
+  background: rgba(230, 57, 70, 0.22);
   border-color: var(--red);
 }
 .ge-city-progress {
@@ -3429,7 +3429,7 @@ body {
   width: 180px;
   height: 180px;
   border-radius: 32px;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(75, 51, 37, 0.06);
   border: 3px solid var(--glass-border);
   display: flex;
   align-items: center;
@@ -3512,7 +3512,7 @@ body {
   border-color: var(--green);
 }
 .helmet-choice.selected-bad .hp-badge {
-  background: rgba(244, 63, 94, 0.9);
+  background: rgba(230, 57, 70, 0.9);
   border-color: var(--red);
 }
 
@@ -3530,7 +3530,7 @@ body {
   font-size: 13.5px;
   border: none;
   cursor: pointer;
-  box-shadow: 0 10px 26px -8px rgba(59, 130, 246, 0.55);
+  box-shadow: 0 10px 26px -8px rgba(33, 158, 188, 0.55);
   transition: transform 0.2s;
 }
 .ge-help-fab:hover {
@@ -3556,7 +3556,7 @@ body {
   background: linear-gradient(
     160deg,
     var(--glass-fill-strong),
-    rgba(255, 255, 255, 0.03)
+    rgba(75, 51, 37, 0.03)
   );
   border: 1px solid var(--glass-border);
   border-radius: 20px;
@@ -3578,7 +3578,7 @@ body {
   border-radius: 50%;
   background: var(--glass-fill);
   border: 1px solid var(--glass-border);
-  color: #fff;
+  color: var(--text-main);
   cursor: pointer;
   font-size: 14px;
 }
@@ -3833,7 +3833,7 @@ body {
   font-size: 15px;
   border: none;
   cursor: pointer;
-  box-shadow: 0 10px 24px -8px rgba(59, 130, 246, 0.55);
+  box-shadow: 0 10px 24px -8px rgba(33, 158, 188, 0.55);
   transition: transform 0.15s;
 }
 .cs-move-btn:hover {
@@ -3850,7 +3850,7 @@ body {
 .cs-hint {
   text-align: center;
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(75, 51, 37, 0.45);
   margin-top: 10px;
 }
 
@@ -4014,9 +4014,9 @@ body {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.55);
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(75, 51, 37, 0.55);
+  background: rgba(75, 51, 37, 0.08);
+  border: 1px solid rgba(75, 51, 37, 0.14);
   padding: 2px 7px;
   border-radius: 6px;
   margin-left: 8px;
@@ -4033,16 +4033,16 @@ body {
   font-size: 11.5px;
   font-weight: 700;
   letter-spacing: 0.04em;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(75, 51, 37, 0.05);
   border: 1px solid var(--glass-border);
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(75, 51, 37, 0.72);
   width: fit-content;
 }
 .mode-pill .mode-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.35);
+  background: rgba(75, 51, 37, 0.35);
 }
 .mode-pill[data-mode="real"] .mode-dot {
   background: var(--green);
@@ -4067,12 +4067,12 @@ body {
   padding: 12px 22px;
   border: none;
   letter-spacing: 0.02em;
-  box-shadow: 0 0 24px rgba(239, 68, 68, 0.65);
+  box-shadow: 0 0 24px rgba(230, 57, 70, 0.65);
   animation: cam-alarm-banner-shake 0.7s ease-in-out infinite;
 }
 @keyframes cam-alarm-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.0), inset 0 0 0 2px rgba(239, 68, 68, 0.35); }
-  50%      { box-shadow: 0 0 32px 4px rgba(239, 68, 68, 0.55), inset 0 0 0 3px rgba(239, 68, 68, 0.9); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(230, 57, 70, 0.0), inset 0 0 0 2px rgba(230, 57, 70, 0.35); }
+  50%      { box-shadow: 0 0 32px 4px rgba(230, 57, 70, 0.55), inset 0 0 0 3px rgba(230, 57, 70, 0.9); }
 }
 @keyframes cam-alarm-banner-shake {
   0%, 100% { transform: translateX(-50%); }
@@ -4081,8 +4081,8 @@ body {
 }
 
 .detect-item.alarm {
-  background: rgba(239, 68, 68, 0.14);
-  border: 1px solid rgba(239, 68, 68, 0.5);
+  background: rgba(230, 57, 70, 0.14);
+  border: 1px solid rgba(230, 57, 70, 0.5);
 }
 .detect-item.alarm .d-info b {
   color: var(--pink);

@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Đóng góp tình huống · Siêu Nhí AI</title><link rel="stylesheet" href="assets/css/style.css?v=12"><link rel="stylesheet" href="assets/css/shared-pages.css?v=28"></head>
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Đóng góp tình huống · Siêu Nhí AI</title><link rel="stylesheet" href="assets/css/fonts.css?v=1"><link rel="stylesheet" href="assets/css/style.css?v=12"><link rel="stylesheet" href="assets/css/shared-pages.css?v=28"><link rel="stylesheet" href="assets/css/kid-components.css?v=1"></head>
 <body><nav class="navbar static"><div class="nav-inner"><a href="index.php" class="logo"><span class="logo-badge">🤖</span>SIÊU NHÍ AI</a><a class="back-link" href="index.php">← Về trang chủ</a><a class="btn btn-ghost" href="community-admin.php">🛡️ Kiểm duyệt</a></div></nav>
 <main class="wrap community-page"><div class="page-head"><span class="eyebrow-pill"><span class="dot"></span> Cộng đồng học an toàn</span><h1>Chia sẻ một tình huống trên đường</h1><p>Chỉ gửi ảnh đường phố, biển báo hoặc góc qua đường. AI sẽ lọc bước đầu và quản trị viên duyệt trước khi chia sẻ cho học sinh.</p><a class="btn btn-ghost" href="community-feed.php">👀 Xem tình huống đã duyệt</a></div>
 <?php if ($message): ?><div class="inline-success"><?= e($message) ?></div><?php endif; ?><?php if ($error): ?><div class="inline-error"><?= e($error) ?></div><?php endif; ?>
