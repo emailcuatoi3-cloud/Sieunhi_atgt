@@ -39,6 +39,7 @@
   // ---------- MOCK MODE (byte-identical to trước khi refactor) ----------
 
   function runMockMode() {
+    showFallbackBanner();
     window.rescan = function () {
       const badge = document.getElementById('accBadge');
       const scanLine = document.querySelector('.scan-line');
@@ -49,7 +50,7 @@
       setTimeout(() => {
         const values = [94, 95, 96, 97, 98];
         const v = values[Math.floor(Math.random() * values.length)];
-        badge.textContent = '✓ Độ chính xác ' + v + '%';
+        badge.textContent = 'Minh họa · độ chính xác ' + v + '%';
         badge.style.color = 'var(--green)';
         badge.style.background = 'rgba(52,211,153,0.15)';
         if (scanLine) scanLine.style.animationDuration = '2.6s';

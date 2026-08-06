@@ -13,6 +13,21 @@ if ($user['role'] === 'hocsinh') {
 $level = (int)$progress['level'];
 $xpIntoLevel = (int)$progress['xp'] % 100;
 $xpNeeded = xpForNextLevel($level);
+$ageGroup = $user['age_group'] ?? '6-8';
+$mastery = [];
+$nextLesson = null;
+try {
+    $db = new DB_UTILS();
+    $rows = $db->getAll('SELECT skill_key, score FROM mastery_scores WHERE student_id = ?', [$user['id']]);
+    foreach ($rows as $row) $mastery[$row['skill_key']] = (int)round((float)$row['score']);
+    $nextLesson = $db->getOne('SELECT id, title, summary, age_group FROM lessons WHERE status = "published" AND age_group = ? ORDER BY difficulty, id LIMIT 1', [$ageGroup]);
+} catch (Throwable $ignored) { /* schema migration may not have run yet */ }
+$skillCards = [
+    ['key' => 'signals', 'label' => 'Đèn tín hiệu & biển báo', 'icon' => '🚦', 'fallback' => 0],
+    ['key' => 'pedestrian', 'label' => 'Qua đường an toàn', 'icon' => '🚸', 'fallback' => 0],
+    ['key' => 'helmet', 'label' => 'Mũ bảo hiểm', 'icon' => '⛑️', 'fallback' => 0],
+    ['key' => 'emergency', 'label' => 'Tình huống khẩn cấp', 'icon' => '🚑', 'fallback' => 0],
+];
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -24,7 +39,7 @@ $xpNeeded = xpForNextLevel($level);
     <script>
     (function() {
         try {
-            document.documentElement.setAttribute("data-theme", localStorage.getItem("sieu-nhi-theme") || "dark");
+            document.documentElement.setAttribute("data-theme", localStorage.getItem("sieu-nhi-theme") || "light");
         } catch (e) {}
     })();
     </script>
@@ -47,19 +62,19 @@ $xpNeeded = xpForNextLevel($level);
                 </div>
                 <a class="side-back" href="index.php">← Về trang chủ</a>
             </div>
-            <a class="side-link active" href="#"><span class="ic">🏠</span> Trang chủ</a>
-            <a class="side-link" href="#"><span class="ic">🎓</span> Khoá học AI</a>
+            <a class="side-link active" href="dashboard-hoc-sinh.php"><span class="ic">🏠</span> Trang chủ</a>
+            <a class="side-link" href="ai-gia-su.php"><span class="ic">🎓</span> Khoá học AI</a>
             <a class="side-link" href="game-mini.php"><span class="ic">🏆</span> Thử thách</a>
-            <a class="side-link" href="#"><span class="ic">🥇</span> Thành tích</a>
-            <a class="side-link" href="#"><span class="ic">📜</span> Chứng chỉ</a>
-            <a class="side-link" href="#"><span class="ic">👥</span> Bạn bè</a>
+            <a class="side-link" href="bang-xep-hang.php"><span class="ic">🥇</span> Thành tích</a>
+            <a class="side-link" href="game-mini.php"><span class="ic">📜</span> Chứng chỉ</a>
+            <a class="side-link" href="index.php#dashboards"><span class="ic">👥</span> Cùng gia đình</a>
             <a class="side-link" href="bang-xep-hang.php"><span class="ic">📊</span> Bảng xếp hạng</a>
             <div class="side-divider"></div>
             <a class="side-link" href="ai-gia-su.php"><span class="ic">💬</span> AI Gia sư</a>
             <a class="side-link" href="ai-camera.php"><span class="ic">📷</span> AI Camera</a>
             <a class="side-link" href="ai-mo-phong.php"><span class="ic">🚦</span> Mô phỏng</a>
             <div class="side-divider"></div>
-            <a class="side-link" href="#"><span class="ic">⚙️</span> Cài đặt</a>
+            <a class="side-link" href="dang-ky.php"><span class="ic">⚙️</span> Cài đặt hồ sơ</a>
             <a class="side-link" href="logout.php"><span class="ic">🚪</span> Đăng xuất</a>
 
             <div class="sidebar-foot">
@@ -72,7 +87,7 @@ $xpNeeded = xpForNextLevel($level);
             <div class="top-row">
                 <div class="greet">
                     <h1>Chào buổi sáng, <?= e($user['name']) ?>! 👋</h1>
-                    <p>Hôm nay là thứ Năm, con đã sẵn sàng chinh phục thử thách mới chưa?</p>
+                    <p>Lộ trình <?= e($ageGroup) ?> tuổi · chọn một nhiệm vụ nhỏ để tiến bộ hôm nay.</p>
                 </div>
                 <div class="top-actions">
                     <div class="icon-btn">🔔</div>
@@ -102,24 +117,14 @@ $xpNeeded = xpForNextLevel($level);
                 <div>
                     <div class="card">
                         <div class="card-head">
-                            <h3>📈 Tiến độ học tập</h3><a href="#">Xem chi tiết</a>
+                            <h3>🗺️ Bản đồ hành trình an toàn</h3><a href="ai-gia-su.php">Học tiếp →</a>
                         </div>
+                        <?php foreach ($skillCards as $skill): $score = $mastery[$skill['key']] ?? $skill['fallback']; ?>
                         <div class="prog-item">
-                            <div class="prog-top"><span>Luật giao thông cơ bản</span><span>82%</span></div>
-                            <div class="mini-bar full"><i style="width:82%;"></i></div>
+                            <div class="prog-top"><span><?= e($skill['icon'] . ' ' . $skill['label']) ?></span><span><?= $score ?>%</span></div>
+                            <div class="mini-bar full"><i style="width:<?= $score ?>%;"></i></div>
                         </div>
-                        <div class="prog-item">
-                            <div class="prog-top"><span>Biển báo &amp; tín hiệu</span><span>64%</span></div>
-                            <div class="mini-bar full"><i style="width:64%;"></i></div>
-                        </div>
-                        <div class="prog-item">
-                            <div class="prog-top"><span>An toàn xe đạp</span><span>45%</span></div>
-                            <div class="mini-bar full"><i style="width:45%;"></i></div>
-                        </div>
-                        <div class="prog-item" style="margin-bottom:0;">
-                            <div class="prog-top"><span>Xử lý tình huống khẩn cấp</span><span>28%</span></div>
-                            <div class="mini-bar full"><i style="width:28%;"></i></div>
-                        </div>
+                        <?php endforeach; ?>
                     </div>
 
                     <div class="card">
@@ -132,13 +137,12 @@ $xpNeeded = xpForNextLevel($level);
 
                     <div class="card">
                         <div class="card-head">
-                            <h3>🎯 Khoá học AI gợi ý</h3><a href="#">Xem tất cả</a>
+                            <h3>🎯 Khoá học AI gợi ý</h3><a href="ai-gia-su.php">Xem lộ trình</a>
                         </div>
                         <div class="course-row">
                             <div class="course-card">
                                 <div class="course-ic">🚦</div>
-                                <div class="course-info"><b>Đèn tín hiệu nâng cao</b><span>8 bài học · Phù hợp với
-                                        con</span></div><span class="course-tag">Đề xuất</span>
+                                <div class="course-info"><b><?= e($nextLesson['title'] ?? 'Qua đường an toàn') ?></b><span><?= e($nextLesson['summary'] ?? 'Bài học được chọn theo nhóm tuổi của con') ?></span></div><span class="course-tag">Đề xuất</span>
                             </div>
                             <div class="course-card">
                                 <div class="course-ic">🚲</div>
@@ -188,7 +192,7 @@ $xpNeeded = xpForNextLevel($level);
 
                     <div class="card">
                         <div class="card-head">
-                            <h3>🔔 Thông báo</h3><a href="#">Đánh dấu đã đọc</a>
+                            <h3>🔔 Thông báo</h3><a href="dashboard-hoc-sinh.php">Cập nhật lại</a>
                         </div>
                         <div class="notif-item">
                             <div class="notif-ic">🏅</div>

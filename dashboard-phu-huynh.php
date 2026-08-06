@@ -2,6 +2,17 @@
 require_once __DIR__ . '/auth.php';
 requireRole(['phuhuynh', 'admin']);
 $user = currentUser();
+$db = new DB_UTILS();
+$child = null; $childProgress = null; $childGames = 0;
+try {
+    $child = $db->getOne('SELECT u.id, u.name FROM parent_student ps JOIN users u ON u.id = ps.student_id WHERE ps.parent_id = ? LIMIT 1', [$user['id']]);
+    if ($child) {
+        $childProgress = $db->getOne('SELECT * FROM student_progress WHERE student_id = ?', [$child['id']]);
+        $childGames = (int)$db->getValue('SELECT COUNT(*) FROM game_sessions WHERE student_id = ?', [$child['id']]);
+    }
+} catch (Throwable $ignored) { }
+$childName = $child['name'] ?? 'Chưa liên kết học sinh';
+$childXp = (int)($childProgress['xp'] ?? 0);
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -9,7 +20,7 @@ $user = currentUser();
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script>(function(){try{document.documentElement.setAttribute("data-theme", localStorage.getItem("sieu-nhi-theme")||"dark");}catch(e){}})();</script>
+<script>(function(){try{document.documentElement.setAttribute("data-theme", localStorage.getItem("sieu-nhi-theme")||"light");}catch(e){}})();</script>
 <title>Dashboard phụ huynh · Siêu Nhí An Toàn Giao Thông AI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -24,13 +35,13 @@ $user = currentUser();
       <div class="side-brand"><div class="mark">🤖</div>SIÊU NHÍ AI</div>
       <a class="side-back" href="index.php">← Về trang chủ</a>
     </div>
-    <a class="side-link active" href="#"><span class="ic">🏠</span> Tổng quan</a>
-    <a class="side-link" href="#"><span class="ic">🧒</span> Con của tôi</a>
-    <a class="side-link" href="#"><span class="ic">📊</span> Báo cáo chi tiết</a>
-    <a class="side-link" href="#"><span class="ic">🗓️</span> Lịch sử học</a>
-    <a class="side-link" href="#"><span class="ic">🔔</span> Thông báo</a>
+    <a class="side-link active" href="dashboard-phu-huynh.php"><span class="ic">🏠</span> Tổng quan</a>
+    <a class="side-link" href="dashboard-phu-huynh.php"><span class="ic">🧒</span> Con của tôi</a>
+    <a class="side-link" href="dashboard-phu-huynh.php"><span class="ic">📊</span> Báo cáo chi tiết</a>
+    <a class="side-link" href="dashboard-phu-huynh.php"><span class="ic">🗓️</span> Lịch sử học</a>
+    <a class="side-link" href="dashboard-phu-huynh.php"><span class="ic">🔔</span> Thông báo</a>
     <div class="side-divider"></div>
-    <a class="side-link" href="#"><span class="ic">⚙️</span> Cài đặt</a>
+    <a class="side-link" href="dang-ky.php"><span class="ic">⚙️</span> Cài đặt hồ sơ</a>
     <a class="side-link" href="logout.php"><span class="ic">🚪</span> Đăng xuất</a>
 
     <div class="sidebar-foot">
@@ -43,26 +54,26 @@ $user = currentUser();
     <div class="top-row">
       <div class="greet">
         <h1>Chào <?= e($user['name']) ?> 👋</h1>
-        <p>Đây là tổng quan tiến bộ học an toàn giao thông của bé Minh An trong 7 ngày qua.</p>
+        <p>Đây là tổng quan tiến bộ học an toàn giao thông của <?= e($childName) ?>.</p>
       </div>
       <div class="top-actions">
         <button class="icon-btn theme-toggle" aria-label="Chế độ tối">🌙</button>
-        <div class="select-pill">🧒 Minh An ▾</div>
+        <div class="select-pill">🧒 <?= e($childName) ?></div>
         <button class="btn btn-primary-sm" onclick="exportPdf(event)">📄 Xuất báo cáo PDF</button>
       </div>
     </div>
 
     <div class="stat-row">
-      <div class="mini-stat-card"><div class="st-ic">⏱️</div><b>4h 20p</b><span>Thời gian học tuần này</span></div>
-      <div class="mini-stat-card"><div class="st-ic">📈</div><b>+18%</b><span>Tiến bộ so với tuần trước</span></div>
-      <div class="mini-stat-card"><div class="st-ic">✅</div><b>23/28</b><span>Bài học hoàn thành</span></div>
-      <div class="mini-stat-card"><div class="st-ic">🎯</div><b>89%</b><span>Độ chính xác trung bình</span></div>
+      <div class="mini-stat-card"><div class="st-ic">⭐</div><b><?= number_format($childXp, 0, ',', '.') ?></b><span>XP của con</span></div>
+      <div class="mini-stat-card"><div class="st-ic">🎮</div><b><?= $childGames ?></b><span>Lượt chơi đã lưu</span></div>
+      <div class="mini-stat-card"><div class="st-ic">🔥</div><b><?= (int)($childProgress['streak_days'] ?? 0) ?></b><span>Ngày học liên tiếp</span></div>
+      <div class="mini-stat-card"><div class="st-ic">🧭</div><b><?= $child ? 'Đã nối' : 'Chưa nối' ?></b><span>Trạng thái hồ sơ</span></div>
     </div>
 
     <div class="grid2">
       <div>
         <div class="card">
-          <div class="card-head"><h3>⏱️ Thời gian học theo ngày</h3><a href="#">7 ngày</a></div>
+          <div class="card-head"><h3>⏱️ Thời gian học theo ngày</h3><a href="dashboard-phu-huynh.php">7 ngày</a></div>
           <div class="bar-chart" id="barChart"></div>
         </div>
 
@@ -89,7 +100,7 @@ $user = currentUser();
         </div>
 
         <div class="card">
-          <div class="card-head"><h3>🗓️ Lịch sử học tập gần đây</h3><a href="#">Xem tất cả</a></div>
+          <div class="card-head"><h3>🗓️ Lịch sử học tập gần đây</h3><a href="dashboard-phu-huynh.php">Cập nhật lại</a></div>
           <table class="data-table hist-table">
             <thead><tr><th>Ngày</th><th>Hoạt động</th><th>Thời gian</th><th>Kết quả</th></tr></thead>
             <tbody>
@@ -120,14 +131,14 @@ $user = currentUser();
               </svg>
               <div class="gauge-label"><b>Thấp</b><span>Mức độ nguy hiểm</span></div>
             </div>
-            <p class="risk-desc">Dựa trên các tình huống mô phỏng gần đây, bé Minh An xử lý phần lớn tình huống giao thông an toàn. AI khuyến nghị luyện tập thêm các tình huống xe ưu tiên.</p>
+            <p class="risk-desc"><?= $child ? 'Dựa trên các lượt học đã lưu, AI sẽ tổng hợp kỹ năng mạnh và kỹ năng cần luyện thêm của con.' : 'Hãy liên kết hồ sơ học sinh để nhận phân tích và khuyến nghị cá nhân hóa.' ?></p>
           </div>
         </div>
 
         <div class="card">
           <div class="advice-box">
             <h4>🤖 AI tư vấn cho phụ huynh</h4>
-            <p>Minh An tiến bộ rất tốt trong việc nhận biết đèn tín hiệu và đội mũ bảo hiểm. Anh chị có thể cùng con luyện tập thêm tình huống "gặp xe cứu thương" và "đi xe đạp khi trời mưa" — đây là 2 điểm AI nhận thấy con còn lúng túng trong tuần qua.</p>
+            <p><?= $child ? 'AI sẽ dựa trên kết quả thật của con để gợi ý bài luyện tiếp theo. Các khuyến nghị chỉ xuất hiện khi có đủ dữ liệu học tập.' : 'Chưa có dữ liệu để đưa ra lời khuyên. Hãy liên kết tài khoản học sinh với hồ sơ phụ huynh.' ?></p>
           </div>
         </div>
 

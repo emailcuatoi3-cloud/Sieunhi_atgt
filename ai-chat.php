@@ -22,11 +22,24 @@ header('Content-Type: application/json; charset=utf-8');
 
 $pdo = (new DB_UTILS())->connection;  // lấy PDO thật từ wrapper DB_UTILS của dự án
 
-$userId = isLoggedIn() ? (int) $_SESSION['user_id'] : 1; // chưa đăng nhập → dùng tài khoản demo id = 1
+$isGuest = !isLoggedIn();
+$userId = $isGuest ? 0 : (int) $_SESSION['user_id'];
 $action = $_REQUEST['action'] ?? '';
 
-function json_out(array $data): void
+function allowAiRequest(): void
 {
+    $now = time();
+    $window = array_values(array_filter($_SESSION['ai_request_times'] ?? [], static fn($time) => ($now - (int)$time) < 3600));
+    if (count($window) >= AI_RATE_LIMIT) {
+        json_out(['status' => 'error', 'message' => 'Con đã hỏi khá nhiều trong một giờ. Mình nghỉ một chút rồi học tiếp nhé.'], 429);
+    }
+    $window[] = $now;
+    $_SESSION['ai_request_times'] = $window;
+}
+
+function json_out(array $data, int $status = 200): void
+{
+    http_response_code($status);
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
     exit;
 }
@@ -43,6 +56,9 @@ switch ($action) {
 
     /* ---------- Danh sách cuộc trò chuyện (sidebar) ---------- */
     case 'sessions':
+        if ($isGuest) {
+            json_out(['status' => 'success', 'sessions' => [], 'guest' => true]);
+        }
         $stmt = $pdo->prepare(
             "SELECT id, title, updated_at FROM ai_chat_sessions
              WHERE user_id = ? ORDER BY updated_at DESC LIMIT 50"
@@ -52,6 +68,9 @@ switch ($action) {
 
     /* ---------- Tin nhắn của 1 cuộc trò chuyện ---------- */
     case 'messages':
+        if ($isGuest) {
+            json_out(['status' => 'error', 'message' => 'Đăng nhập để xem lịch sử trò chuyện.']);
+        }
         $sid = (int) ($_GET['session_id'] ?? 0);
         if (!own_session($pdo, $sid, $userId)) {
             json_out(['status' => 'error', 'message' => 'Không tìm thấy cuộc trò chuyện']);
@@ -65,6 +84,8 @@ switch ($action) {
 
     /* ---------- Gửi tin nhắn + nhận trả lời AI ---------- */
     case 'send':
+        requireCsrf();
+        allowAiRequest();
         $message = trim($_POST['message'] ?? '');
         if ($message === '') {
             json_out(['status' => 'error', 'message' => 'Tin nhắn trống']);
@@ -74,8 +95,24 @@ switch ($action) {
         }
 
         $sid = (int) ($_POST['session_id'] ?? 0);
+        $ageGroup = (string)($_POST['age_group'] ?? ($_SESSION['user_age_group'] ?? '6-8'));
+        if (!in_array($ageGroup, ['6-8', '9-11'], true)) $ageGroup = '6-8';
 
         // Chưa có cuộc trò chuyện → tạo mới, lấy câu hỏi đầu tiên làm tiêu đề
+        if ($isGuest) {
+            $reply = ai_get_reply($pdo, 0, $message, $ageGroup);
+            json_out([
+                'status' => 'success',
+                'session_id' => 0,
+                'reply' => $reply,
+                'engine' => (GEMINI_API_KEY !== '') ? 'gemini' : 'offline',
+                'guest' => true,
+                'sources' => ['Luật Trật tự, an toàn giao thông đường bộ · 36/2024/QH15'],
+                'suggested_actions' => ['Cho con xem hình', 'Thử tình huống', 'Luyện lại'],
+                'safety' => 'safe',
+            ]);
+        }
+
         if ($sid === 0) {
             $title = mb_substr($message, 0, 40, 'UTF-8');
             if (mb_strlen($message, 'UTF-8') > 40) $title .= '…';
@@ -87,7 +124,7 @@ switch ($action) {
         }
 
         // AI "suy nghĩ" câu trả lời (dựa trên lịch sử hội thoại trước đó)
-        $reply = ai_get_reply($pdo, $sid, $message);
+        $reply = ai_get_reply($pdo, $sid, $message, $ageGroup);
 
         // Lưu tin nhắn của bé và của AI vào CSDL
         $stmt = $pdo->prepare("INSERT INTO ai_chat_messages (session_id, role, content) VALUES (?, 'user', ?)");
@@ -103,10 +140,14 @@ switch ($action) {
             'session_id' => $sid,
             'reply'      => $reply,
             'engine'     => (GEMINI_API_KEY !== '') ? 'gemini' : 'offline',
+            'sources' => ['Luật Trật tự, an toàn giao thông đường bộ · 36/2024/QH15'],
+            'suggested_actions' => ['Cho con xem hình', 'Thử tình huống', 'Luyện lại'],
+            'safety' => 'safe',
         ]);
 
     /* ---------- Xoá cuộc trò chuyện ---------- */
     case 'delete':
+        requireCsrf();
         $sid = (int) ($_POST['session_id'] ?? 0);
         if (!own_session($pdo, $sid, $userId)) {
             json_out(['status' => 'error', 'message' => 'Không tìm thấy cuộc trò chuyện']);

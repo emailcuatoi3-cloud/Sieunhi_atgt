@@ -28,3 +28,9 @@ defined('PASSWORD_EMAIL') || define('PASSWORD_EMAIL', env('SMTP_PASSWORD', ''));
 defined('AI_CAMERA_ENABLED') || define('AI_CAMERA_ENABLED', (bool) env('AI_CAMERA_ENABLED', false));
 defined('ROBOFLOW_KEY')      || define('ROBOFLOW_KEY',      env('ROBOFLOW_PUBLISHABLE_KEY', ''));
 defined('ROBOFLOW_MODEL')    || define('ROBOFLOW_MODEL',    env('ROBOFLOW_MODEL', 'hard-hat-workers/12'));
+
+// AI providers are configured only through the environment. Never commit keys.
+defined('GEMINI_API_KEY') || define('GEMINI_API_KEY', (string) env('GEMINI_API_KEY', ''));
+defined('GEMINI_MODEL')   || define('GEMINI_MODEL', (string) env('GEMINI_MODEL', 'gemini-2.5-flash'));
+defined('OPENAI_API_KEY') || define('OPENAI_API_KEY', (string) env('OPENAI_API_KEY', ''));
+defined('AI_RATE_LIMIT')  || define('AI_RATE_LIMIT', max(1, (int) env('AI_RATE_LIMIT', 30)));

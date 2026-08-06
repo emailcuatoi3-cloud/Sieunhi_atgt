@@ -11,8 +11,7 @@
 /* ---------- CẤU HÌNH ----------
    Lấy API key MIỄN PHÍ tại: https://aistudio.google.com/apikey
    (đăng nhập Google → Create API key → dán vào giữa 2 dấu nháy) */
-define('GEMINI_API_KEY', '');
-define('GEMINI_MODEL', 'gemini-2.5-flash'); // có thể đổi model khác nếu muốn
+require_once __DIR__ . '/config.php';
 
 /* "Tính cách" của AI Gia sư khi dùng Gemini */
 define('AI_SYSTEM_PROMPT',
@@ -56,10 +55,10 @@ function gemini_endpoint(string $model): array
 /* ============================================================
    HÀM CHÍNH — được ai-chat.php gọi
    ============================================================ */
-function ai_get_reply(PDO $pdo, int $sessionId, string $userMessage): string
+function ai_get_reply(PDO $pdo, int $sessionId, string $userMessage, string $ageGroup = '6-8'): string
 {
     if (GEMINI_API_KEY !== '') {
-        $reply = ai_call_gemini($pdo, $sessionId, $userMessage);
+        $reply = ai_call_gemini($pdo, $sessionId, $userMessage, $ageGroup);
         if ($reply !== null && trim($reply) !== '') {
             return trim($reply);
         }
@@ -71,7 +70,7 @@ function ai_get_reply(PDO $pdo, int $sessionId, string $userMessage): string
 /* ============================================================
    CHẾ ĐỘ 1 — Gọi Google Gemini API (kèm lịch sử hội thoại)
    ============================================================ */
-function ai_call_gemini(PDO $pdo, int $sessionId, string $userMessage): ?string
+function ai_call_gemini(PDO $pdo, int $sessionId, string $userMessage, string $ageGroup = '6-8'): ?string
 {
     // Lấy 10 tin nhắn gần nhất làm ngữ cảnh để AI "nhớ" cuộc trò chuyện
     $stmt = $pdo->prepare(
@@ -91,7 +90,9 @@ function ai_call_gemini(PDO $pdo, int $sessionId, string $userMessage): ?string
     $contents[] = ['role' => 'user', 'parts' => [['text' => $userMessage]]];
 
     $body = [
-        'system_instruction' => ['parts' => [['text' => AI_SYSTEM_PROMPT]]],
+        'system_instruction' => ['parts' => [['text' => AI_SYSTEM_PROMPT .
+            " Nhóm tuổi hiện tại: {$ageGroup}. Dùng từ vựng và ví dụ phù hợp với nhóm tuổi này. " .
+            "Nếu câu hỏi cần quy định cụ thể, chỉ nêu điều đã có trong nguồn được duyệt."]]],
         'contents'           => $contents,
         'generationConfig'   => ['temperature' => 0.7, 'maxOutputTokens' => 1024],
     ];
@@ -107,7 +108,8 @@ function ai_call_gemini(PDO $pdo, int $sessionId, string $userMessage): ?string
         CURLOPT_TIMEOUT        => 30,
         // XAMPP trên Windows thường thiếu chứng chỉ SSL → tắt kiểm tra
         // (chỉ dùng cho localhost/demo; khi đưa lên hosting thật nên bật lại)
-        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_SSL_VERIFYPEER => true,
+        CURLOPT_SSL_VERIFYHOST => 2,
     ]);
     $res = curl_exec($ch);
     curl_close($ch);

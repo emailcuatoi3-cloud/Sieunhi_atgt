@@ -6,7 +6,7 @@
 /* ---------- Dark/Light theme: áp dụng NGAY để tránh nháy sáng/tối ---------- */
 (function () {
   try {
-    const saved = localStorage.getItem("sieu-nhi-theme") || "dark";
+    const saved = localStorage.getItem("sieu-nhi-theme") || "light";
     document.documentElement.setAttribute("data-theme", saved);
   } catch (e) {
     /* localStorage có thể bị chặn — bỏ qua để không làm dừng script phía dưới */
@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* ---------- Dark/Light toggle — hoạt động trên MỌI trang, đồng bộ qua localStorage ---------- */
   function syncThemeIcons() {
-    const theme = document.documentElement.getAttribute("data-theme") || "dark";
+    const theme = document.documentElement.getAttribute("data-theme") || "light";
     document.querySelectorAll(".theme-toggle").forEach((btn) => {
       btn.textContent = theme === "light" ? "☀️" : "🌙";
       btn.setAttribute(
@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".theme-toggle").forEach((btn) => {
     btn.addEventListener("click", () => {
       const current =
-        document.documentElement.getAttribute("data-theme") || "dark";
+        document.documentElement.getAttribute("data-theme") || "light";
       const next = current === "light" ? "dark" : "light";
       document.documentElement.setAttribute("data-theme", next);
       syncThemeIcons();
@@ -150,4 +150,27 @@ document.addEventListener("DOMContentLoaded", () => {
       chip.style.color = "#fff";
     });
   });
+
+  /* ---------- Age-aware learning entry point ---------- */
+  document.querySelectorAll("[data-age-group]").forEach((option) => {
+    option.addEventListener("click", () => {
+      const ageGroup = option.dataset.ageGroup;
+      try { localStorage.setItem("sieu-nhi-age-group", ageGroup); } catch (e) {}
+      if (window.SIEU_NHI_AUTH && window.SIEU_NHI_CSRF) {
+        const fd = new FormData(); fd.append("age_group", ageGroup);
+        fetch("profile-api.php", { method: "POST", headers: { "X-CSRF-Token": window.SIEU_NHI_CSRF }, body: fd }).catch(() => {});
+      }
+      document.querySelectorAll("[data-age-group]").forEach((item) => item.classList.remove("selected"));
+      option.classList.add("selected");
+      const target = document.querySelector('a[href="ai-gia-su.php"]');
+      if (target) target.href = "ai-gia-su.php?age_group=" + encodeURIComponent(ageGroup);
+      const label = ageGroup === "9-11" ? "Bé đã chọn lộ trình 9–11 tuổi" : "Bé đã chọn lộ trình 6–8 tuổi";
+      option.closest(".age-chooser")?.setAttribute("data-selected-label", label);
+    });
+  });
+  try {
+    const savedAge = localStorage.getItem("sieu-nhi-age-group");
+    const savedOption = savedAge && Array.from(document.querySelectorAll("[data-age-group]")).find((item) => item.dataset.ageGroup === savedAge);
+    if (savedOption) savedOption.classList.add("selected");
+  } catch (e) {}
 });

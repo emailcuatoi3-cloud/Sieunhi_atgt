@@ -3,6 +3,8 @@ require_once __DIR__ . '/auth.php';
 $user = currentUser();
 $fullname = $user['name'] ?? 'Bé Minh An';
 $avatar = $user['avatar'] ?? '🧒';
+$ageGroup = (string)($_GET['age_group'] ?? ($user['age_group'] ?? '6-8'));
+if (!in_array($ageGroup, ['6-8', '9-11'], true)) $ageGroup = '6-8';
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -14,7 +16,7 @@ $avatar = $user['avatar'] ?? '🧒';
     <script>
     (function() {
         try {
-            document.documentElement.setAttribute("data-theme", localStorage.getItem("sieu-nhi-theme") || "dark");
+            document.documentElement.setAttribute("data-theme", localStorage.getItem("sieu-nhi-theme") || "light");
         } catch (e) {}
     })();
     </script>
@@ -199,6 +201,26 @@ $avatar = $user['avatar'] ?? '🧒';
         background: var(--yellow) !important;
         color: var(--ink) !important;
     }
+
+    .tutor-context { display:grid; grid-template-columns: minmax(0,1.4fr) minmax(220px,.8fr); gap:12px; padding:14px 28px 0; }
+    .context-lesson, .context-progress { border:1px solid var(--glass-border); background:rgba(255,255,255,.045); border-radius:16px; padding:13px; display:flex; align-items:center; gap:12px; }
+    .context-art { width:46px; height:46px; display:grid; place-items:center; flex:0 0 auto; border-radius:14px; background:linear-gradient(145deg,#ffe59a,#fff3cf); font-size:25px; }
+    .context-lesson div { display:grid; gap:2px; min-width:0; }
+    .context-lesson small, .context-progress small { color:rgba(255,255,255,.5); font-size:10px; text-transform:uppercase; letter-spacing:.05em; }
+    .context-lesson b { font-size:13px; }
+    .context-lesson div span:last-child, .context-progress > span { color:rgba(255,255,255,.56); font-size:11px; }
+    .context-lesson a { margin-left:auto; color:var(--cyan); font-size:11px; white-space:nowrap; }
+    .context-progress { display:block; }
+    .context-progress > div:first-child { display:flex; justify-content:space-between; align-items:center; }
+    .context-progress strong { color:#bff5ff; font-size:16px; }
+    .progress-track { height:7px; margin:8px 0 6px; border-radius:99px; background:rgba(255,255,255,.1); overflow:hidden; }
+    .progress-track i { display:block; height:100%; border-radius:inherit; background:linear-gradient(90deg,#7dd3fc,#34d399); }
+    .ai-mode-badge { color:#a7f3d0; background:rgba(52,211,153,.11); border:1px solid rgba(52,211,153,.3); border-radius:8px; padding:5px 9px; font-size:10px; }
+    .ai-next-actions { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+    .ai-next-actions button { background:rgba(79,195,247,.1); color:#bff5ff; border:1px solid rgba(79,195,247,.24); border-radius:8px; padding:6px 8px; font-size:10.5px; }
+    .ai-next-actions button:hover { background:rgba(79,195,247,.2); }
+    .ai-source { color:rgba(255,255,255,.42); font-size:10px; margin-top:8px; }
+    @media (max-width:760px) { .tutor-context { grid-template-columns:1fr; padding:10px 14px 0; } .ai-mode-badge { display:none; } }
     </style>
 </head>
 
@@ -238,12 +260,18 @@ $avatar = $user['avatar'] ?? '🧒';
         <div class="chat-col">
             <div class="chat-top">
                 <h2><span class="status-dot"></span> AI Gia sư — luôn sẵn sàng lắng nghe</h2>
+                <span class="ai-mode-badge" title="Chế độ AI sẽ được hiển thị rõ trong phản hồi">Kho kiến thức ATGT đã duyệt</span>
                 <div class="top-actions">
                     <button class="icon-btn theme-toggle" aria-label="Chế độ tối">🌙</button>
                     <div class="icon-btn" title="Video call AI" onclick="toast('Video call AI sắp ra mắt 🎥')">🎥</div>
                     <div class="icon-btn" title="Xuất báo cáo trò chuyện" onclick="exportChat()">📄</div>
                     <div class="icon-btn" title="Cài đặt" onclick="toast('Cài đặt đang được phát triển ⚙️')">⚙️</div>
                 </div>
+            </div>
+
+            <div class="tutor-context" aria-label="Lộ trình học hiện tại">
+                <div class="context-lesson"><span class="context-art">🚸</span><div><small>Bài học gợi ý</small><b>Qua đường an toàn</b><span>Dừng lại · Quan sát · Lắng nghe</span></div><a href="ai-mo-phong.php">Thử ngay →</a></div>
+                <div class="context-progress"><div><small>Lộ trình <b id="ageLabel"><?= $ageGroup === '9-11' ? '9–11' : '6–8' ?> tuổi</b></small><strong id="skillProgress">0%</strong></div><div class="progress-track"><i id="skillProgressBar" style="width:0%"></i></div><span>AI sẽ điều chỉnh câu hỏi theo câu trả lời của con</span></div>
             </div>
 
             <div class="chat-scroll" id="chatScroll">
@@ -284,9 +312,11 @@ $avatar = $user['avatar'] ?? '🧒';
     <script>
     // Tên học sinh truyền từ PHP sang JavaScript
     const STUDENT_NAME = <?php echo json_encode($fullname, JSON_UNESCAPED_UNICODE); ?>;
+    const CSRF_TOKEN = <?php echo json_encode(csrfToken(), JSON_UNESCAPED_UNICODE); ?>;
+    const STUDENT_AGE_GROUP = <?php echo json_encode($ageGroup, JSON_UNESCAPED_UNICODE); ?>;
     </script>
     <script src="assets/js/main.js?v=5"></script>
-    <script src="assets/js/ai-gia-su.js?v=1"></script>
+    <script src="assets/js/ai-gia-su.js?v=2"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

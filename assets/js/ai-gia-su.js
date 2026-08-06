@@ -54,7 +54,7 @@ function addUserMsg(text) {
   document.getElementById("chatInner").appendChild(div);
 }
 
-function addBotMsg(text) {
+function addBotMsg(text, meta = {}) {
   chatLog.push({ role: "bot", content: text });
   const div = document.createElement("div");
   div.className = "msg bot";
@@ -66,6 +66,8 @@ function addBotMsg(text) {
          <div class="msg-tool" onclick="feedback(this)">👍 Hữu ích</div>
          <div class="msg-tool" onclick="feedback(this)">👎 Chưa rõ</div>
        </div>
+       <div class="ai-next-actions"><button type="button" onclick="askSuggested(this)">🖼️ Cho con xem hình</button><button type="button" onclick="askSuggested(this)">🎮 Thử tình huống</button><button type="button" onclick="askSuggested(this)">🔁 Luyện lại</button></div>
+       ${meta.sources && meta.sources.length ? `<div class="ai-source">Nguồn đã duyệt: ${meta.sources.map(esc).join(" · ")}</div>` : ""}
      </div>`;
   document.getElementById("chatInner").appendChild(div);
 }
@@ -103,10 +105,11 @@ async function sendMsg() {
     fd.append("action", "send");
     fd.append("session_id", currentSessionId);
     fd.append("message", text);
+    fd.append("age_group", STUDENT_AGE_GROUP || "6-8");
 
     // Chờ tối thiểu 0.7s để bé thấy hiệu ứng AI "đang gõ"
     const [res] = await Promise.all([
-      fetch(API, { method: "POST", body: fd }),
+      fetch(API, { method: "POST", headers: { "X-CSRF-Token": CSRF_TOKEN }, body: fd }),
       new Promise((r) => setTimeout(r, 700)),
     ]);
     const data = await res.json();
@@ -115,7 +118,7 @@ async function sendMsg() {
     if (data.status === "success") {
       const isNew = currentSessionId === 0;
       currentSessionId = data.session_id;
-      addBotMsg(data.reply);
+      addBotMsg(data.reply, data);
       if (isNew) loadSessions(); // cuộc trò chuyện mới → cập nhật sidebar
     } else {
       addBotMsg(
@@ -227,11 +230,17 @@ function newChat(focus = true) {
     .querySelectorAll(".session-item")
     .forEach((el) => el.classList.remove("active"));
   addBotMsg(
-    `Chào ${STUDENT_NAME}! Mình là AI Gia sư 🤖 — hôm nay con muốn học điều gì về an toàn giao thông nào? Con có thể gõ câu hỏi hoặc bấm nút 🎤 để nói chuyện với mình nhé!`,
+    `Chào ${STUDENT_NAME}! Mình là AI Gia sư 🤖 — hôm nay con muốn luyện kỹ năng nào? Mình sẽ giải thích bằng hình, kể một tình huống ngắn và cho con thử lại nhé!`,
   );
   scrollBottom();
   if (focus) document.getElementById("chatText").focus();
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const group = STUDENT_AGE_GROUP || (() => { try { return localStorage.getItem("sieu-nhi-age-group") || "6-8"; } catch (e) { return "6-8"; } })();
+  const label = document.getElementById("ageLabel");
+  if (label) label.textContent = group === "9-11" ? "9–11 tuổi" : "6–8 tuổi";
+});
 
 async function deleteSession(id) {
   if (!confirm("Xoá cuộc trò chuyện này?")) return;
@@ -239,7 +248,7 @@ async function deleteSession(id) {
   fd.append("action", "delete");
   fd.append("session_id", id);
   try {
-    await fetch(API, { method: "POST", body: fd });
+    await fetch(API, { method: "POST", headers: { "X-CSRF-Token": CSRF_TOKEN }, body: fd });
   } catch (e) {}
   if (String(id) === String(currentSessionId)) newChat(false);
   loadSessions();

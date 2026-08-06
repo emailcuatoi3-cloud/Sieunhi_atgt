@@ -9,7 +9,7 @@ $aiEnabled = AI_CAMERA_ENABLED && ROBOFLOW_KEY !== '' && ROBOFLOW_MODEL !== '';
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script>(function(){try{document.documentElement.setAttribute("data-theme", localStorage.getItem("sieu-nhi-theme")||"dark");}catch(e){}})();</script>
+<script>(function(){try{document.documentElement.setAttribute("data-theme", localStorage.getItem("sieu-nhi-theme")||"light");}catch(e){}})();</script>
 <script>
 window.__AI_CAMERA__ = {
   enabled: <?= $aiEnabled ? 'true' : 'false' ?>,
@@ -52,7 +52,7 @@ window.__AI_CAMERA__ = {
     </div>
     <div class="cam-view">
       <div class="cam-hud-top">
-        <span class="rec-dot"><i></i> AI ĐANG PHÂN TÍCH</span>
+        <span class="rec-dot"><i></i> <?= $aiEnabled ? 'AI ĐANG PHÂN TÍCH' : 'CHẾ ĐỘ MINH HỌA' ?></span>
         <span>1280×720 · 30fps</span>
       </div>
       <div class="cam-scene" id="camScene">
@@ -82,19 +82,19 @@ window.__AI_CAMERA__ = {
     <div class="upload-hint">Hỗ trợ JPG, PNG · Hoặc kéo thả ảnh vào khung camera</div>
     <div class="mode-pill" id="camModePill" data-mode="<?= $aiEnabled ? 'real' : 'demo' ?>">
       <span class="mode-dot"></span>
-      <?= $aiEnabled ? 'AI thật' : 'Demo' ?>
+      <?= $aiEnabled ? 'AI thật · model đã kết nối' : 'Minh họa · chưa kết nối model' ?>
     </div>
   </div>
 
   <div class="result-panel">
     <div class="card-head" style="margin-bottom:0;">
       <h3>Kết quả nhận diện</h3>
-      <span class="accuracy-badge" id="accBadge">✓ Độ chính xác 96%</span>
+      <span class="accuracy-badge" id="accBadge"><?= $aiEnabled ? 'Chờ ảnh để phân tích' : 'Kết quả minh họa' ?></span>
     </div>
 
     <div class="detect-item ok">
       <div class="d-icon">⛑️</div>
-      <div class="d-info"><b>Mũ bảo hiểm — Đạt chuẩn</b><span>Cài quai đúng cách, vừa khít đầu</span></div>
+      <div class="d-info"><b>Mũ bảo hiểm — Đạt chuẩn <span class="demo-badge"><?= $aiEnabled ? 'Mẫu' : 'Minh họa' ?></span></b><span>Cài quai đúng cách, vừa khít đầu</span></div>
       <div class="detect-bar"><i></i></div>
     </div>
     <div class="detect-item ok">

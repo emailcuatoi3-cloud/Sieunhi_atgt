@@ -2,6 +2,13 @@
 require_once __DIR__ . '/auth.php';
 requireRole(['giaovien', 'admin']);
 $user = currentUser();
+$db = new DB_UTILS();
+$classCount = 0; $studentCount = 0; $lessonCount = 0;
+try {
+  $classCount = (int)$db->getValue('SELECT COUNT(*) FROM classes WHERE teacher_id = ?', [$user['id']]);
+  $studentCount = (int)$db->getValue('SELECT COUNT(DISTINCT cs.student_id) FROM class_students cs JOIN classes c ON c.id = cs.class_id WHERE c.teacher_id = ?', [$user['id']]);
+  $lessonCount = (int)$db->getValue('SELECT COUNT(*) FROM lessons WHERE status = "published"');
+} catch (Throwable $ignored) { }
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -9,7 +16,7 @@ $user = currentUser();
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script>(function(){try{document.documentElement.setAttribute("data-theme", localStorage.getItem("sieu-nhi-theme")||"dark");}catch(e){}})();</script>
+<script>(function(){try{document.documentElement.setAttribute("data-theme", localStorage.getItem("sieu-nhi-theme")||"light");}catch(e){}})();</script>
 <title>Dashboard giáo viên · Siêu Nhí An Toàn Giao Thông AI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -24,14 +31,14 @@ $user = currentUser();
       <div class="side-brand"><div class="mark">🤖</div>SIÊU NHÍ AI</div>
       <a class="side-back" href="index.php">← Về trang chủ</a>
     </div>
-    <a class="side-link active" href="#"><span class="ic">🏠</span> Tổng quan</a>
-    <a class="side-link" href="#"><span class="ic">🏫</span> Lớp học</a>
-    <a class="side-link" href="#"><span class="ic">🧒</span> Học sinh</a>
-    <a class="side-link" href="#"><span class="ic">📘</span> Bài học</a>
-    <a class="side-link" href="#"><span class="ic">🏆</span> Cuộc thi</a>
-    <a class="side-link" href="#"><span class="ic">📊</span> Báo cáo</a>
+    <a class="side-link active" href="dashboard-giao-vien.php"><span class="ic">🏠</span> Tổng quan</a>
+    <a class="side-link" href="dashboard-giao-vien.php"><span class="ic">🏫</span> Lớp học</a>
+    <a class="side-link" href="dashboard-giao-vien.php"><span class="ic">🧒</span> Học sinh</a>
+    <a class="side-link" href="ai-gia-su.php"><span class="ic">📘</span> Bài học</a>
+    <a class="side-link" href="game-mini.php"><span class="ic">🏆</span> Cuộc thi</a>
+    <a class="side-link" href="dashboard-giao-vien.php"><span class="ic">📊</span> Báo cáo</a>
     <div class="side-divider"></div>
-    <a class="side-link" href="#"><span class="ic">⚙️</span> Cài đặt</a>
+    <a class="side-link" href="dang-ky.php"><span class="ic">⚙️</span> Cài đặt hồ sơ</a>
     <a class="side-link" href="logout.php"><span class="ic">🚪</span> Đăng xuất</a>
 
     <div class="sidebar-foot">
@@ -44,21 +51,21 @@ $user = currentUser();
     <div class="top-row">
       <div class="greet">
         <h1>Chào <?= e($user['name']) ?> 👋</h1>
-        <p>Tổng quan hoạt động của Lớp 3A trong tuần này.</p>
+        <p>Dữ liệu lớp học được đồng bộ từ cơ sở dữ liệu.</p>
       </div>
       <div class="top-actions">
         <button class="icon-btn theme-toggle" aria-label="Chế độ tối">🌙</button>
-        <div class="select-pill">🏫 Lớp 3A ▾</div>
+        <div class="select-pill">🏫 <?= $classCount ?> lớp</div>
         <button class="btn btn-ghost" onclick="exportExcel(event)">📊 Xuất Excel</button>
         <button class="btn btn-primary-sm" onclick="toggleLessonForm()">＋ Tạo bài học</button>
       </div>
     </div>
 
     <div class="stat-row">
-      <div class="mini-stat-card"><div class="st-ic">🧒</div><b>32</b><span>Học sinh trong lớp</span></div>
-      <div class="mini-stat-card"><div class="st-ic">📘</div><b>18</b><span>Bài học đã giao</span></div>
-      <div class="mini-stat-card"><div class="st-ic">📈</div><b>84%</b><span>Tỷ lệ hoàn thành trung bình</span></div>
-      <div class="mini-stat-card"><div class="st-ic">⚠️</div><b>3</b><span>Học sinh cần chú ý</span></div>
+      <div class="mini-stat-card"><div class="st-ic">🧒</div><b><?= $studentCount ?></b><span>Học sinh đã nối lớp</span></div>
+      <div class="mini-stat-card"><div class="st-ic">📘</div><b><?= $lessonCount ?></b><span>Bài học đã xuất bản</span></div>
+      <div class="mini-stat-card"><div class="st-ic">📈</div><b>—</b><span>Chờ dữ liệu hoàn thành</span></div>
+      <div class="mini-stat-card"><div class="st-ic">⚠️</div><b>—</b><span>Chưa đủ dữ liệu cảnh báo</span></div>
     </div>
 
     <div class="card" id="lessonForm" style="display:none;">
@@ -82,7 +89,7 @@ $user = currentUser();
     <div class="grid2">
       <div>
         <div class="card">
-          <div class="card-head"><h3>🧒 Danh sách học sinh</h3><a href="#">Xem tất cả 32</a></div>
+          <div class="card-head"><h3>🧒 Danh sách học sinh</h3><a href="dashboard-giao-vien.php">Cập nhật danh sách</a></div>
           <table class="data-table">
             <thead><tr><th>Học sinh</th><th>Tiến độ</th><th>Điểm AI</th><th>Trạng thái</th><th></th></tr></thead>
             <tbody>
@@ -96,7 +103,7 @@ $user = currentUser();
         </div>
 
         <div class="card">
-          <div class="card-head"><h3>🔥 Heatmap hoạt động lớp học</h3><a href="#">30 ngày qua</a></div>
+          <div class="card-head"><h3>🔥 Heatmap hoạt động lớp học</h3><a href="dashboard-giao-vien.php">30 ngày qua</a></div>
           <div class="heatmap" id="heatmap"></div>
           <div class="heat-legend">
             <span>Ít</span>

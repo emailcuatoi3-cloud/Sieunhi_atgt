@@ -13,13 +13,14 @@
    ============================================================ */
 
 header('Content-Type: application/json; charset=utf-8');
+require_once __DIR__ . '/config.php';
 
 /* ---------- CẤU HÌNH ----------
    Lấy API key tại: https://platform.openai.com/api-keys
    (đăng nhập/đăng ký OpenAI → "Create new secret key" → dán vào giữa 2 dấu nháy)
    LƯU Ý: khác với Gemini, OpenAI KHÔNG có gói dùng thử miễn phí vĩnh viễn —
    cần nạp một khoản nhỏ (vài USD) vào tài khoản OpenAI để API hoạt động. */
-define('OPENAI_API_KEY', '');
+// OPENAI_API_KEY is loaded from .env by config.php.
 define('OPENAI_MODEL', 'gpt-4o-mini'); // model rẻ, hỗ trợ nhìn ảnh (vision), đủ dùng cho tính năng này
 
 function json_error(string $msg, int $code = 400): void
@@ -107,7 +108,8 @@ curl_setopt_array($ch, [
     CURLOPT_TIMEOUT    => 40,
     // XAMPP trên Windows thường thiếu chứng chỉ SSL → tắt kiểm tra
     // (chỉ dùng cho localhost/demo; khi đưa lên hosting thật nên bật lại)
-    CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_SSL_VERIFYPEER => true,
+        CURLOPT_SSL_VERIFYHOST => 2,
 ]);
 $res = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
