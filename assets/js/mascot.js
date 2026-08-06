@@ -139,7 +139,83 @@ const MascotSVG = (() => {
     `;
   }
 
-  return { character };
+  /** Vẽ tay theo 4 trạng thái cảm xúc: wave/cheer/worry/point (dùng cho pose()) */
+  function arms(state) {
+    const leftRest = `
+      <path d="M36 118 Q26 138 32 156" stroke="#F2B87E" stroke-width="15" fill="none" stroke-linecap="round"/>
+      <circle cx="32" cy="156" r="9" fill="#F2B87E"/>
+    `;
+
+    if (state === "cheer") {
+      // Hai tay giơ cao ăn mừng
+      return `
+        <path d="M36 118 Q22 90 28 60" stroke="#F2B87E" stroke-width="15" fill="none" stroke-linecap="round"/>
+        <circle cx="28" cy="58" r="9" fill="#F2B87E"/>
+        <path d="M104 118 Q118 90 112 60" stroke="#F2B87E" stroke-width="15" fill="none" stroke-linecap="round"/>
+        <circle cx="112" cy="58" r="9" fill="#F2B87E"/>
+      `;
+    }
+
+    if (state === "worry") {
+      // Lông mày xéo (vẽ đè lên lông mày mặc định của head()) + hai tay ôm má
+      return `
+        <path d="M46 70 L64 60" stroke="#5B4632" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M94 70 L76 60" stroke="#5B4632" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M36 118 Q30 100 46 94" stroke="#F2B87E" stroke-width="15" fill="none" stroke-linecap="round"/>
+        <circle cx="48" cy="93" r="9" fill="#F2B87E"/>
+        <path d="M104 118 Q110 100 94 94" stroke="#F2B87E" stroke-width="15" fill="none" stroke-linecap="round"/>
+        <circle cx="92" cy="93" r="9" fill="#F2B87E"/>
+      `;
+    }
+
+    if (state === "point") {
+      // Tay phải chỉ sang phải (callout hướng dẫn), tay trái nghỉ
+      return `
+        ${leftRest}
+        <path d="M104 118 Q120 108 126 96" stroke="#F2B87E" stroke-width="15" fill="none" stroke-linecap="round"/>
+        <circle cx="128" cy="94" r="8" fill="#F2B87E"/>
+        <path d="M128 94 L139 90" stroke="#F2B87E" stroke-width="8" stroke-linecap="round"/>
+      `;
+    }
+
+    // 'wave' (mặc định): tay phải giơ vẫy, rotate -30° quanh vai; tay trái nghỉ
+    return `
+      ${leftRest}
+      <g transform="rotate(-30 104 118)">
+        <path d="M104 118 Q114 90 108 62" stroke="#F2B87E" stroke-width="15" fill="none" stroke-linecap="round"/>
+        <circle cx="108" cy="60" r="9" fill="#F2B87E"/>
+      </g>
+    `;
+  }
+
+  /** Phụ kiện theo trạng thái: confetti quanh đầu khi cheer, giọt mồ hôi khi worry */
+  function extras(state) {
+    if (state === "cheer") {
+      const dots = [
+        { x: 92, y: 24, c: "#FFB703" },
+        { x: 81, y: 5, c: "#219EBC" },
+        { x: 59, y: 5, c: "#E63946" },
+        { x: 48, y: 24, c: "#2A9D34" },
+        { x: 59, y: 43, c: "#FF7B9C" },
+        { x: 81, y: 43, c: "#7BD3EA" },
+      ];
+      return dots.map((d) => `<circle cx="${d.x}" cy="${d.y}" r="4" fill="${d.c}"/>`).join("");
+    }
+    if (state === "worry") {
+      return `<ellipse cx="118" cy="50" rx="6" ry="9" fill="#BFE6FA" opacity=".85" transform="rotate(15 118 50)"/>`;
+    }
+    return "";
+  }
+
+  /** Vẽ mascot ở 1 trong 4 trạng thái cảm xúc: 'wave' | 'cheer' | 'worry' | 'point' */
+  function pose(state = "wave") {
+    return `<svg viewBox="0 0 140 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Siêu Nhí ${state}">
+      <defs><radialGradient id="skinGrad" cx="50%" cy="40%"><stop offset="0%" stop-color="#FFD9A8"/><stop offset="100%" stop-color="#F2B87E"/></radialGradient></defs>
+      ${extras(state)}${hairFull()}${head()}${arms(state)}
+    </svg>`;
+  }
+
+  return { character, pose };
 })();
 
 window.MascotSVG = MascotSVG;

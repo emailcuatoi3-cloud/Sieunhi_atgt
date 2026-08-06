@@ -190,6 +190,7 @@ $user = currentUser();
         <div class="wrap hero-grid">
             <!-- LEFT -->
             <div class="hero-left">
+                <div id="hero-mascot" style="width:150px" aria-hidden="true"></div>
                 <span class="eyebrow-pill"><span class="dot"></span> Học an toàn giao thông theo cách của con</span>
                 <h1>HỌC AN TOÀN.<br />CHƠI THÔNG MINH.</h1>
                 <p class="subtitle">
@@ -783,7 +784,14 @@ $user = currentUser();
     </footer>
 
     <script src="assets/js/main.js?v=5"></script>
+    <script src="assets/js/mascot.js?v=2"></script>
     <script>window.SIEU_NHI_AUTH = <?= $user ? 'true' : 'false' ?>; window.SIEU_NHI_CSRF = <?= json_encode(csrfToken(), JSON_UNESCAPED_UNICODE) ?>;</script>
+    <script>
+        var heroMascot = document.getElementById('hero-mascot');
+        if (heroMascot && window.MascotSVG) {
+            heroMascot.innerHTML = MascotSVG.pose('wave');
+        }
+    </script>
 </body>
 
 </html>
