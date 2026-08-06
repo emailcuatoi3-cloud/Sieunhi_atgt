@@ -98,26 +98,33 @@ async function send(text) {
 /* ---------- Chip gợi ý cá nhân hoá ---------- */
 async function loadChips() {
   const row = document.getElementById('chip-row');
-  try {
-    const [chipsRes, sessRes] = await Promise.all([
-      api('ai-chat.php?action=chips'),
-      api('ai-chat.php?action=sessions'),
-    ]);
-    row.innerHTML = '';
-    const chips = (chipsRes && chipsRes.status === 'success') ? chipsRes.chips : [];
-    chips.forEach((chip) => {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'kid-chip';
-      btn.textContent = chip.text; // textContent — chống XSS
-      btn.addEventListener('click', () => {
-        if (state.sending) return;
-        addMsg('user', chip.text);
-        send(chip.text);
-      });
-      row.appendChild(btn);
-    });
 
+  // Chip câu hỏi phải hiện được dù việc phát hiện guest (để thêm chip đăng nhập) lỗi —
+  // tách 2 lệnh gọi + 2 try/catch riêng, không để 1 lệnh fail kéo lệnh kia mất trắng.
+  let chips = [];
+  try {
+    const chipsRes = await api('ai-chat.php?action=chips');
+    chips = (chipsRes && chipsRes.status === 'success') ? chipsRes.chips : [];
+  } catch (err) {
+    /* bỏ qua lỗi mạng khi tải chip gợi ý — vẫn thử vẽ danh sách rỗng bên dưới */
+  }
+
+  row.innerHTML = '';
+  chips.forEach((chip) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'kid-chip';
+    btn.textContent = chip.text; // textContent — chống XSS
+    btn.addEventListener('click', () => {
+      if (state.sending) return;
+      addMsg('user', chip.text);
+      send(chip.text);
+    });
+    row.appendChild(btn);
+  });
+
+  try {
+    const sessRes = await api('ai-chat.php?action=sessions');
     state.guest = !!(sessRes && sessRes.guest);
     if (state.guest) {
       // guest: thêm chip cuối mời đăng nhập (trang đăng nhập thật của dự án là dang-nhap.php)
@@ -128,7 +135,7 @@ async function loadChips() {
       row.appendChild(link);
     }
   } catch (err) {
-    /* bỏ qua lỗi mạng khi tải chip gợi ý */
+    /* bỏ qua lỗi mạng khi phát hiện guest — chip câu hỏi ở trên vẫn đã hiện rồi */
   }
 }
 
