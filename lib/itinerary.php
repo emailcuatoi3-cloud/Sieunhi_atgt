@@ -37,11 +37,15 @@ function itinerary_offline(array $places, array $opts): array {
 /* Gemini sắp lịch — chỉ được CHỌN từ danh sách places, không bịa. Trả null nếu lỗi → caller fallback offline. */
 function itinerary_ai(array $places, array $opts): ?array {
     if (!defined('GEMINI_API_KEY') || GEMINI_API_KEY === '') return null;
+    $types = $opts['types'] ?? [];
+    $places = $types === [] ? $places : array_values(array_filter($places, fn($p) => in_array($p['type'], $types, true)));
+    if ($places === []) return null;   // lọc theo loại không còn điểm nào → dùng offline
     $menu = array_map(fn($p) => ['slug' => $p['slug'], 'name' => $p['name'], 'type' => $p['type'],
         'km' => (float)$p['distance_km'], 'open' => $p['open_hours'], 'safety' => $p['safety_note']], $places);
+    $typesNote = $types === [] ? '' : " Chỉ chọn địa điểm thuộc loại: " . implode(', ', $types) . ".";
     $prompt = "Bạn lập lịch trình tham quan Buôn Ma Thuột cho học sinh. CHỈ chọn địa điểm từ JSON sau, "
         . "tôn trọng giờ mở cửa và phương tiện '{$opts['vehicle']}' (di-bo tối đa 2km, xe-dap tối đa 6km), "
-        . "khung thời gian '{$opts['time_slot']}' (sang=2 điểm, ca-ngay=3, cuoi-tuan=4). "
+        . "khung thời gian '{$opts['time_slot']}' (sang=2 điểm, ca-ngay=3, cuoi-tuan=4)." . $typesNote . " "
         . "Trả về DUY NHẤT JSON mảng [{slug,time,activity,safety_tip}] — activity 1 câu vui cho trẻ em, "
         . "safety_tip dựa trên trường safety của điểm đó. Danh sách: " . json_encode($menu, JSON_UNESCAPED_UNICODE);
     [$url, $headers] = gemini_endpoint(GEMINI_MODEL);
