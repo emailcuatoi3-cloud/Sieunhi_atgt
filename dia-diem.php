@@ -116,6 +116,13 @@ $smileys = ['☹️' => 1, '🙁' => 2, '😐' => 3, '🙂' => 4, '😍' => 5];
     .dd-smiley-btn[aria-pressed="true"] { border-color: var(--kid-yellow); background: #FFF3D6; }
     .dd-form-row { display: flex; flex-direction: column; gap: 12px; }
 
+    .dd-review-error { display: flex; align-items: center; gap: 8px; color: var(--kid-red);
+      font-size: 14px; font-weight: 700; }
+    .dd-review-error-mascot { width: 32px; height: 32px; flex: 0 0 auto; }
+    .dd-review-success { text-align: center; padding: 6px 0; }
+    .dd-review-success-mascot { width: 90px; height: 90px; margin: 0 auto 10px; }
+    .dd-review-success p { color: var(--kid-ink); font-size: 15px; margin: 0; }
+
     @media (max-width: 480px) {
       .dd-top, .dd-wrap { padding-left: 14px; padding-right: 14px; }
       .dd-head h1 { font-size: 21px; }
@@ -216,19 +223,23 @@ $smileys = ['☹️' => 1, '🙁' => 2, '😐' => 3, '🙂' => 4, '😍' => 5];
 
     <!-- 7. Form gửi review -->
     <?php if ($user): ?>
-    <div class="kid-card dd-card">
-        <h2>✍️ Kể chuyện của con <span class="kid-badge kid-badge--yellow">Sắp mở!</span></h2>
+    <div class="kid-card dd-card" id="review-card">
+        <h2>✍️ Kể chuyện của con</h2>
         <form id="review-form" class="dd-form-row">
             <input type="hidden" name="csrf_token" value="<?= e(csrfToken()) ?>">
             <input type="hidden" name="place_id" value="<?= (int)$p['id'] ?>">
             <div class="dd-smiley-row" role="group" aria-label="Chọn số sao">
                 <?php foreach ($smileys as $face => $stars): ?>
-                <button type="button" class="dd-smiley-btn" data-stars="<?= $stars ?>" aria-pressed="false" disabled><?= $face ?></button>
+                <button type="button" class="dd-smiley-btn" data-stars="<?= $stars ?>" aria-pressed="false"><?= $face ?></button>
                 <?php endforeach; ?>
             </div>
-            <textarea class="kid-input" name="content" rows="3" maxlength="500" placeholder="Con thấy nơi này thế nào?" disabled></textarea>
-            <input class="kid-input" type="file" name="photos[]" accept="image/*" multiple disabled>
-            <button class="kid-btn kid-btn--green" type="submit" disabled>Gửi cho Siêu Nhí 🚀</button>
+            <textarea class="kid-input" name="content" rows="3" maxlength="500" placeholder="Con thấy nơi này thế nào?"></textarea>
+            <input class="kid-input" type="file" name="photos[]" accept="image/*" multiple>
+            <button class="kid-btn kid-btn--green" type="submit">Gửi cho Siêu Nhí 🚀</button>
+            <div id="review-error" class="dd-review-error" role="alert" hidden>
+                <span id="review-error-mascot" class="dd-review-error-mascot"></span>
+                <span id="review-error-text"></span>
+            </div>
         </form>
     </div>
     <?php else: ?>
@@ -241,6 +252,83 @@ $smileys = ['☹️' => 1, '🙁' => 2, '😐' => 3, '🙂' => 4, '😍' => 5];
 </main>
 
 <script src="assets/js/mascot.js?v=2"></script>
+<script>
+(function () {
+    var form = document.getElementById('review-form');
+    if (!form) return;
+
+    var CSRF = document.querySelector('meta[name="csrf"]').content;
+    var smileyBtns = form.querySelectorAll('.dd-smiley-btn');
+    var selectedStars = null;
+
+    smileyBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            selectedStars = btn.getAttribute('data-stars');
+            smileyBtns.forEach(function (b) { b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
+        });
+    });
+
+    var errorBox = document.getElementById('review-error');
+    var errorMascot = document.getElementById('review-error-mascot');
+    var errorText = document.getElementById('review-error-text');
+
+    function showError(message) {
+        errorText.textContent = message;
+        if (window.MascotSVG) errorMascot.innerHTML = MascotSVG.pose('worry');
+        errorBox.hidden = false;
+    }
+
+    function showSuccess(message) {
+        var card = document.getElementById('review-card');
+        card.innerHTML = '';
+        var wrap = document.createElement('div');
+        wrap.className = 'dd-review-success';
+        var mascotBox = document.createElement('div');
+        mascotBox.className = 'dd-review-success-mascot';
+        if (window.MascotSVG) mascotBox.innerHTML = MascotSVG.pose('cheer');
+        var text = document.createElement('p');
+        text.textContent = message;
+        wrap.appendChild(mascotBox);
+        wrap.appendChild(text);
+        card.appendChild(wrap);
+    }
+
+    form.addEventListener('submit', function (evt) {
+        evt.preventDefault();
+        errorBox.hidden = true;
+
+        if (!selectedStars) {
+            showError('Con hãy chọn mức mặt cười nhé!');
+            return;
+        }
+
+        var fd = new FormData(form);
+        fd.append('stars', selectedStars);
+
+        var submitBtn = form.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+
+        fetch('review-submit.php', {
+            method: 'POST',
+            body: fd,
+            headers: { 'X-CSRF-Token': CSRF }
+        })
+            .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
+            .then(function (result) {
+                if (result.ok && result.data && result.data.status === 'success') {
+                    showSuccess(result.data.message || 'Cảm ơn con! Bài kể đang chờ cô duyệt 🕐');
+                } else {
+                    submitBtn.disabled = false;
+                    showError((result.data && result.data.message) || 'Có lỗi xảy ra, con thử lại nhé! 😢');
+                }
+            })
+            .catch(function () {
+                submitBtn.disabled = false;
+                showError('Có lỗi mạng, con thử lại nhé! 😢');
+            });
+    });
+})();
+</script>
 </body>
 
 </html>
