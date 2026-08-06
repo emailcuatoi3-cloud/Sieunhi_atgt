@@ -49,7 +49,6 @@ if (OPENAI_API_KEY === '') {
         503
     );
 }
-
 $prompt = <<<PROMPT
 Bạn là "AI Camera" của ứng dụng Siêu Nhí An Toàn Giao Thông AI, chuyên phân tích ảnh chụp tình huống giao thông
 của học sinh tiểu học Việt Nam (6-11 tuổi) để đánh giá mức độ an toàn.
