@@ -118,6 +118,7 @@ $smileys = ['☹️' => 1, '🙁' => 2, '😐' => 3, '🙂' => 4, '😍' => 5];
 
     .dd-review-error { display: flex; align-items: center; gap: 8px; color: var(--kid-red);
       font-size: 14px; font-weight: 700; }
+    .dd-review-error[hidden] { display: none; }
     .dd-review-error-mascot { width: 32px; height: 32px; flex: 0 0 auto; }
     .dd-review-success { text-align: center; padding: 6px 0; }
     .dd-review-success-mascot { width: 90px; height: 90px; margin: 0 auto 10px; }

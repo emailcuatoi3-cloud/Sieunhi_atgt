@@ -30,10 +30,12 @@ if (!in_array($ageGroup, ['6-8', '9-11'], true)) $ageGroup = '6-8';
     body.chat-page { display: flex; flex-direction: column; height: 100dvh; overflow: hidden; background: var(--kid-cream); }
 
     /* ===== Thanh trên cùng ===== */
-    .chat-top { display: flex; align-items: center; gap: 14px; padding: 14px 24px; background: #fff;
+    .chat-top { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 14px; padding: 14px 24px; background: #fff;
       border-bottom: 3px solid var(--glass-border); flex: 0 0 auto; }
-    .chat-title { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
-    .chat-title h1 { font-family: "Baloo 2", sans-serif; font-size: 20px; margin: 0; color: var(--kid-ink); }
+    .chat-title { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; overflow: hidden; }
+    .chat-title > div { min-width: 0; overflow: hidden; }
+    .chat-title h1 { font-family: "Baloo 2", sans-serif; font-size: 20px; margin: 0; color: var(--kid-ink);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     #chat-mascot-mini { width: 48px; height: 48px; flex: 0 0 auto; }
     #btn-toggle-sidebar { display: none; }
 
@@ -81,6 +83,7 @@ if (!in_array($ageGroup, ['6-8', '9-11'], true)) $ageGroup = '6-8';
     /* ===== Onboarding ===== */
     .onboard-overlay { position: fixed; inset: 0; background: rgba(75,51,37,.45); display: flex;
       align-items: center; justify-content: center; padding: 20px; z-index: 100; }
+    .onboard-overlay[hidden] { display: none; }
     .onboard-box { max-width: 480px; width: 100%; max-height: 88vh; overflow-y: auto; }
     .onboard-step h2 { font-family: "Baloo 2", sans-serif; font-size: 18px; color: var(--kid-ink); margin: 0 0 12px; }
     .onboard-grade-row { display: flex; gap: 12px; flex-wrap: wrap; }
@@ -101,6 +104,7 @@ if (!in_array($ageGroup, ['6-8', '9-11'], true)) $ageGroup = '6-8';
     @media (max-width: 480px) {
       .chat-top { padding: 10px 12px; gap: 8px; }
       .chat-top .kid-btn { padding: 8px 14px; font-size: 14px; min-height: 40px; }
+      .chat-title { flex-basis: 100%; order: 3; }
       .chat-title h1 { font-size: 16px; }
     }
     @media (prefers-reduced-motion: reduce) {
