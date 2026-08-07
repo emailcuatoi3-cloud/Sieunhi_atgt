@@ -47,15 +47,17 @@ switch ($action) {
 
     /* ---------- Danh sách cuộc trò chuyện (sidebar) ---------- */
     case 'sessions':
+        $engine = (GEMINI_API_KEY !== '') ? 'gemini' : ((OPENAI_API_KEY !== '') ? 'openai' : 'offline');
+        $model  = (GEMINI_API_KEY !== '') ? GEMINI_MODEL : ((OPENAI_API_KEY !== '') ? OPENAI_MODEL : 'offline');
         if ($isGuest) {
-            json_out(['status' => 'success', 'sessions' => [], 'guest' => true]);
+            json_out(['status' => 'success', 'guest' => true, 'engine' => $engine, 'model' => $model, 'sessions' => []]);
         }
         $stmt = $pdo->prepare(
             "SELECT id, title, updated_at FROM ai_chat_sessions
-             WHERE user_id = ? ORDER BY updated_at DESC LIMIT 50"
+             WHERE user_id = ? ORDER BY updated_at DESC LIMIT 30"
         );
         $stmt->execute([$userId]);
-        json_out(['status' => 'success', 'sessions' => $stmt->fetchAll()]);
+        json_out(['status' => 'success', 'guest' => false, 'engine' => $engine, 'model' => $model, 'sessions' => $stmt->fetchAll()]);
 
     /* ---------- Tin nhắn của 1 cuộc trò chuyện ---------- */
     case 'messages':
@@ -97,7 +99,7 @@ switch ($action) {
                 'status' => 'success',
                 'session_id' => 0,
                 'reply' => $reply,
-                'engine' => (GEMINI_API_KEY !== '') ? 'gemini' : 'offline',
+                'engine' => (GEMINI_API_KEY !== '') ? 'gemini' : ((OPENAI_API_KEY !== '') ? 'openai' : 'offline'),
                 'guest' => true,
                 'sources' => ['Luật Trật tự, an toàn giao thông đường bộ · 36/2024/QH15'],
                 'suggested_actions' => ['Cho con xem hình', 'Thử tình huống', 'Luyện lại'],
@@ -134,7 +136,7 @@ switch ($action) {
             'status'     => 'success',
             'session_id' => $sid,
             'reply'      => $reply,
-            'engine'     => (GEMINI_API_KEY !== '') ? 'gemini' : 'offline',
+            'engine'     => (GEMINI_API_KEY !== '') ? 'gemini' : ((OPENAI_API_KEY !== '') ? 'openai' : 'offline'),
             'sources' => ['Luật Trật tự, an toàn giao thông đường bộ · 36/2024/QH15'],
             'suggested_actions' => ['Cho con xem hình', 'Thử tình huống', 'Luyện lại'],
             'safety' => 'safe',

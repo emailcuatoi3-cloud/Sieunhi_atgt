@@ -53,18 +53,52 @@ function setEngineLabel(engine) {
   const badge = document.getElementById('engine-label');
   if (!badge) return;
   if (engine === 'gemini') {
-    badge.textContent = '● AI thật';
+    badge.textContent = '● Chế độ Online (Gemini)';
+    badge.className = 'kid-badge kid-badge--green';
+  } else if (engine === 'openai') {
+    badge.textContent = '● Chế độ Online (GPT-5-nano)';
     badge.className = 'kid-badge kid-badge--green';
   } else {
-    badge.textContent = '● Chế độ offline';
+    badge.textContent = '● Chế độ Offline';
     badge.className = 'kid-badge kid-badge--yellow';
   }
+}
+
+/* ---------- Hiệu ứng AI đang suy nghĩ (Thinking...) ---------- */
+function showThinking() {
+  const log = document.getElementById('chat-log');
+  const el = document.createElement('div');
+  el.className = 'msg bot thinking';
+  el.id = 'msg-thinking-indicator';
+  el.innerHTML = `
+    <div class="msg-avatar">${MascotSVG.pose('point')}</div>
+    <div class="msg-body">
+      <span class="thinking-text">AI đang suy nghĩ...</span>
+      <span class="thinking-dots"><span></span><span></span><span></span></span>
+    </div>
+  `;
+  log.appendChild(el);
+  log.scrollTop = log.scrollHeight;
+  return el;
+}
+
+function removeThinking() {
+  const el = document.getElementById('msg-thinking-indicator');
+  if (el) el.remove();
 }
 
 /* ---------- Gửi tin nhắn & nhận trả lời ---------- */
 async function send(text) {
   if (state.sending) return;
   state.sending = true;
+
+  const inputEl = document.getElementById('chat-input');
+  const btnEl = document.querySelector('#chat-form button');
+  if (inputEl) inputEl.disabled = true;
+  if (btnEl) btnEl.disabled = true;
+
+  showThinking();
+
   try {
     const fd = new FormData();
     fd.append('action', 'send');
@@ -74,6 +108,8 @@ async function send(text) {
     fd.append('age_group', state.gradeBand === 'thcs' ? '9-11' : '6-8');
 
     const d = await api('ai-chat.php', { method: 'POST', body: fd });
+    removeThinking();
+
     if (d.status === 'success') {
       state.sessionId = d.session_id;
       addMsg('bot', d.reply, d.art_url);
@@ -86,12 +122,18 @@ async function send(text) {
       if (av) av.innerHTML = MascotSVG.pose('worry');
     }
   } catch (err) {
-    // lỗi mạng → vẫn trả lời + đổi mặt mascot lo lắng
+    removeThinking();
     addMsg('bot', 'Ôi, có gì đó chưa ổn, thử lại nhé! 🙈');
     const log = document.getElementById('chat-log');
     const av = log.lastElementChild && log.lastElementChild.querySelector('.msg-avatar');
     if (av) av.innerHTML = MascotSVG.pose('worry');
   }
+
+  if (inputEl) {
+    inputEl.disabled = false;
+    inputEl.focus();
+  }
+  if (btnEl) btnEl.disabled = false;
   state.sending = false;
 }
 
@@ -146,6 +188,7 @@ async function loadSessions() {
     const d = await api('ai-chat.php?action=sessions');
     if (d.status !== 'success') return;
     state.guest = !!d.guest;
+    if (d.engine) setEngineLabel(d.engine);
 
     box.innerHTML = '';
     const heading = document.createElement('p');

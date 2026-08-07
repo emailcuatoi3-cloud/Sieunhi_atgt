@@ -3,6 +3,7 @@
    Kid components — dùng chung mọi trang mới (Hoạt hình rực rỡ).
    Nạp SAU style.css (và shared-pages.css nếu có) để kế thừa biến màu.
    ======================================================================= */
+a, a:hover, a:focus, a:active { text-decoration: none !important; }
 .kid-card { background:#fff; border:3px solid var(--glass-border); border-radius:var(--radius-lg);
   box-shadow:var(--shadow-soft); padding:20px; transition:transform .2s ease, box-shadow .2s ease; }
 .kid-card:hover { transform:translateY(-4px) scale(1.01); box-shadow:0 18px 40px -14px rgba(75,51,37,.35); }
@@ -10,22 +11,23 @@
 .sticker-tilt:nth-child(even) { transform:rotate(1.2deg); }
 .sticker-tilt:hover { transform:rotate(0) translateY(-4px); }
 
-.kid-btn { display:inline-flex; align-items:center; gap:8px; min-height:48px; padding:12px 26px;
-  border-radius:999px; font-family:"Baloo 2",sans-serif; font-weight:800; font-size:17px;
-  background:var(--kid-yellow); color:var(--kid-ink); border:3px solid rgba(75,51,37,.18);
-  box-shadow:0 5px 0 rgba(75,51,37,.22); transition:transform .12s ease, box-shadow .12s ease; }
-.kid-btn:hover { transform:translateY(-2px); }
-.kid-btn:active { transform:translateY(3px); box-shadow:0 1px 0 rgba(75,51,37,.22); }
-.kid-btn--sky   { background:var(--kid-sky); color:#fff; }
-.kid-btn--green { background:var(--kid-green); color:#fff; }
-.kid-btn--red   { background:var(--kid-red); color:#fff; }
+.kid-btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:44px; padding:10px 22px;
+  border-radius:999px; font-family:"Baloo 2",sans-serif; font-weight:800; font-size:15px;
+  background:var(--primary, #30AFFF); color:#ffffff !important; border:none;
+  box-shadow:0 6px 18px -4px rgba(48,175,255,.4); transition:transform .15s ease, box-shadow .15s ease, background .15s ease; text-decoration:none !important; }
+.kid-btn:hover { transform:translateY(-2px); color:#ffffff !important; box-shadow:0 10px 24px -4px rgba(48,175,255,.55); }
+.kid-btn:active { transform:translateY(1px); }
+.kid-btn--sky   { background:var(--primary, #30AFFF) !important; color:#ffffff !important; }
+.kid-btn--sky:hover { background:var(--primary-hover, #1D8CD8) !important; color:#ffffff !important; }
+.kid-btn--green { background:var(--green, #10B981) !important; color:#ffffff !important; }
+.kid-btn--red   { background:var(--pink, #EF4444) !important; color:#ffffff !important; }
 
-.kid-chip { display:inline-flex; align-items:center; gap:6px; padding:9px 16px; border-radius:999px;
-  background:#fff; border:2.5px solid var(--kid-sky); color:var(--kid-sky-deep);
-  font-weight:700; font-size:14px; cursor:pointer; white-space:nowrap;
-  transition:transform .12s ease, background .12s ease; }
-.kid-chip:hover { transform:translateY(-2px); }
-.kid-chip.active, .kid-chip[aria-pressed="true"] { background:var(--kid-sky); color:#fff; }
+.kid-chip { display:inline-flex; align-items:center; gap:6px; padding:8px 16px; border-radius:999px;
+  background:#ffffff; border:1.5px solid var(--border-color, #BAE6FD); color:var(--text-main, #0F172A) !important;
+  font-weight:700; font-size:13.5px; cursor:pointer; white-space:nowrap; text-decoration:none !important;
+  transition:transform .15s ease, background .15s ease, border-color .15s ease, color .15s ease; }
+.kid-chip:hover { transform:translateY(-2px); border-color:var(--primary, #30AFFF); color:var(--primary-hover, #1D8CD8) !important; }
+.kid-chip.active, .kid-chip[aria-pressed="true"] { background:var(--primary, #30AFFF) !important; border-color:var(--primary, #30AFFF) !important; color:#ffffff !important; }
 
 .kid-badge { display:inline-flex; align-items:center; gap:5px; padding:4px 12px; border-radius:999px;
   font-size:12.5px; font-weight:800; background:var(--kid-cream-2); color:var(--kid-ink-soft); }

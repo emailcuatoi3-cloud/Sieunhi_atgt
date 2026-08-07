@@ -32,5 +32,6 @@ defined('ROBOFLOW_MODEL')    || define('ROBOFLOW_MODEL',    env('ROBOFLOW_MODEL'
 // AI providers are configured only through the environment. Never commit keys.
 defined('GEMINI_API_KEY') || define('GEMINI_API_KEY', (string) env('GEMINI_API_KEY', ''));
 defined('GEMINI_MODEL')   || define('GEMINI_MODEL', (string) env('GEMINI_MODEL', 'gemini-2.5-flash'));
-defined('OPENAI_API_KEY') || define('OPENAI_API_KEY', (string) env('OPENAI_API_KEY', ''));
+defined('OPENAI_API_KEY') || define('OPENAI_API_KEY', (string) (env('OPENAI_API_KEY') ?: env('OPENAI_KEY', '')));
+defined('OPENAI_MODEL')   || define('OPENAI_MODEL', (string) env('OPENAI_MODEL', 'gpt-5-nano'));
 defined('AI_RATE_LIMIT')  || define('AI_RATE_LIMIT', max(1, (int) env('AI_RATE_LIMIT', 30)));

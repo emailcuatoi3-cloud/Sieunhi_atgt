@@ -69,6 +69,20 @@ if (!in_array($ageGroup, ['6-8', '9-11'], true)) $ageGroup = '6-8';
     .msg.user { align-self: flex-end; background: var(--kid-yellow); color: var(--kid-ink);
       border-radius: 20px 20px 6px 20px; padding: 12px 16px; font-size: 15px; font-weight: 600; line-height: 1.5; }
 
+    /* ===== Thinking Indicator Animation ===== */
+    .msg.bot.thinking .msg-body { display: inline-flex; align-items: center; gap: 8px; background: #F0F9FF;
+      border-color: #30AFFF; color: #0284C7; font-weight: 600; font-size: 14.5px; padding: 10px 16px; }
+    .thinking-dots { display: inline-flex; gap: 4px; align-items: center; }
+    .thinking-dots span { width: 6px; height: 6px; background-color: #30AFFF; border-radius: 50%;
+      display: inline-block; animation: thinkingBounce 1.2s infinite ease-in-out; }
+    .thinking-dots span:nth-child(1) { animation-delay: 0s; }
+    .thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes thinkingBounce {
+      0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+      40% { transform: scale(1.3); opacity: 1; }
+    }
+
     .msg-art { margin-top: 10px; }
     .msg-art img { display: block; max-width: 220px; width: 100%; border-radius: 14px; }
 

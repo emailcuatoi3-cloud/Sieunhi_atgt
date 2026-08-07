@@ -62,9 +62,74 @@ function ai_get_reply(PDO $pdo, int $sessionId, string $userMessage, string $age
         if ($reply !== null && trim($reply) !== '') {
             return trim($reply);
         }
-        // Gemini lỗi (hết quota, mất mạng...) → tự chuyển sang offline
+    }
+    if (OPENAI_API_KEY !== '') {
+        $reply = ai_call_openai($pdo, $sessionId, $userMessage, $ageGroup);
+        if ($reply !== null && trim($reply) !== '') {
+            return trim($reply);
+        }
     }
     return ai_rule_based($userMessage);
+}
+
+function ai_call_openai(PDO $pdo, int $sessionId, string $userMessage, string $ageGroup = '6-8'): ?string
+{
+    $history = [];
+    if ($sessionId > 0) {
+        $stmt = $pdo->prepare(
+            "SELECT role, content FROM ai_chat_messages
+             WHERE session_id = ? ORDER BY id DESC LIMIT 10"
+        );
+        $stmt->execute([$sessionId]);
+        $history = array_reverse($stmt->fetchAll());
+    }
+
+    $systemPrompt = "Bạn là trợ lý AI dành cho trẻ em học an toàn giao thông. " .
+                    AI_SYSTEM_PROMPT . " Nhóm tuổi hiện tại: {$ageGroup}. Dùng từ vựng và ví dụ phù hợp với nhóm tuổi này.";
+
+    $messages = [
+        [
+            "role"    => "system",
+            "content" => $systemPrompt
+        ]
+    ];
+    foreach ($history as $m) {
+        $messages[] = [
+            "role"    => $m['role'] === 'user' ? 'user' : 'assistant',
+            "content" => $m['content'],
+        ];
+    }
+    $messages[] = [
+        "role"    => "user",
+        "content" => $userMessage
+    ];
+
+    $body = [
+        "model"                 => OPENAI_MODEL, // gpt-5-nano
+        "messages"              => $messages,
+        "reasoning_effort"      => "low",
+        "max_completion_tokens" => 2048,
+    ];
+
+    $ch = curl_init('https://api.openai.com/v1/chat/completions');
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST           => true,
+        CURLOPT_HTTPHEADER     => [
+            'Content-Type: application/json',
+            'Authorization: Bearer ' . OPENAI_API_KEY,
+        ],
+        CURLOPT_POSTFIELDS     => json_encode($body),
+        CURLOPT_TIMEOUT        => 30,
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_SSL_VERIFYHOST => 0,
+    ]);
+    $res = curl_exec($ch);
+    curl_close($ch);
+    if ($res === false) return null;
+
+    $data = json_decode($res, true);
+    return $data['choices'][0]['message']['content'] ?? null;
 }
 
 /* ============================================================

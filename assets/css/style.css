@@ -43,6 +43,18 @@
   --mist: rgba(15, 23, 42, 0.75);
   --mist-dim: rgba(71, 85, 105, 0.55);
 
+  /* Kid friendly alias tokens */
+  --kid-cream: #F0F9FF;
+  --kid-cream-2: #E0F2FE;
+  --kid-ink: #0F172A;
+  --kid-ink-soft: #475569;
+  --kid-yellow: #F59E0B;
+  --kid-sky: #30AFFF;
+  --kid-sky-deep: #0284C7;
+  --kid-red: #EF4444;
+  --kid-green: #10B981;
+  --kid-pink: #EC4899;
+
   --glass-fill: #FFFFFF;
   --glass-fill-strong: #F8FAFC;
   --glass-border: #BAE6FD;
@@ -109,6 +121,13 @@ html[data-theme="dark"] {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+a,
+a:hover,
+a:focus,
+a:active,
+a:visited {
+  text-decoration: none !important;
 }
 html {
   scroll-behavior: smooth;
