@@ -3,13 +3,13 @@ require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/auth.php'; // for e() helper
 
 $aiEnabled = AI_CAMERA_ENABLED && ROBOFLOW_KEY !== '' && ROBOFLOW_MODEL !== '';
+
+$PAGE = [
+    'title' => 'AI Camera · Siêu Nhí An Toàn Giao Thông AI',
+    'nav'   => 'ai-camera',
+];
+require __DIR__ . '/partials/site-head.php';
 ?>
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script>(function(){try{document.documentElement.setAttribute("data-theme", localStorage.getItem("sieu-nhi-theme")||"light");}catch(e){}})();</script>
 <script>
 window.__AI_CAMERA__ = {
   enabled: <?= $aiEnabled ? 'true' : 'false' ?>,
@@ -17,26 +17,7 @@ window.__AI_CAMERA__ = {
   model:   "<?= $aiEnabled ? e(ROBOFLOW_MODEL) : '' ?>"
 };
 </script>
-<title>AI Camera · Siêu Nhí An Toàn Giao Thông AI</title>
-<link rel="stylesheet" href="assets/css/fonts.css?v=1">
-<link rel="stylesheet" href="assets/css/style.css?v=10">
-<link rel="stylesheet" href="assets/css/shared-pages.css?v=10">
-<link rel="stylesheet" href="assets/css/kid-components.css?v=1">
-</head>
-<body>
-
-<nav class="navbar static" id="navbar">
-  <div class="nav-inner">
-    <a href="index.php" class="logo"><img src="assets/images/sieu-nhi-logo.png" alt="SIÊU NHÍ AI" class="site-logo-img"></a>
-    <a class="back-link" href="index.php">← Về trang chủ</a>
-    <div class="nav-actions">
-      <button class="icon-btn theme-toggle" aria-label="Chế độ tối">🌙</button>
-      <a class="btn btn-ghost" href="ai-gia-su.php">🎓 AI Gia sư</a>
-      <a class="btn btn-ghost" href="ai-mo-phong.php">🚦 Mô phỏng</a>
-      <a class="btn btn-ghost" href="game-mini.php">🎮 Game Mini</a>
-    </div>
-  </div>
-</nav>
+<?php require __DIR__ . '/partials/site-nav.php'; ?>
 
 <div class="page-head wrap">
   <span class="eyebrow-pill"><span class="dot"></span> AI Camera Vision</span>
@@ -151,7 +132,4 @@ window.__AI_CAMERA__ = {
   </div>
 </section>
 
-<script src="assets/js/main.js?v=6"></script>
-<script src="assets/js/ai-camera.js?v=10"></script>
-</body>
-</html>
+<?php $PAGE['scripts'] = ['assets/js/ai-camera.js']; require __DIR__ . '/partials/site-footer.php'; ?>

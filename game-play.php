@@ -34,52 +34,29 @@ if ($isStudent) {
 }
 
 $meta = $gameMeta[$gameId];
+
+$PAGE = [
+    'title' => $meta['title'] . ' · Siêu Nhí An Toàn Giao Thông AI',
+    'nav'   => 'thu-thach',
+    'crumb' => ['href' => 'game-mini.php', 'label' => '← Thử thách'],
+];
+require __DIR__ . '/partials/site-head.php';
+require __DIR__ . '/partials/site-nav.php';
 ?>
-<!DOCTYPE html>
-<html lang="vi">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>
-    (function() {
-        try {
-            document.documentElement.setAttribute("data-theme", localStorage.getItem("sieu-nhi-theme") || "light");
-        } catch (e) {}
-    })();
-    </script>
-    <title><?= e($meta['title']) ?> · Siêu Nhí An Toàn Giao Thông AI</title>
-    <link rel="stylesheet" href="assets/css/fonts.css?v=1">
-    <link rel="stylesheet" href="assets/css/style.css?v=5">
-    <link rel="stylesheet" href="assets/css/shared-pages.css?v=6">
-    <link rel="stylesheet" href="assets/css/kid-components.css?v=1">
-</head>
-
-<body>
-
-    <nav class="navbar static" id="navbar">
-        <div class="nav-inner">
-            <a href="index.php" class="logo"><span class="logo-badge">🤖</span>SIÊU NHÍ <span
-                    class="logo-text-en">AI</span></a>
-            <a class="back-link" href="game-mini.php">← Về Game Mini</a>
-            <div class="nav-actions">
-                <button class="icon-btn theme-toggle" aria-label="Chế độ tối">🌙</button>
-                <div class="status-item" style="font-size:12.5px;"><span class="s-ic">⭐</span> <span
-                        id="xpVal"><?= (int)($progress['xp'] ?? 0) ?></span> XP</div>
-                <div class="status-item" style="font-size:12.5px;"><span class="s-ic">🪙</span> <span
-                        id="coinVal"><?= (int)($progress['coin'] ?? 0) ?></span></div>
-                <div class="status-item" style="font-size:12.5px;"><span class="s-ic">🏅</span> <span
-                        id="badgeVal"><?= (int)$badgeCount ?></span></div>
-                <div class="status-item" style="font-size:12.5px;">🎖️ Cấp <span
-                        id="levelVal"><?= $currentLevel ?></span></div>
-            </div>
-        </div>
-    </nav>
 
     <div class="page-head wrap">
         <span class="eyebrow-pill"><span class="dot"></span> <?= $meta['icon'] ?> Đang chơi</span>
         <h1><?= e($meta['title']) ?></h1>
         <p><?= e($meta['desc']) ?></p>
+        <div class="status-bar">
+            <div class="status-item"><span class="s-ic">⭐</span> <span id="xpVal"><?= (int)($progress['xp'] ?? 0) ?></span> XP</div>
+            <div class="status-div"></div>
+            <div class="status-item"><span class="s-ic">🪙</span> <span id="coinVal"><?= (int)($progress['coin'] ?? 0) ?></span> Coin</div>
+            <div class="status-div"></div>
+            <div class="status-item"><span class="s-ic">🏅</span> <span id="badgeVal"><?= (int)$badgeCount ?></span> Huy hiệu</div>
+            <div class="status-div"></div>
+            <div class="status-item"><span class="s-ic">🎖️</span> Cấp <span id="levelVal"><?= $currentLevel ?></span></div>
+        </div>
     </div>
 
     <section style="padding:10px 0 90px;">
@@ -113,14 +90,12 @@ $meta = $gameMeta[$gameId];
     window.GAME_ID = <?= json_encode($gameId) ?>;
     window.STUDENT_LEVEL = <?= (int)$currentLevel ?>;
     </script>
-    <script src="assets/js/main.js?v=5"></script>
-    <script src="assets/js/sound-fx.js?v=1"></script>
-    <script src="assets/js/game-mini.js?v=8"></script>
     <script>
     document.addEventListener('DOMContentLoaded', () => {
         if (window.openGame) openGame(window.GAME_ID);
     });
     </script>
-</body>
-
-</html>
+    <?php
+    $PAGE['scripts'] = ['assets/js/sound-fx.js', 'assets/js/game-mini.js'];
+    require __DIR__ . '/partials/site-footer.php';
+    ?>

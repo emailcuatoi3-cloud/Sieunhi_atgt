@@ -58,31 +58,18 @@ if ($p === null) {
 $reviews = place_reviews_approved((int)$p['id']);
 $typeEmoji = ['bao-tang' => '🏛️', 'cong-vien' => '🌳', 'vui-choi' => '🎡', 'thien-nhien' => '🏞️'];
 $smileys = ['☹️' => 1, '🙁' => 2, '😐' => 3, '🙂' => 4, '😍' => 5];
-?>
-<!DOCTYPE html>
-<html lang="vi">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf" content="<?= e(csrfToken()) ?>">
-    <script>
-    (function() {
-        try {
-            document.documentElement.setAttribute("data-theme", localStorage.getItem("sieu-nhi-theme") || "light");
-        } catch (e) {}
-    })();
-    </script>
-    <title><?= e($p['name']) ?> · Khám phá Buôn Ma Thuột</title>
-    <link rel="stylesheet" href="assets/css/fonts.css?v=1">
-    <link rel="stylesheet" href="assets/css/style.css?v=9">
-    <link rel="stylesheet" href="assets/css/shared-pages.css?v=16">
-    <link rel="stylesheet" href="assets/css/kid-components.css?v=1">
+$PAGE = [
+    'title'      => $p['name'] . ' · Khám phá Buôn Ma Thuột',
+    'nav'        => 'kham-pha',
+    'body_class' => 'dd-page',
+    'crumb'      => ['href' => 'kham-pha.php', 'label' => '← Khám phá'],
+];
+require __DIR__ . '/partials/site-head.php';
+?>
     <style>
     body.dd-page { background: var(--kid-cream); }
 
-    .dd-top { display: flex; align-items: center; gap: 14px; padding: 14px 24px; background: #fff;
-      border-bottom: 3px solid var(--glass-border); flex-wrap: wrap; }
     .dd-wrap { max-width: 780px; margin: 0 auto; padding: 22px 20px 60px; display: flex;
       flex-direction: column; gap: 20px; }
 
@@ -125,16 +112,11 @@ $smileys = ['☹️' => 1, '🙁' => 2, '😐' => 3, '🙂' => 4, '😍' => 5];
     .dd-review-success p { color: var(--kid-ink); font-size: 15px; margin: 0; }
 
     @media (max-width: 480px) {
-      .dd-top, .dd-wrap { padding-left: 14px; padding-right: 14px; }
+      .dd-wrap { padding-left: 14px; padding-right: 14px; }
       .dd-head h1 { font-size: 21px; }
     }
     </style>
-</head>
-
-<body class="dd-page">
-<header class="dd-top">
-    <a class="kid-btn kid-btn--sky" href="kham-pha.php">← Khám phá</a>
-</header>
+<?php require __DIR__ . '/partials/site-nav.php'; ?>
 
 <main class="dd-wrap">
     <!-- 1. Breadcrumb + tiêu đề + badge loại -->
@@ -252,7 +234,6 @@ $smileys = ['☹️' => 1, '🙁' => 2, '😐' => 3, '🙂' => 4, '😍' => 5];
     <?php endif; ?>
 </main>
 
-<script src="assets/js/mascot.js?v=2"></script>
 <script>
 (function () {
     var form = document.getElementById('review-form');
@@ -330,6 +311,4 @@ $smileys = ['☹️' => 1, '🙁' => 2, '😐' => 3, '🙂' => 4, '😍' => 5];
     });
 })();
 </script>
-</body>
-
-</html>
+<?php $PAGE['scripts'] = ['assets/js/mascot.js']; require __DIR__ . '/partials/site-footer.php'; ?>

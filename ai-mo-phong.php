@@ -1,38 +1,11 @@
-<!DOCTYPE html>
-<html lang="vi">
-
-<head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>
-    (function() {
-        try {
-            document.documentElement.setAttribute("data-theme", localStorage.getItem("sieu-nhi-theme") || "light");
-        } catch (e) {}
-    })();
-    </script>
-    <title>AI Mô phỏng giao thông · Siêu Nhí An Toàn Giao Thông AI</title>
-    <link rel="stylesheet" href="assets/css/fonts.css?v=1">
-    <link rel="stylesheet" href="assets/css/style.css?v=9">
-    <link rel="stylesheet" href="assets/css/shared-pages.css?v=25">
-    <link rel="stylesheet" href="assets/css/kid-components.css?v=1">
-</head>
-
-<body>
-
-    <nav class="navbar static" id="navbar">
-        <div class="nav-inner">
-            <a href="index.php" class="logo"><img src="assets/images/sieu-nhi-logo.png" alt="SIÊU NHÍ AI" class="site-logo-img"></a>
-            <a class="back-link" href="index.php">← Về trang chủ</a>
-            <div class="nav-actions">
-                <button class="icon-btn theme-toggle" aria-label="Chế độ tối">🌙</button>
-                <a class="btn btn-ghost" href="ai-gia-su.php">🎓 AI Gia sư</a>
-                <a class="btn btn-ghost" href="ai-camera.php">📷 AI Camera</a>
-                <a class="btn btn-ghost" href="game-mini.php">🎮 Game Mini</a>
-            </div>
-        </div>
-    </nav>
+<?php
+$PAGE = [
+    'title' => 'AI Mô phỏng giao thông · Siêu Nhí An Toàn Giao Thông AI',
+    'nav'   => 'mo-phong',
+];
+require __DIR__ . '/partials/site-head.php';
+require __DIR__ . '/partials/site-nav.php';
+?>
 
     <div class="page-head wrap">
         <span class="eyebrow-pill"><span class="dot"></span> AI Mô phỏng giao thông</span>
@@ -105,10 +78,4 @@
         </div>
     </div>
 
-    <script src="assets/js/main.js?v=5"></script>
-    <script src="assets/js/ai-mo-phong.js?v=11"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-
-</html>
+    <?php $PAGE['scripts'] = ['assets/js/ai-mo-phong.js']; require __DIR__ . '/partials/site-footer.php'; ?>

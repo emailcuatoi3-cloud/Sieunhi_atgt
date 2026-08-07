@@ -1,37 +1,11 @@
-<!DOCTYPE html>
-<html lang="vi">
-
-<head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>
-    (function() {
-        try {
-            document.documentElement.setAttribute("data-theme", localStorage.getItem("sieu-nhi-theme") || "light");
-        } catch (e) {}
-    })();
-    </script>
-    <title>AI Truyện tranh · Siêu Nhí An Toàn Giao Thông AI</title>
-    <link rel="stylesheet" href="assets/css/fonts.css?v=1">
-    <link rel="stylesheet" href="assets/css/style.css?v=9">
-    <link rel="stylesheet" href="assets/css/shared-pages.css?v=25">
-    <link rel="stylesheet" href="assets/css/kid-components.css?v=1">
-</head>
-
-<body>
-
-    <nav class="navbar static" id="navbar">
-        <div class="nav-inner">
-            <a href="index.php" class="logo"><img src="assets/images/sieu-nhi-logo.png" alt="SIÊU NHÍ AI" class="site-logo-img"></a>
-            <a class="back-link" href="index.php">← Về trang chủ</a>
-            <div class="nav-actions">
-                <button class="icon-btn theme-toggle" aria-label="Chế độ tối">🌙</button>
-                <a class="btn btn-ghost" href="ai-mo-phong.php">🚦 Mô phỏng</a>
-                <a class="btn btn-ghost" href="game-mini.php">🎮 Game Mini</a>
-            </div>
-        </div>
-    </nav>
+<?php
+$PAGE = [
+    'title' => 'AI Truyện tranh · Siêu Nhí An Toàn Giao Thông AI',
+    'nav'   => 'truyen-tranh',
+];
+require __DIR__ . '/partials/site-head.php';
+require __DIR__ . '/partials/site-nav.php';
+?>
 
     <div class="page-head wrap">
         <span class="eyebrow-pill"><span class="dot"></span> AI Truyện tương tác</span>
@@ -96,11 +70,4 @@
         </div>
     </section>
 
-    <script src="assets/js/main.js?v=5"></script>
-    <script src="assets/js/comic-scenes.js?v=18"></script>
-    <script src="assets/js/ai-truyen-tranh.js?v=7"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-
-</html>
+    <?php $PAGE['scripts'] = ['assets/js/comic-scenes.js', 'assets/js/ai-truyen-tranh.js']; require __DIR__ . '/partials/site-footer.php'; ?>

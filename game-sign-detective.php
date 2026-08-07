@@ -14,51 +14,26 @@ if ($isStudent) {
         exit;
     }
 }
+$PAGE = [
+    'title' => 'Thám tử biển báo · Siêu Nhí An Toàn Giao Thông AI',
+    'nav'   => 'thu-thach',
+    'crumb' => ['href' => 'game-mini.php', 'label' => '← Thử thách'],
+];
+require __DIR__ . '/partials/site-head.php';
+require __DIR__ . '/partials/site-nav.php';
 ?>
-<!DOCTYPE html>
-<html lang="vi">
-
-<head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>
-    (function() {
-        try {
-            document.documentElement.setAttribute("data-theme", localStorage.getItem("sieu-nhi-theme") || "light");
-        } catch (e) {}
-    })();
-    </script>
-    <title>Thám tử biển báo · Siêu Nhí An Toàn Giao Thông AI</title>
-    <link rel="stylesheet" href="assets/css/fonts.css?v=1">
-    <link rel="stylesheet" href="assets/css/style.css?v=9">
-    <link rel="stylesheet" href="assets/css/shared-pages.css?v=19">
-    <link rel="stylesheet" href="assets/css/kid-components.css?v=1">
-</head>
-
-<body>
-
-    <nav class="navbar static" id="navbar">
-        <div class="nav-inner">
-            <a href="index.php" class="logo"><span class="logo-badge">🤖</span>SIÊU NHÍ <span
-                    class="logo-text-en">AI</span></a>
-            <a class="back-link" href="game-mini.php">← Về Game Mini</a>
-            <div class="nav-actions">
-                <button class="icon-btn theme-toggle" aria-label="Chế độ tối">🌙</button>
-                <div class="status-item" style="font-size:12.5px;"><span class="s-ic">⭐</span> <span
-                        id="xpVal"><?= (int)$progress['xp'] ?></span> XP</div>
-                <div class="status-item" style="font-size:12.5px;"><span class="s-ic">🪙</span> <span
-                        id="coinVal"><?= (int)$progress['coin'] ?></span></div>
-                <div class="status-item" style="font-size:12.5px;"><span class="s-ic">🏅</span> <span
-                        id="badgeVal"><?= (int)$badgeCount ?></span></div>
-                <div class="status-item" style="font-size:12.5px;">🎖️ Cấp <span
-                        id="levelVal"><?= $currentLevel ?></span></div>
-            </div>
-        </div>
-    </nav>
 
     <div class="page-head wrap">
         <span class="eyebrow-pill"><span class="dot"></span> 🕵️ Game 3 · Thám tử biển báo</span>
+        <div class="status-bar">
+            <div class="status-item"><span class="s-ic">⭐</span> <span id="xpVal"><?= (int)$progress['xp'] ?></span> XP</div>
+            <div class="status-div"></div>
+            <div class="status-item"><span class="s-ic">🪙</span> <span id="coinVal"><?= (int)$progress['coin'] ?></span> Coin</div>
+            <div class="status-div"></div>
+            <div class="status-item"><span class="s-ic">🏅</span> <span id="badgeVal"><?= (int)$badgeCount ?></span> Huy hiệu</div>
+            <div class="status-div"></div>
+            <div class="status-item"><span class="s-ic">🎖️</span> Cấp <span id="levelVal"><?= $currentLevel ?></span></div>
+        </div>
     </div>
 
     <section style="padding:0 0 90px;">
@@ -70,12 +45,7 @@ if ($isStudent) {
     <script>
     window.IS_STUDENT = <?= $isStudent ? 'true' : 'false' ?>;
     </script>
-    <script src="assets/js/main.js?v=5"></script>
-    <script src="assets/js/sound-fx.js?v=1"></script>
-    <script src="assets/js/game-engine.js?v=1"></script>
-    <script src="assets/js/game-sign-detective.js?v=4"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-
-</html>
+    <?php
+    $PAGE['scripts'] = ['assets/js/sound-fx.js', 'assets/js/game-engine.js', 'assets/js/game-sign-detective.js'];
+    require __DIR__ . '/partials/site-footer.php';
+    ?>

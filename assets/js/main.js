@@ -173,4 +173,23 @@ document.addEventListener("DOMContentLoaded", () => {
     const savedOption = savedAge && Array.from(document.querySelectorAll("[data-age-group]")).find((item) => item.dataset.ageGroup === savedAge);
     if (savedOption) savedOption.classList.add("selected");
   } catch (e) {}
+
+  /* ---------- Menu di động (master layout: partials/site-nav.php) ---------- */
+  const burger = document.getElementById("navBurger");
+  const mobileMenu = document.getElementById("mobileMenu");
+  if (burger && mobileMenu) {
+    const setOpen = (open) => {
+      mobileMenu.hidden = !open;
+      burger.setAttribute("aria-expanded", String(open));
+      burger.textContent = open ? "✕" : "☰";
+      burger.setAttribute("aria-label", open ? "Đóng menu" : "Mở menu");
+    };
+    burger.addEventListener("click", () => setOpen(mobileMenu.hidden));
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !mobileMenu.hidden) {
+        setOpen(false);
+        burger.focus();
+      }
+    });
+  }
 });

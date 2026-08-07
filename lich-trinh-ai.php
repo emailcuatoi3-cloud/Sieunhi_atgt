@@ -15,32 +15,17 @@ $vehicleOptions = [
 ];
 $typeEmoji = ['bao-tang' => '🏛️', 'cong-vien' => '🌳', 'vui-choi' => '🎡', 'thien-nhien' => '🏞️'];
 $typeOptions = ['bao-tang', 'cong-vien', 'vui-choi', 'thien-nhien'];
-?>
-<!DOCTYPE html>
-<html lang="vi">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf" content="<?= e(csrfToken()) ?>">
-    <script>
-    (function() {
-        try {
-            document.documentElement.setAttribute("data-theme", localStorage.getItem("sieu-nhi-theme") || "light");
-        } catch (e) {}
-    })();
-    </script>
-    <title>Lịch trình AI · Siêu Nhí An Toàn Giao Thông AI</title>
-    <link rel="stylesheet" href="assets/css/fonts.css?v=1">
-    <link rel="stylesheet" href="assets/css/style.css?v=9">
-    <link rel="stylesheet" href="assets/css/shared-pages.css?v=16">
-    <link rel="stylesheet" href="assets/css/kid-components.css?v=1">
+$PAGE = [
+    'title'      => 'Lịch trình AI · Siêu Nhí An Toàn Giao Thông AI',
+    'nav'        => 'lich-trinh',
+    'body_class' => 'lich-trinh-page',
+    'crumb'      => ['href' => 'index.php', 'label' => '← Trang chủ', 'title' => '🗓️ Lịch trình AI'],
+];
+require __DIR__ . '/partials/site-head.php';
+?>
     <style>
     body.lich-trinh-page { background: var(--kid-cream); }
-
-    .lt-top { display: flex; align-items: center; gap: 14px; padding: 14px 24px; background: #fff;
-      border-bottom: 3px solid var(--glass-border); flex-wrap: wrap; }
-    .lt-top span { font-family: "Baloo 2", sans-serif; font-size: 18px; margin: 0; color: var(--kid-ink); }
 
     .lt-hero { padding: 22px 24px 6px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
     .lt-hero-mascot { width: 76px; height: 76px; flex: 0 0 auto; }
@@ -80,24 +65,18 @@ $typeOptions = ['bao-tang', 'cong-vien', 'vui-choi', 'thien-nhien'];
     .ticket-actions { display: flex; align-items: center; gap: 12px; margin-top: 18px; flex-wrap: wrap; }
 
     @media (max-width: 480px) {
-      .lt-top, .lt-hero, .lt-wizard, .lt-result { padding-left: 14px; padding-right: 14px; }
+      .lt-hero, .lt-wizard, .lt-result { padding-left: 14px; padding-right: 14px; }
       .lt-hero-mascot { width: 60px; height: 60px; }
       .lt-hero h1 { font-size: 21px; }
       .lt-sticker { min-width: 90px; }
     }
 
     @media print {
-      .lt-top, .lt-hero, .lt-wizard, .ticket-actions { display: none !important; }
+      .navbar, .crumb-bar, .site-footer, .lt-hero, .lt-wizard, .ticket-actions { display: none !important; }
       body { background: #fff !important; }
     }
     </style>
-</head>
-
-<body class="lich-trinh-page">
-<header class="lt-top">
-    <a class="kid-btn kid-btn--sky" href="index.php">← Trang chủ</a>
-    <span>🗓️ Lịch trình AI</span>
-</header>
+<?php require __DIR__ . '/partials/site-nav.php'; ?>
 
 <main>
     <section class="lt-hero">
@@ -150,9 +129,8 @@ $typeOptions = ['bao-tang', 'cong-vien', 'vui-choi', 'thien-nhien'];
     <section class="lt-result" id="result"></section>
 </main>
 
-<script src="assets/js/mascot.js?v=2"></script>
 <script>
-(function () {
+document.addEventListener('DOMContentLoaded', function () {
     var CSRF = document.querySelector('meta[name="csrf"]').content;
 
     var heroMascot = document.getElementById('lt-hero-mascot');
@@ -318,7 +296,6 @@ $typeOptions = ['bao-tang', 'cong-vien', 'vui-choi', 'thien-nhien'];
                 btnGo.disabled = false;
             });
     });
-})();
+});
 </script>
-</body>
-</html>
+<?php $PAGE['scripts'] = ['assets/js/mascot.js']; require __DIR__ . '/partials/site-footer.php'; ?>

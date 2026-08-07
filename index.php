@@ -1,84 +1,17 @@
 <?php
 require_once __DIR__ . '/auth.php';
 $user = currentUser();
+$PAGE = [
+    'title'    => 'SIÊU NHÍ AN TOÀN GIAO THÔNG AI',
+    'desc'     => 'Nền tảng AI giáo dục an toàn giao thông cho học sinh Việt Nam — Học thông minh, Đi an toàn, Vì tương lai Việt Nam.',
+    'nav'      => 'trang-chu',
+    'hero_nav' => true,
+    'scripts'  => ['assets/js/mascot.js'],
+];
+require __DIR__ . '/partials/site-head.php';
+require __DIR__ . '/partials/site-nav.php';
 ?>
-<!doctype html>
-<html lang="vi">
-
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script>
-    (function() {
-        try {
-            document.documentElement.setAttribute(
-                "data-theme",
-                localStorage.getItem("sieu-nhi-theme") || "light",
-            );
-        } catch (e) {}
-    })();
-    </script>
-    <title>SIÊU NHÍ AN TOÀN GIAO THÔNG AI</title>
-    <meta name="description"
-        content="Nền tảng AI giáo dục an toàn giao thông cho học sinh Việt Nam — Học thông minh, Đi an toàn, Vì tương lai Việt Nam." />
-    <link rel="stylesheet" href="assets/css/fonts.css?v=1">
-    <link rel="stylesheet" href="assets/css/style.css?v=9" />
-    <link rel="stylesheet" href="assets/css/kid-components.css?v=1">
-</head>
-
-<body>
-    <!-- ============ NAVBAR ============ -->
-    <nav class="navbar" id="navbar">
-        <div class="nav-inner">
-            <a href="index.php" class="logo">
-                <img src="assets/images/sieu-nhi-logo.png" alt="SIÊU NHÍ AI" class="site-logo-img" />
-            </a>
-
-            <ul class="nav-menu">
-                <li><a href="index.php" class="active">Trang chủ</a></li>
-                <li><a href="ai-gia-su.php">AI Gia sư</a></li>
-                <li><a href="kham-pha.php">🗺️ Khám phá</a></li>
-                <li><a href="lich-trinh-ai.php">🗓️ Lịch trình AI</a></li>
-                <li><a href="ai-camera.php">AI Camera</a></li>
-                <li><a href="ai-mo-phong.php">Mô phỏng</a></li>
-                <li><a href="ai-truyen-tranh.php">Truyện tranh</a></li>
-                <li><a href="game-mini.php">Thử thách</a></li>
-                <?php if ($user && $user['role'] === 'phuhuynh'): ?>
-                <li><a href="dashboard-phu-huynh.php">Phụ huynh</a></li>
-                <?php endif; ?>
-                <?php if ($user && $user['role'] === 'giaovien'): ?>
-                <li><a href="dashboard-giao-vien.php">Giáo viên</a></li>
-                <?php endif; ?>
-                <?php if ($user && $user['role'] === 'hocsinh'): ?>
-                <li><a href="dashboard-hoc-sinh.php">Học sinh</a></li>
-                <?php endif; ?>
-                <?php if ($user && $user['role'] === 'admin'): ?>
-                <li><a href="dashboard-admin.php">Quản trị</a></li>
-                <?php endif; ?>
-            </ul>
-
-            <div class="nav-actions">
-                <button class="icon-btn nav-extra" aria-label="Tìm kiếm">🔍</button>
-                <button class="icon-btn nav-extra" aria-label="Thông báo">🔔</button>
-                <div class="lang-toggle" role="group" aria-label="Chọn ngôn ngữ">
-                    <span class="on" style="cursor: pointer">VN</span>
-                    <span style="cursor: pointer">EN</span>
-                </div>
-                <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Chế độ tối">
-                    🌙
-                </button>
-                <?php if ($user): ?>
-                <a href="<?= e(ROLE_DASHBOARDS[$user['role']] ?? 'index.php') ?>"
-                    class="btn btn-ghost desktop-only"><?= e($user['avatar']) ?> <?= e($user['name']) ?></a>
-                <a href="logout.php" class="btn btn-primary-sm">Đăng xuất</a>
-                <?php else: ?>
-                <a href="dang-nhap.php" class="btn btn-ghost desktop-only">Đăng nhập</a>
-                <a href="dang-ky.php" class="btn btn-primary-sm">Đăng ký</a>
-                <?php endif; ?>
-                <button class="icon-btn nav-burger" aria-label="Menu">☰</button>
-            </div>
-        </div>
-    </nav>
+    <!-- ============ NAVBAR: partials/site-nav.php ============ -->
 
     <!-- ============ HERO ============ -->
     <header class="hero" id="hero">
@@ -679,63 +612,13 @@ $user = currentUser();
     </section>
 
     <!-- ============ FOOTER ============ -->
-    <footer class="site-footer" id="footer">
-        <div class="wrap">
-            <div class="foot-grid">
-                <div class="foot-brand">
-                    <a href="index.php" class="logo">
-                        <img src="assets/images/sieu-nhi-logo.png" alt="SIÊU NHÍ AI" class="site-logo-img" />
-                    </a>
-                    <p>
-                        Nền tảng AI giáo dục an toàn giao thông cho học sinh Việt Nam. Học
-                        thông minh — Đi an toàn — Vì tương lai Việt Nam.
-                    </p>
-                </div>
-                <div class="foot-col">
-                    <h5>Sản phẩm</h5>
-                    <a href="ai-gia-su.php">AI Gia sư</a><a href="ai-mo-phong.php">Mô phỏng</a><a
-                        href="game-mini.php">Thử thách</a><a href="bang-xep-hang.php">Bảng xếp hạng</a>
-                </div>
-                <div class="foot-col">
-                    <h5>Đối tượng</h5>
-                    <?php if (!$user || in_array($user['role'], ['hocsinh', 'admin'], true)): ?>
-                    <a href="dashboard-hoc-sinh.php">Học sinh</a>
-                    <?php endif; ?>
-                    <?php if (!$user || in_array($user['role'], ['phuhuynh', 'admin'], true)): ?>
-                    <a href="dashboard-phu-huynh.php">Phụ huynh</a>
-                    <?php endif; ?>
-                    <?php if (!$user || in_array($user['role'], ['giaovien', 'admin'], true)): ?>
-                    <a href="dashboard-giao-vien.php">Giáo viên</a>
-                    <?php endif; ?>
-                    <a href="dang-ky.php">Nhà trường</a>
-                </div>
-                <div class="foot-col">
-                    <h5>Công ty</h5>
-                    <a href="index.php#hero">Về dự án</a><a href="community.php">Đóng góp tình huống</a><a href="index.php#features">Tính năng</a><a href="dang-ky.php">Liên hệ</a>
-                </div>
-                <div class="foot-col">
-                    <h5>Pháp lý</h5>
-                    <a href="index.php#footer">Điều khoản</a><a href="index.php#footer">Chính sách bảo mật</a><a href="index.php">Mở trên điện thoại</a>
-                </div>
-            </div>
-            <div class="foot-bottom">
-                <span>© 2026 Siêu Nhí An Toàn Giao Thông AI · AI Traffic Hero</span>
-                <div class="social-row">
-                    <a href="index.php#footer" aria-label="Kênh thông tin">ⓘ</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <script src="assets/js/main.js?v=5"></script>
-    <script src="assets/js/mascot.js?v=2"></script>
-    <script>window.SIEU_NHI_AUTH = <?= $user ? 'true' : 'false' ?>; window.SIEU_NHI_CSRF = <?= json_encode(csrfToken(), JSON_UNESCAPED_UNICODE) ?>;</script>
     <script>
-        var heroMascot = document.getElementById('hero-mascot');
-        if (heroMascot && window.MascotSVG) {
-            heroMascot.innerHTML = MascotSVG.pose('wave');
-        }
+        document.addEventListener('DOMContentLoaded', function () {
+            var heroMascot = document.getElementById('hero-mascot');
+            if (heroMascot && window.MascotSVG) {
+                heroMascot.innerHTML = MascotSVG.pose('wave');
+            }
+        });
     </script>
-</body>
 
-</html>
+<?php require __DIR__ . '/partials/site-footer.php'; ?>

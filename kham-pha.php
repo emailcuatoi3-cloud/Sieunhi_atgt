@@ -10,32 +10,19 @@ $allPlaces = $type === null ? $places : places_all();
 
 $typeEmoji = ['bao-tang' => '🏛️', 'cong-vien' => '🌳', 'vui-choi' => '🎡', 'thien-nhien' => '🏞️'];
 $typeFilters = ['bao-tang', 'cong-vien', 'vui-choi', 'thien-nhien'];
+$PAGE = [
+    'title'      => 'KhÃ¡m phÃ¡ BuÃ´n Ma Thuá»t Â· SiÃªu NhÃ­ An ToÃ n Giao ThÃ´ng AI',
+    'desc'       => 'Báº£n Äá» Äá»a Äiá»m thÃ¢n thiá»n vá»i tráº» em táº¡i BuÃ´n Ma Thuá»t â báº£o tÃ ng, cÃ´ng viÃªn, khu vui chÆ¡i, thiÃªn nhiÃªn.',
+    'nav'        => 'kham-pha',
+    'body_class' => 'kham-pha-page',
+    'crumb'      => ['href' => 'index.php', 'label' => '← Trang chủ', 'title' => '🗺️ Khám phá Buôn Ma Thuột'],
+    'scripts'    => ['assets/js/mascot.js'],
+];
+require __DIR__ . '/partials/site-head.php';
 ?>
-<!DOCTYPE html>
-<html lang="vi">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf" content="<?= e(csrfToken()) ?>">
-    <script>
-    (function() {
-        try {
-            document.documentElement.setAttribute("data-theme", localStorage.getItem("sieu-nhi-theme") || "light");
-        } catch (e) {}
-    })();
-    </script>
-    <title>Khám phá Buôn Ma Thuột · Siêu Nhí An Toàn Giao Thông AI</title>
-    <link rel="stylesheet" href="assets/css/fonts.css?v=1">
-    <link rel="stylesheet" href="assets/css/style.css?v=9">
-    <link rel="stylesheet" href="assets/css/shared-pages.css?v=16">
-    <link rel="stylesheet" href="assets/css/kid-components.css?v=1">
     <style>
     body.kham-pha-page { background: var(--kid-cream); }
 
-    .kp-top { display: flex; align-items: center; gap: 14px; padding: 14px 24px; background: #fff;
-      border-bottom: 3px solid var(--glass-border); flex-wrap: wrap; }
-    .kp-top span { font-family: "Baloo 2", sans-serif; font-size: 18px; margin: 0; color: var(--kid-ink); }
 
     .kp-hero { padding: 22px 24px 6px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
     .kp-hero-mascot { width: 76px; height: 76px; flex: 0 0 auto; }
@@ -62,18 +49,12 @@ $typeFilters = ['bao-tang', 'cong-vien', 'vui-choi', 'thien-nhien'];
     .kp-card .kp-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
 
     @media (max-width: 480px) {
-      .kp-top, .kp-hero, .kp-section { padding-left: 14px; padding-right: 14px; }
+      .kp-hero, .kp-section { padding-left: 14px; padding-right: 14px; }
       .kp-hero-mascot { width: 60px; height: 60px; }
       .kp-hero h1 { font-size: 21px; }
     }
     </style>
-</head>
-
-<body class="kham-pha-page">
-<header class="kp-top">
-    <a class="kid-btn kid-btn--sky" href="index.php">← Trang chủ</a>
-    <span>🗺️ Khám phá Buôn Ma Thuột</span>
-</header>
+<?php require __DIR__ . '/partials/site-nav.php'; ?>
 
 <main>
     <section class="kp-hero">
@@ -135,12 +116,13 @@ $typeFilters = ['bao-tang', 'cong-vien', 'vui-choi', 'thien-nhien'];
     </section>
 </main>
 
-<script src="assets/js/mascot.js?v=2"></script>
 <script>
+document.addEventListener('DOMContentLoaded', function () {
     var kpMascot = document.getElementById('kp-hero-mascot');
     if (kpMascot && window.MascotSVG) {
         kpMascot.innerHTML = MascotSVG.pose('point');
     }
+});
 </script>
-</body>
-</html>
+
+<?php require __DIR__ . '/partials/site-footer.php'; ?>
