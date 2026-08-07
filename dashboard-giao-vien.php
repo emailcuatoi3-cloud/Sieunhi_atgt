@@ -30,7 +30,7 @@ try {
 <div class="app">
   <aside class="sidebar">
     <div>
-      <div class="side-brand"><div class="mark">🤖</div>SIÊU NHÍ AI</div>
+      <a href="index.php" class="side-brand"><img src="assets/images/sieu-nhi-logo.png" alt="SIÊU NHÍ AI" class="side-brand-img"></a>
       <a class="side-back" href="index.php">← Về trang chủ</a>
     </div>
     <a class="side-link active" href="dashboard-giao-vien.php"><span class="ic">🏠</span> Tổng quan</a>

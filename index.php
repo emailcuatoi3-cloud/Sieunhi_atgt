@@ -31,8 +31,7 @@ $user = currentUser();
     <nav class="navbar" id="navbar">
         <div class="nav-inner">
             <a href="index.php" class="logo">
-                <span class="logo-badge">🤖</span>
-                SIÊU NHÍ <span class="logo-text-en">AI</span>
+                <img src="assets/images/sieu-nhi-logo.png" alt="SIÊU NHÍ AI" class="site-logo-img" />
             </a>
 
             <ul class="nav-menu">
@@ -87,27 +86,23 @@ $user = currentUser();
             <svg viewBox="0 0 1440 800" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                     <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#1B2E8C" />
-                        <stop offset="55%" stop-color="#3A2B8F" />
-                        <stop offset="100%" stop-color="#160B45" />
+                        <stop offset="0%" stop-color="#F0F9FF" />
+                        <stop offset="60%" stop-color="#E0F2FE" />
+                        <stop offset="100%" stop-color="#BAE6FD" />
                     </linearGradient>
                     <linearGradient id="bld1" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#2A3A8F" />
-                        <stop offset="100%" stop-color="#171C55" />
+                        <stop offset="0%" stop-color="#30AFFF" stop-opacity="0.25" />
+                        <stop offset="100%" stop-color="#30AFFF" stop-opacity="0.08" />
                     </linearGradient>
                     <linearGradient id="bld2" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#3C2E8C" />
-                        <stop offset="100%" stop-color="#1B1450" />
+                        <stop offset="0%" stop-color="#0284C7" stop-opacity="0.2" />
+                        <stop offset="100%" stop-color="#30AFFF" stop-opacity="0.05" />
                     </linearGradient>
-                    <radialGradient id="sun" cx="50%" cy="50%" r="50%">
-                        <stop offset="0%" stop-color="#8FE9FF" stop-opacity="0.9" />
-                        <stop offset="100%" stop-color="#8FE9FF" stop-opacity="0" />
-                    </radialGradient>
                 </defs>
                 <rect width="1440" height="800" fill="url(#sky)" />
-                <circle cx="1180" cy="140" r="180" fill="url(#sun)" />
+                <circle cx="1180" cy="140" r="180" fill="#30AFFF" opacity="0.1" />
 
-                <g opacity="0.55">
+                <g opacity="0.7">
                     <rect x="40" y="380" width="80" height="260" fill="url(#bld1)" />
                     <rect x="140" y="320" width="60" height="320" fill="url(#bld2)" />
                     <rect x="220" y="410" width="90" height="230" fill="url(#bld1)" />
@@ -119,71 +114,18 @@ $user = currentUser();
                 </g>
 
                 <g>
-                    <rect x="0" y="480" width="130" height="220" fill="#141B57" />
-                    <rect x="150" y="440" width="110" height="260" fill="#161E5E" />
-                    <rect x="280" y="500" width="95" height="200" fill="#141B57" />
-                    <rect x="1020" y="460" width="120" height="240" fill="#161E5E" />
-                    <rect x="1160" y="500" width="100" height="200" fill="#141B57" />
-                    <rect x="1280" y="430" width="130" height="270" fill="#161E5E" />
-                    <g fill="#7FE3FF" opacity="0.85">
-                        <rect x="14" y="500" width="6" height="8" />
-                        <rect x="30" y="500" width="6" height="8" />
-                        <rect x="46" y="520" width="6" height="8" />
-                        <rect x="14" y="540" width="6" height="8" />
-                        <rect x="46" y="560" width="6" height="8" />
-                        <rect x="90" y="540" width="6" height="8" />
-                        <rect x="170" y="470" width="6" height="8" />
-                        <rect x="190" y="490" width="6" height="8" />
-                        <rect x="210" y="470" width="6" height="8" />
-                        <rect x="230" y="520" width="6" height="8" />
-                        <rect x="170" y="540" width="6" height="8" />
-                        <rect x="1040" y="500" width="6" height="8" />
-                        <rect x="1060" y="490" width="6" height="8" />
-                        <rect x="1090" y="520" width="6" height="8" />
-                        <rect x="1300" y="470" width="6" height="8" />
-                        <rect x="1330" y="490" width="6" height="8" />
-                        <rect x="1360" y="470" width="6" height="8" />
-                        <rect x="1300" y="530" width="6" height="8" />
-                        <rect x="1360" y="550" width="6" height="8" />
-                    </g>
+                    <rect x="0" y="480" width="130" height="220" fill="#BAE6FD" opacity="0.4" />
+                    <rect x="150" y="440" width="110" height="260" fill="#7DD3FC" opacity="0.4" />
+                    <rect x="280" y="500" width="95" height="200" fill="#BAE6FD" opacity="0.4" />
+                    <rect x="1020" y="460" width="120" height="240" fill="#7DD3FC" opacity="0.4" />
+                    <rect x="1160" y="500" width="100" height="200" fill="#BAE6FD" opacity="0.4" />
+                    <rect x="1280" y="430" width="130" height="270" fill="#7DD3FC" opacity="0.4" />
                 </g>
 
-                <path d="M0,760 L1440,760 L1440,800 L0,800 Z" fill="#0E1240" />
-                <path d="M-100,760 C300,700 1140,700 1540,760 L1540,800 L-100,800 Z" fill="#12163F" />
-                <g stroke="#8FE3FF" stroke-width="6" stroke-dasharray="26 22" opacity="0.55">
+                <path d="M0,760 L1440,760 L1440,800 L0,800 Z" fill="#E0F2FE" />
+                <path d="M-100,760 C300,700 1140,700 1540,760 L1540,800 L-100,800 Z" fill="#BAE6FD" opacity="0.6" />
+                <g stroke="#30AFFF" stroke-width="4" stroke-dasharray="20 16" opacity="0.6">
                     <path d="M-50,782 C350,738 1090,738 1490,782" fill="none" />
-                </g>
-
-                <g fill="#E9F6FF" opacity="0.9">
-                    <rect x="560" y="742" width="18" height="42" transform="skewX(-8)" />
-                    <rect x="600" y="742" width="18" height="42" transform="skewX(-8)" />
-                    <rect x="640" y="742" width="18" height="42" transform="skewX(-8)" />
-                    <rect x="680" y="742" width="18" height="42" transform="skewX(-8)" />
-                    <rect x="720" y="742" width="18" height="42" transform="skewX(-8)" />
-                    <rect x="760" y="742" width="18" height="42" transform="skewX(-8)" />
-                </g>
-
-                <g transform="translate(880,560)">
-                    <rect x="-4" y="0" width="8" height="180" fill="#2C356E" />
-                    <rect x="-22" y="-58" width="44" height="70" rx="12" fill="#1B2260" stroke="#4C5AC9"
-                        stroke-width="2" />
-                    <circle cx="0" cy="-38" r="8" fill="#FBBF24" />
-                    <circle cx="0" cy="-14" r="8" fill="#34D399" />
-                    <circle cx="0" cy="-38" r="14" fill="#FBBF24" opacity="0.25" />
-                    <circle cx="0" cy="-14" r="14" fill="#34D399" opacity="0.3" />
-                </g>
-
-                <g fill="#2FA97A" opacity="0.85">
-                    <circle cx="420" cy="710" r="26" />
-                    <rect x="415" y="710" width="10" height="30" fill="#3A2A1F" />
-                    <circle cx="1000" cy="705" r="22" />
-                    <rect x="995" y="705" width="8" height="26" fill="#3A2A1F" />
-                </g>
-
-                <g opacity="0.7">
-                    <ellipse cx="230" cy="230" rx="90" ry="30" fill="none" stroke="#7FE3FF" stroke-width="2" />
-                    <ellipse cx="230" cy="230" rx="60" ry="18" fill="none" stroke="#7FE3FF" stroke-width="1.4"
-                        opacity="0.6" />
                 </g>
             </svg>
         </div>
@@ -741,9 +683,9 @@ $user = currentUser();
         <div class="wrap">
             <div class="foot-grid">
                 <div class="foot-brand">
-                    <div class="logo">
-                        <span class="logo-badge">🤖</span>SIÊU NHÍ AI
-                    </div>
+                    <a href="index.php" class="logo">
+                        <img src="assets/images/sieu-nhi-logo.png" alt="SIÊU NHÍ AI" class="site-logo-img" />
+                    </a>
                     <p>
                         Nền tảng AI giáo dục an toàn giao thông cho học sinh Việt Nam. Học
                         thông minh — Đi an toàn — Vì tương lai Việt Nam.

@@ -55,9 +55,9 @@ $skillCards = [
     <div class="app">
         <aside class="sidebar">
             <div>
-                <div class="side-brand">
-                    <div class="mark">🤖</div>SIÊU NHÍ AI
-                </div>
+                <a href="index.php" class="side-brand">
+                    <img src="assets/images/sieu-nhi-logo.png" alt="SIÊU NHÍ AI" class="side-brand-img">
+                </a>
                 <a class="side-back" href="index.php">← Về trang chủ</a>
             </div>
             <a class="side-link active" href="dashboard-hoc-sinh.php"><span class="ic">🏠</span> Trang chủ</a>

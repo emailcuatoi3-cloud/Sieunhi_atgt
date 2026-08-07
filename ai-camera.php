@@ -27,7 +27,7 @@ window.__AI_CAMERA__ = {
 
 <nav class="navbar static" id="navbar">
   <div class="nav-inner">
-    <a href="index.php" class="logo"><span class="logo-badge">🤖</span>SIÊU NHÍ <span class="logo-text-en">AI</span></a>
+    <a href="index.php" class="logo"><img src="assets/images/sieu-nhi-logo.png" alt="SIÊU NHÍ AI" class="site-logo-img"></a>
     <a class="back-link" href="index.php">← Về trang chủ</a>
     <div class="nav-actions">
       <button class="icon-btn theme-toggle" aria-label="Chế độ tối">🌙</button>
