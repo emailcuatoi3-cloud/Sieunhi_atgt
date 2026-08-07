@@ -869,6 +869,9 @@ body {
   gap: 24px;
   padding-bottom: 70px;
 }
+.cam-layout > * {
+  min-width: 0;
+}
 .cam-panel {
   border-radius: var(--radius-lg);
   border: 1px solid var(--glass-border);
@@ -4155,4 +4158,8 @@ body {
 }
 @media (max-width: 480px) {
   .crumb-bar { padding: 10px 14px; }
+  .cam-tabs { flex-wrap: wrap; }
+  .cam-tab { padding: 8px 10px; font-size: 12px; }
+  .cam-controls { flex-wrap: wrap; gap: 10px; }
+  .cam-view { margin: 0 10px 12px; }
 }
