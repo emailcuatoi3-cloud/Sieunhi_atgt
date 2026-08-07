@@ -11,8 +11,8 @@ $allPlaces = $type === null ? $places : places_all();
 $typeEmoji = ['bao-tang' => '🏛️', 'cong-vien' => '🌳', 'vui-choi' => '🎡', 'thien-nhien' => '🏞️'];
 $typeFilters = ['bao-tang', 'cong-vien', 'vui-choi', 'thien-nhien'];
 $PAGE = [
-    'title'      => 'KhÃ¡m phÃ¡ BuÃ´n Ma Thuá»t Â· SiÃªu NhÃ­ An ToÃ n Giao ThÃ´ng AI',
-    'desc'       => 'Báº£n Äá» Äá»a Äiá»m thÃ¢n thiá»n vá»i tráº» em táº¡i BuÃ´n Ma Thuá»t â báº£o tÃ ng, cÃ´ng viÃªn, khu vui chÆ¡i, thiÃªn nhiÃªn.',
+    'title'      => 'Khám phá Buôn Ma Thuột · Siêu Nhí An Toàn Giao Thông AI',
+    'desc'       => 'Bản đồ địa điểm thân thiện với trẻ em tại Buôn Ma Thuột — bảo tàng, công viên, khu vui chơi, thiên nhiên.',
     'nav'        => 'kham-pha',
     'body_class' => 'kham-pha-page',
     'crumb'      => ['href' => 'index.php', 'label' => '← Trang chủ', 'title' => '🗺️ Khám phá Buôn Ma Thuột'],

@@ -52,16 +52,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  /* ---------- Language toggle visual state ---------- */
-  document.querySelectorAll(".lang-toggle span").forEach((el) => {
-    el.addEventListener("click", () => {
-      document
-        .querySelectorAll(".lang-toggle span")
-        .forEach((s) => s.classList.remove("on"));
-      el.classList.add("on");
-    });
-  });
-
   /* ---------- Counter animation on scroll into view ---------- */
   const counters = document.querySelectorAll(".counter");
   const formatNum = (n) => n.toLocaleString("vi-VN");
